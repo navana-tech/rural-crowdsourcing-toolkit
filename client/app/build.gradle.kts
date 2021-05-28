@@ -44,9 +44,6 @@ android {
   lintOptions {
     isAbortOnError = false
   }
-  androidExtensions {
-    isExperimental = true
-  }
   buildFeatures {
     dataBinding = true
     viewBinding = true
@@ -88,7 +85,6 @@ dependencies {
   implementation(Dependencies.AndroidX.constraintLayout)
   implementation(Dependencies.AndroidX.datastorePrefs)
   implementation(Dependencies.AndroidX.fragmentKtx)
-  implementation(Dependencies.AndroidX.legacy_support)
   implementation(Dependencies.AndroidX.multidex)
   implementation(Dependencies.AndroidX.work_runtime)
 
