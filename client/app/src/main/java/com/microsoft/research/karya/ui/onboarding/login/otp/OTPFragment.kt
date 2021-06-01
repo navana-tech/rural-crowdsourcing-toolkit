@@ -10,7 +10,18 @@ import com.microsoft.research.karya.data.model.karya.enums.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentOtpBinding
 import com.microsoft.research.karya.ui.Destination
 import com.microsoft.research.karya.ui.base.BaseFragment
-import com.microsoft.research.karya.utils.extensions.*
+import com.microsoft.research.karya.utils.extensions.dataStore
+import com.microsoft.research.karya.utils.extensions.disable
+import com.microsoft.research.karya.utils.extensions.doOnlyOnce
+import com.microsoft.research.karya.utils.extensions.enable
+import com.microsoft.research.karya.utils.extensions.finish
+import com.microsoft.research.karya.utils.extensions.gone
+import com.microsoft.research.karya.utils.extensions.observe
+import com.microsoft.research.karya.utils.extensions.requestSoftKeyFocus
+import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycle
+import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
+import com.microsoft.research.karya.utils.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val OTP_LENGTH = 6
@@ -20,6 +31,7 @@ class OTPFragment : BaseFragment(R.layout.fragment_otp) {
 
   private val binding by viewBinding(FragmentOtpBinding::bind)
   private val viewModel by viewModels<OTPViewModel>()
+  override val TAG: String = "OTP_FRAGMENT"
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -30,7 +42,9 @@ class OTPFragment : BaseFragment(R.layout.fragment_otp) {
 
   override fun onResume() {
     super.onResume()
-    assistant.playAssistantAudio(AssistantAudio.OTP_PROMPT)
+    viewLifecycleScope.launchWhenResumed {
+      requireContext().dataStore.doOnlyOnce(audioTag) { assistant.playAssistantAudio(AssistantAudio.OTP_PROMPT) }
+    }
   }
 
   private fun setupView() {

@@ -13,7 +13,14 @@ import com.microsoft.research.karya.data.manager.ResourceManager
 import com.microsoft.research.karya.data.model.karya.enums.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentConsentFormBinding
 import com.microsoft.research.karya.ui.base.BaseFragment
-import com.microsoft.research.karya.utils.extensions.*
+import com.microsoft.research.karya.utils.extensions.dataStore
+import com.microsoft.research.karya.utils.extensions.disable
+import com.microsoft.research.karya.utils.extensions.doOnlyOnce
+import com.microsoft.research.karya.utils.extensions.enable
+import com.microsoft.research.karya.utils.extensions.observe
+import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycle
+import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,6 +29,7 @@ class ConsentFormFragment : BaseFragment(R.layout.fragment_consent_form) {
 
   private val binding by viewBinding(FragmentConsentFormBinding::bind)
   private val viewModel by viewModels<ConsentFormViewModel>()
+  override val TAG: String = "CONSENT_FORM_FRAGMENT"
 
   @Inject
   lateinit var resourceManager: ResourceManager
@@ -39,7 +47,11 @@ class ConsentFormFragment : BaseFragment(R.layout.fragment_consent_form) {
 
   override fun onResume() {
     super.onResume()
-    assistant.playAssistantAudio(AssistantAudio.CONSENT_FORM_SUMMARY)
+    viewLifecycleScope.launchWhenResumed {
+      requireContext().dataStore.doOnlyOnce(audioTag) {
+        assistant.playAssistantAudio(AssistantAudio.CONSENT_FORM_SUMMARY)
+      }
+    }
   }
 
   private fun setupViews() {

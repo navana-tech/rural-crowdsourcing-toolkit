@@ -10,9 +10,12 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.model.karya.enums.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentSelectAgeGroupBinding
 import com.microsoft.research.karya.ui.base.SessionFragment
+import com.microsoft.research.karya.utils.extensions.dataStore
+import com.microsoft.research.karya.utils.extensions.doOnlyOnce
 import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import com.microsoft.research.karya.utils.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +24,7 @@ class SelectAgeGroupFragment : SessionFragment(R.layout.fragment_select_age_grou
 
   private val binding by viewBinding(FragmentSelectAgeGroupBinding::bind)
   private val viewModel by viewModels<SelectAgeViewModel>()
+  override val TAG: String = "SELECT_AGE_GROUP_FRAGMENT"
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -33,7 +37,9 @@ class SelectAgeGroupFragment : SessionFragment(R.layout.fragment_select_age_grou
 
   override fun onResume() {
     super.onResume()
-    assistant.playAssistantAudio(AssistantAudio.AGE_PROMPT)
+    viewLifecycleScope.launchWhenResumed {
+      requireContext().dataStore.doOnlyOnce(audioTag) { assistant.playAssistantAudio(AssistantAudio.AGE_PROMPT) }
+    }
   }
 
   private fun setupView() {

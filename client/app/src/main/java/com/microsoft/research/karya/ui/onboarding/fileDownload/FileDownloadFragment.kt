@@ -20,13 +20,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FileDownloadFragment : Fragment(R.layout.fragment_file_download) {
 
-  val viewModel by viewModels<AccessCodeViewModel>()
-
-  @Inject
-  lateinit var resourceManager: ResourceManager
-
-  @Inject
-  lateinit var authManager: AuthManager
+  private val viewModel by viewModels<AccessCodeViewModel>()
+  @Inject lateinit var resourceManager: ResourceManager
+  @Inject lateinit var authManager: AuthManager
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)

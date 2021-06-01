@@ -11,7 +11,16 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.model.karya.enums.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentPhoneNumberBinding
 import com.microsoft.research.karya.ui.base.BaseFragment
-import com.microsoft.research.karya.utils.extensions.*
+import com.microsoft.research.karya.utils.extensions.dataStore
+import com.microsoft.research.karya.utils.extensions.doOnlyOnce
+import com.microsoft.research.karya.utils.extensions.gone
+import com.microsoft.research.karya.utils.extensions.hideKeyboard
+import com.microsoft.research.karya.utils.extensions.invisible
+import com.microsoft.research.karya.utils.extensions.observe
+import com.microsoft.research.karya.utils.extensions.requestSoftKeyFocus
+import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
+import com.microsoft.research.karya.utils.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val PHONE_NUMBER_LENGTH = 10
@@ -21,6 +30,7 @@ class PhoneNumberFragment : BaseFragment(R.layout.fragment_phone_number) {
 
   private val binding by viewBinding(FragmentPhoneNumberBinding::bind)
   private val viewModel by viewModels<PhoneNumberViewModel>()
+  override val TAG: String = "PHONE_NUMBER_FRAGMENT"
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -32,7 +42,11 @@ class PhoneNumberFragment : BaseFragment(R.layout.fragment_phone_number) {
 
   override fun onResume() {
     super.onResume()
-    assistant.playAssistantAudio(AssistantAudio.PHONE_NUMBER_PROMPT)
+    viewLifecycleScope.launchWhenResumed {
+      requireContext().dataStore.doOnlyOnce(audioTag) {
+        assistant.playAssistantAudio(AssistantAudio.PHONE_NUMBER_PROMPT)
+      }
+    }
   }
 
   private fun setupViews() {

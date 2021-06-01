@@ -8,7 +8,14 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.model.karya.enums.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentSelectGenderBinding
 import com.microsoft.research.karya.ui.base.SessionFragment
-import com.microsoft.research.karya.utils.extensions.*
+import com.microsoft.research.karya.utils.extensions.dataStore
+import com.microsoft.research.karya.utils.extensions.doOnlyOnce
+import com.microsoft.research.karya.utils.extensions.gone
+import com.microsoft.research.karya.utils.extensions.observe
+import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycle
+import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
+import com.microsoft.research.karya.utils.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,6 +23,7 @@ class SelectGenderFragment : SessionFragment(R.layout.fragment_select_gender) {
 
   private val binding by viewBinding(FragmentSelectGenderBinding::bind)
   private val viewModel by viewModels<SelectGenderViewModel>()
+  override val TAG: String = "SELECT_GENDER_FRAGMENT"
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -27,7 +35,9 @@ class SelectGenderFragment : SessionFragment(R.layout.fragment_select_gender) {
 
   override fun onResume() {
     super.onResume()
-    assistant.playAssistantAudio(AssistantAudio.GENDER_PROMPT)
+    viewLifecycleScope.launchWhenResumed {
+      requireContext().dataStore.doOnlyOnce(audioTag) { assistant.playAssistantAudio(AssistantAudio.GENDER_PROMPT) }
+    }
   }
 
   private fun setupViews() {
