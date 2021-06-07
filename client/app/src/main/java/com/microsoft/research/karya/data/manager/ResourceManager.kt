@@ -43,6 +43,7 @@ constructor(
         .flowOn(Dispatchers.IO)
         .catch {
           Log.d("ResourceManager", "Error downloading files for language: $language")
+          it.printStackTrace()
           emit(Result.Error(it))
           return@catch
         }
