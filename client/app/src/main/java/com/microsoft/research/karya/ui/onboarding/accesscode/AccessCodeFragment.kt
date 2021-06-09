@@ -112,19 +112,11 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
   }
 
   private fun showError(message: String) {
-    with(binding) {
-      creationCodeErrorTv.text = message
-      creationCodeStatusIv.setImageResource(0)
-      creationCodeStatusIv.setImageResource(R.drawable.ic_quit_select)
-      creationCodeStatusIv.visible()
-    }
+    with(binding) { creationCodeErrorTv.text = message }
   }
 
   private fun hideError() {
-    with(binding) {
-      creationCodeErrorTv.text = ""
-      creationCodeStatusIv.gone()
-    }
+    with(binding) { creationCodeErrorTv.text = "" }
   }
 
   private fun showLoading() {
@@ -144,17 +136,11 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
   }
 
   private fun disableButton() {
-    with(binding) {
-      submitAccessCodeBtn.isClickable = false
-      submitAccessCodeBtn.setBackgroundResource(R.drawable.ic_next_disabled)
-    }
+    binding.submitAccessCodeBtn.disable()
   }
 
   private fun enableButton() {
-    with(binding) {
-      submitAccessCodeBtn.isClickable = true
-      submitAccessCodeBtn.setBackgroundResource(R.drawable.ic_next_enabled)
-    }
+    binding.submitAccessCodeBtn.enable()
   }
 
   private fun updateActivityLanguage(language: String) {
