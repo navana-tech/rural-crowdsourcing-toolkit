@@ -10,6 +10,8 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.local.enum.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentSelectAgeGroupBinding
 import com.microsoft.research.karya.ui.base.BaseFragment
+import com.microsoft.research.karya.utils.extensions.disable
+import com.microsoft.research.karya.utils.extensions.enable
 import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.doOnlyOnce
 import com.microsoft.research.karya.utils.extensions.gone
@@ -44,8 +46,8 @@ class SelectAgeGroupFragment : BaseFragment(R.layout.fragment_select_age_group) 
 
   private fun setupView() {
     with(binding) {
-      appTb.setTitle(getString(R.string.s_age_title))
-      appTb.setAssistantClickListener { assistant.playAssistantAudio(AssistantAudio.AGE_PROMPT) }
+      appTb.title = getString(R.string.s_age_title)
+      // appTb.setAssistantClickListener { assistant.playAssistantAudio(AssistantAudio.AGE_PROMPT) }
 
       ageEt.doAfterTextChanged { text ->
         if (text?.length == 4) {
@@ -113,17 +115,11 @@ class SelectAgeGroupFragment : BaseFragment(R.layout.fragment_select_age_group) 
   }
 
   private fun disableAgeGroupSubmitButton() {
-    with(binding) {
-      submitAgeGroupIb.isClickable = false
-      submitAgeGroupIb.setBackgroundResource(R.drawable.ic_next_disabled)
-    }
+    binding.submitAgeGroupIb.disable()
   }
 
   private fun enableAgeGroupSubmitButton() {
-    with(binding) {
-      submitAgeGroupIb.isClickable = true
-      submitAgeGroupIb.setBackgroundResource(R.drawable.ic_next_enabled)
-    }
+    binding.submitAgeGroupIb.enable()
   }
 
   private fun submitYOB(yob: String) {
