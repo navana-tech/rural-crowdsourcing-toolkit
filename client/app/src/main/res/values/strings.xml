@@ -248,4 +248,21 @@
     <string name="s_yes">Yes</string>
     <string name="s_no">No</string>
     <string name="input_file_does_not_exist">Input file does not exist for next assignment</string>
+    <string name="s_speech_scenario_name">Speech-data Collection</string>
+    <string name="s_speech_scenario_description">This task consists of a set of sentences. The worker is expected to record themselves reading out each sentence, one sentence at a time</string>
+    <string name="s_story_scenario_name">Group Speech-data Collection</string>
+    <string name="s_story_scenario_description">This task consists of a set of stories. The worker is expected to record themselves reading out each story, one sentence at a time</string>
+    <string name="s_recording_scenario_name">Verification of Speech Data Recordings</string>
+    <string name="s_recording_scenario_description">This task consists of a set of recordings. The worker is expected to verify the given recording and text.</string>
+    <string name="s_record_sentence">You have to record yourself speaking out this sentence</string>
+    <string name="s_record_action">To start recording, press this button. It will turn red indicating that the recording has started.</string>
+    <string name="s_stop_action">Once you are done recording, press this button again to stop the recording</string>
+    <string name="s_listen_action"> The app will play back the recorded audio. Listen to it carefully to ensure it is correct and that there is no other background voice.</string>
+    <string name="s_rerecord_action">If your recording is not correct, you can record again using the record button.</string>
+    <string name="s_next_action">If you are happy with the recording, you can press this button to go to the next sentence.</string>
+    <string name="s_next">Next</string>
+    <string name="s_previous_action"> You can press this button to go to the previous sentence.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="s_other">Other</string>
 </resources>
