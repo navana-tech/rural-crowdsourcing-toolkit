@@ -46,7 +46,6 @@ class SelectAgeGroupFragment : BaseFragment(R.layout.fragment_select_age_group) 
 
   private fun setupView() {
     with(binding) {
-      appTb.setTitle(getString(R.string.s_age_title))
       // appTb.setAssistantClickListener { assistant.playAssistantAudio(AssistantAudio.AGE_PROMPT) }
 
       ageEt.doAfterTextChanged { text ->
