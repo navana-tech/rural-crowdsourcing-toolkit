@@ -10,6 +10,7 @@ import com.microsoft.research.karya.data.model.karya.WorkerRecord
 import com.microsoft.research.karya.data.repo.WorkerRepository
 import com.microsoft.research.karya.injection.qualifier.FilesDir
 import com.microsoft.research.karya.ui.Destination
+import com.microsoft.research.karya.utils.extensions.rotateLeft
 import com.microsoft.research.karya.utils.extensions.rotateRight
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -83,7 +84,7 @@ constructor(
     }
   }
 
-  fun rotateProfileImage() {
+  fun rotateProfileImage(direction: Direction) {
     viewModelScope.launch(Dispatchers.IO) {
       _profileUiState.value = ProfileUiState.Loading
 
@@ -101,7 +102,12 @@ constructor(
       var bitmap = BitmapFactory.decodeFile(imageFile.path)
       imageFile.delete()
 
-      bitmap = bitmap.rotateRight()
+      bitmap =
+        when (direction) {
+          Direction.LEFT -> bitmap.rotateLeft()
+          Direction.RIGHT -> bitmap.rotateRight()
+        }
+
       imageFile.createNewFile()
       val result = writeBitmap(bitmap, imageFile)
 
