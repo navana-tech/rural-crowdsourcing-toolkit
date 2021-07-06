@@ -98,6 +98,8 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
         }
         if (workInfo != null && workInfo.state == WorkInfo.State.FAILED) {
           lifecycleScope.launch {
+
+          }
             showErrorUi(
               Throwable(workInfo.outputData.getString("errorMsg")),
               ERROR_TYPE.SYNC_ERROR,
@@ -132,14 +134,13 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
   }
 
   private fun setupViews() {
-
     with(binding) {
       tasksRv.apply {
         adapter = TaskListAdapter(emptyList(), ::onDashboardItemClick)
         layoutManager = LinearLayoutManager(context)
       }
 
-      binding.syncCv.setOnClickListener { syncWithServer() }
+      tvCheckUpdates.setOnClickListener { syncWithServer() }
 
       appTb.setProfileClickListener { findNavController().navigate(R.id.action_global_tempDataFlow) }
       loadProfilePic()
@@ -233,9 +234,9 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
     binding.syncErrorMessageTv.gone()
   }
 
-  private fun showLoading() = binding.syncProgressBar.visible()
+  private fun showLoading() {}
 
-  private fun hideLoading() = binding.syncProgressBar.gone()
+  private fun hideLoading() {}
 
   private fun loadProfilePic() {
     //    binding.appTb.showProfilePicture()
