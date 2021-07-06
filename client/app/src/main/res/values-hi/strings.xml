@@ -20,4 +20,26 @@
     <string name="s_tasks_completed">कार्य पूरे हुए</string>
     <string name="s_tasks_submitted">कार्य सबमिट किए गए हैं</string>
     <string name="s_tasks_verified">कार्यों का सत्यापन किया जाता है</string>
+<<<<<<< HEAD
+=======
+    <string name="d_tasks_available">%d/%d कार्य उपलब्ध हैं</string>
+    <string name="d_tasks_completed">%d/%d कार्य पूरे हुए</string>
+    <string name="d_tasks_submitted">%d/%d कार्य सबमिट किए गए हैं</string>
+    <string name="d_tasks_verified">%d/%d कार्यों का सत्यापन किया जाता है</string>
+    <string name="s_update_app_language">ऐप की भाषा बदलें</string>
+    <string name="s_update_skills">अद्यतन भाषा कौशल</string>
+    <string name="s_speech_scenario_name">भाषण-डेटा संग्रह</string>
+    <string name="s_speech_scenario_description">इस कार्य में वाक्यों का एक समूह होता है। कार्यकर्ता से यह अपेक्षा की जाती है कि वह प्रत्येक वाक्य, एक वाक्य को एक बार में स्वयं पढ़कर रिकॉर्ड करे</string>
+    <string name="s_story_scenario_name">कहानी-आधारित भाषण डेटा संग्रह</string>
+    <string name="s_story_scenario_description">इस कार्य में कहानियों का एक समूह शामिल है। कार्यकर्ता से यह अपेक्षा की जाती है कि वह प्रत्येक कहानी, एक वाक्य को एक बार में पढ़कर खुद को रिकॉर्ड कर ले</string>
+    <string name="s_recording_scenario_name">भाषण डेटा रिकॉर्डिंग का सत्यापन</string>
+    <string name="s_recording_scenario_description">इस कार्य में रिकॉर्डिंग का एक सेट होता है। कार्यकर्ता को दी गई रिकॉर्डिंग और पाठ को सत्यापित करने की उम्मीद है।</string>
+    <string name="s_record_sentence">आपको इस वाक्य को बोलते हुए खुद को रिकॉर्ड करना होगा</string>
+    <string name="s_record_action">रिकॉर्डिंग शुरू करने के लिए, इस बटन को दबाएं। यह इंगित करते हुए लाल हो जाएगा कि रिकॉर्डिंग शुरू हो गई है।</string>
+    <string name="s_stop_action">एक बार रिकॉर्डिंग करने के बाद, रिकॉर्डिंग को रोकने के लिए इस बटन को फिर से दबाएँ</string>
+    <string name="s_listen_action">ऐप रिकॉर्डेड ऑडियो को वापस प्ले करेगा। यह सुनिश्चित करने के लिए ध्यान से सुनें कि यह सही है और कोई अन्य पृष्ठभूमि की आवाज नहीं है।</string>
+    <string name="s_rerecord_action">यदि आपकी रिकॉर्डिंग सही नहीं है, तो आप रिकॉर्ड बटन का उपयोग करके फिर से रिकॉर्ड कर सकते हैं।</string>
+    <string name="s_next_action">यदि आप रिकॉर्डिंग से खुश हैं, तो आप अगले वाक्य पर जाने के लिए इस बटन को दबा सकते हैं।</string>
+    <string name="s_previous_action">पिछले वाक्य पर जाने के लिए आप इस बटन को दबा सकते हैं।</string>
+>>>>>>> 4716282d (app: update dashboard card layout)
 </resources>

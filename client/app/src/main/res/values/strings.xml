@@ -247,6 +247,22 @@
     <string name="dialogTitle">Skip or do it later?</string>
     <string name="dialogMessage">Do you want to skip this task or do it later? Skipped tasks cannot be attempted again.</string>
     <string name="FAILED_UPLOAD_RECORD_AGAIN_MSG">Some files did not upload. Please record them again</string>
+    <string name="s_years">years</string>
+    <string name="s_registering_worker">Registering worker with the server</string>
+    <!-- TODO: update tick and cross with more suitable words -->
+    <string name="s_uploading_files">Uploading files to the box</string>
+    <string name="s_send_updates">Sending updates to the box</string>
+    <string name="s_receive_updates">Receiving updates from the box</string>
+    <string name="s_downloading_files">Downloading files from the box</string>
+    <string name="s_get_new_tasks"> Get new tasks</string>
+    <string name="s_submit_completed_tasks">Submit completed tasks</string>
+    <string name="s_update_verified_tasks">Update verified tasks</string>
+    <string name="s_update_earning">Update earnings</string>
+    <string name="d_tasks_available">%d/%d tasks available</string>
+    <string name="d_tasks_completed">%d/%d tasks completed</string>
+    <string name="d_tasks_submitted">%d/%d tasks submitted</string>
+    <string name="d_tasks_verified">%d/%d tasks verified</string>
+    <string name="s_update_app_language">Change the App Language</string>
     <string name="s_sync_prompt_message">You have completed tasks that can be submitted to the server. Do you want to submit the tasks now?</string>
     <string name="s_yes">Yes</string>
     <string name="s_no">No</string>
@@ -268,4 +284,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="s_other">Other</string>
+    <string name="d_sentences_available">%d sentences available</string>
 </resources>
