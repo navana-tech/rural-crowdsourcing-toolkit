@@ -2,11 +2,11 @@ package com.microsoft.research.karya.ui.dashboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.model.karya.modelsExtra.TaskInfo
-import com.microsoft.research.karya.databinding.ItemTaskBinding
-import com.microsoft.research.karya.utils.extensions.gone
-import com.microsoft.research.karya.utils.extensions.visible
+import com.microsoft.research.karya.databinding.ItemDashboardCardBinding
 
 class TaskListAdapter(
   private var tasks: List<TaskInfo>,
@@ -15,7 +15,7 @@ class TaskListAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NgTaskViewHolder {
     val layoutInflater = LayoutInflater.from(parent.context)
-    val binding = ItemTaskBinding.inflate(layoutInflater, parent, false)
+    val binding = ItemDashboardCardBinding.inflate(layoutInflater, parent, false)
 
     return NgTaskViewHolder(binding, dashboardItemClick)
   }
@@ -44,7 +44,7 @@ class TaskListAdapter(
   }
 
   class NgTaskViewHolder(
-    private val binding: ItemTaskBinding,
+    private val binding: ItemDashboardCardBinding,
     private val dashboardItemClick: (task: TaskInfo) -> Unit,
   ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -53,41 +53,53 @@ class TaskListAdapter(
       setViews(binding, taskInfo)
     }
 
-    private fun setText(binding: ItemTaskBinding, task: TaskInfo) {
+    private fun setText(binding: ItemDashboardCardBinding, task: TaskInfo) {
       with(binding) {
         task.apply {
-          taskNameTv.text = taskName
-          scenarioNameTv.text = scenarioName
-          numIncompleteTv.text = assignedMicrotasks.toString()
-          numCompletedTv.text = completedMicrotasks.toString()
-          numSubmittedTv.text = submittedMicrotasks.toString()
-          numVerifiedTv.text = verifiedMicrotasks.toString()
+          val context = binding.root.context
+          val total = assignedMicrotasks +
+              completedMicrotasks +
+              submittedMicrotasks +
+              verifiedMicrotasks
+
+          val available = assignedMicrotasks
+          val completed = completedMicrotasks + submittedMicrotasks + verifiedMicrotasks
+          val submitted = submittedMicrotasks + verifiedMicrotasks
+          val verified = verifiedMicrotasks
+
+          taskTitle.text = taskName
+          taskSubtitle.text = context.getString(R.string.d_sentences_available, total)
+          tasksAvailable.text = context.getString(R.string.d_tasks_available, available, total)
+          tasksCompleted.text = context.getString(R.string.d_tasks_completed, completed, total)
+          tasksSubmitted.text = context.getString(R.string.d_tasks_submitted, submitted, total)
+          tasksVerified.text = context.getString(R.string.d_tasks_verified, verified, total)
         }
       }
     }
 
-    private fun setViews(binding: ItemTaskBinding, task: TaskInfo) {
+    private fun setViews(binding: ItemDashboardCardBinding, task: TaskInfo) {
       with(binding) {
         task.apply {
-          completedTasksPb.max = assignedMicrotasks + completedMicrotasks
-          completedTasksPb.progress = completedMicrotasks
+          root.apply {
+            val clickableAndEnabled = task.assignedMicrotasks > 0
+            isClickable = clickableAndEnabled
+            isEnabled = clickableAndEnabled
 
-          incompleteCl.apply { if (assignedMicrotasks > 0) visible() else gone() }
-          completedCl.apply { if (completedMicrotasks > 0) visible() else gone() }
-          submittedCl.apply { if (submittedMicrotasks > 0) visible() else gone() }
-          verifiedCl.apply { if (verifiedMicrotasks > 0) visible() else gone() }
-        }
-
-        taskLl.apply {
-          val clickableAndEnabled = task.assignedMicrotasks > 0
-          isClickable = clickableAndEnabled
-          isEnabled = clickableAndEnabled
-
-          setOnClickListener {
-            isClickable = false
-            isEnabled = false
-            dashboardItemClick(task)
+            setOnClickListener {
+              isClickable = false
+              isEnabled = false
+              dashboardItemClick(task)
+            }
           }
+
+          val drawable =
+            when (task.scenarioName) {
+              "SPEECH_DATA" -> ContextCompat.getDrawable(root.context, R.drawable.ic_task_speech_data)
+              "SPEECH_VERIFICATION" -> ContextCompat.getDrawable(root.context, R.drawable.ic_task_speech_data)
+              "TEXT_TRANSLATION" -> ContextCompat.getDrawable(root.context, R.drawable.ic_task_text_data)
+              else -> ContextCompat.getDrawable(root.context, R.drawable.ic_task_speech_data)
+            }
+          taskImage.setImageDrawable(drawable)
         }
       }
     }
