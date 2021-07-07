@@ -753,7 +753,7 @@ constructor(
         }
 
   /** Reset recording length */
-  private fun resetPlayingLength(duration: Int = null) {
+  private fun resetPlayingLength(duration: Int) {
     uiScope.launch {
       val milliseconds = duration
       val centiSeconds = (milliseconds / 10) % 100
