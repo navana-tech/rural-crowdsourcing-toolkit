@@ -752,10 +752,16 @@ constructor(
           releaseRecorder()
         }
 
-        /**
-         * If recording, join preRecordingFlushJob, recordingJob. Reset buffers and release
-         * recorder.
-         */
+  /** Reset recording length */
+  private fun resetPlayingLength(duration: Int = null) {
+    uiScope.launch {
+      val milliseconds = duration
+      val centiSeconds = (milliseconds / 10) % 100
+      val seconds = milliseconds / 1000
+      playSecondsTv.text = "%d".format(seconds)
+      playCentiSecondsTv.text = "%02d".format(centiSeconds)
+    }
+  }
 
         /**
          * If recording, join preRecordingFlushJob, recordingJob. Reset buffers and release
@@ -827,7 +833,8 @@ constructor(
     val runnable = Runnable {
       while (state == activityState) {
         val currentPosition = mediaPlayer?.currentPosition
-        _playbackProgressPbProgress.value = currentPosition ?: _playbackProgressPbProgress.value
+        resetPlayingLength(mediaPlayer?.currentPosition!!)
+        playbackProgressPb.progress = currentPosition ?: playbackProgressPb.progress
         Thread.sleep(100)
       }
     }
