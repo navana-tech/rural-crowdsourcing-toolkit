@@ -10,20 +10,20 @@ import retrofit2.http.*
 
 interface MicroTaskAssignmentAPI {
 
-  @PUT("/assignments")
+  @PUT("assignments")
   suspend fun submitAssignments(
     @Header("karya-id-token") idTokenHeader: String,
     @Body updates: List<MicroTaskAssignmentRecord>,
   ): Response<List<String>>
 
-  @GET("/assignments")
+  @GET("assignments")
   suspend fun getNewAssignments(
     @Header("karya-id-token") idTokenHeader: String,
     @Query("from") from: String,
     @Query("type") type: String = "new",
   ): Response<GetAssignmentsResponse>
 
-  @GET("/assignments")
+  @GET("assignments")
   suspend fun getVerifiedAssignments(
     @Header("karya-id-token") idTokenHeader: String,
     @Query("from") from: String,
@@ -31,7 +31,7 @@ interface MicroTaskAssignmentAPI {
   ): Response<List<MicroTaskAssignmentRecord>>
 
   @Multipart
-  @POST("/assignment/{id}/output_file")
+  @POST("assignment/{id}/output_file")
   suspend fun submitAssignmentOutputFile(
     @Header("karya-id-token") idTokenHeader: String,
     @Path("id") id: String,
@@ -39,7 +39,7 @@ interface MicroTaskAssignmentAPI {
     @Part file: MultipartBody.Part,
   ): Response<KaryaFileRecord>
 
-  @GET("/assignment/{id}/input_file")
+  @GET("assignment/{id}/input_file")
   suspend fun getInputFile(
     @Header("karya-id-token") idToken: String,
     @Path("id") assignmentId: String,

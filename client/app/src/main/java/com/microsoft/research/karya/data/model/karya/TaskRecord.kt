@@ -11,7 +11,7 @@ import com.microsoft.research.karya.data.model.karya.enums.TaskStatus
 @Entity(tableName = "task")
 data class TaskRecord(
   @PrimaryKey var id: String,
-  var language_code: String,
+  var language_code: String? = null,
   var scenario_name: String,
   var name: String,
   var description: String,

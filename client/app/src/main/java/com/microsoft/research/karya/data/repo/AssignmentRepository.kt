@@ -1,5 +1,6 @@
 package com.microsoft.research.karya.data.repo
 
+import android.util.Log
 import com.microsoft.research.karya.data.local.daos.MicroTaskAssignmentDao
 import com.microsoft.research.karya.data.local.daos.MicroTaskDao
 import com.microsoft.research.karya.data.local.daos.TaskDao
@@ -32,7 +33,7 @@ constructor(
 
     val response = assignmentAPI.getNewAssignments(idToken, from)
     val assignmentResponse = response.body()
-
+    Log.d("REPO", assignmentResponse.toString())
     if (!response.isSuccessful) {
       error("Failed to get assignments")
     }
