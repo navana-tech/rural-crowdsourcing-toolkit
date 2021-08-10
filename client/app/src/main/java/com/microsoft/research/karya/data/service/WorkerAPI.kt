@@ -8,19 +8,19 @@ import retrofit2.http.*
 
 interface WorkerAPI {
 
-  @PUT("/worker/otp/generate")
+  @PUT("worker/otp/generate")
   suspend fun generateOTP(
     @Header("access-code") accessCode: String,
     @Header("phone-number") phoneNumber: String,
   ): Response<ResponseBody>
 
-  @PUT("/worker/otp/resend")
+  @PUT("worker/otp/resend")
   suspend fun resendOTP(
     @Header("access-code") accessCode: String,
     @Header("phone-number") phoneNumber: String,
   ): Response<ResponseBody>
 
-  @PUT("/worker/otp/verify")
+  @PUT("worker/otp/verify")
   suspend fun verifyOTP(
     @Header("access-code") accessCode: String,
     @Header("phone-number") phoneNumber: String,
@@ -30,7 +30,7 @@ interface WorkerAPI {
   /*
    * This API would be used before OTP to determine App language and check the validity of access code
    * */
-  @GET("/worker")
+  @GET("worker")
   suspend fun getWorkerUsingAccessCode(
     @Header("access-code") accessCode: String,
   ): Response<WorkerRecord>
@@ -38,19 +38,19 @@ interface WorkerAPI {
   /*
    * This API would be used whenever needed after the successful OTP verification
    * */
-  @GET("/worker")
+  @GET("worker")
   suspend fun getWorkerUsingIdToken(
     @Header("karya-id-token") idToken: String,
   ): Response<WorkerRecord>
 
-  @PUT("/worker")
+  @PUT("worker")
   suspend fun updateWorker(
     @Header("karya-id-token") idToken: String,
     @Body registerOrUpdateWorkerRequest: RegisterOrUpdateWorkerRequest,
     @Query("action") action: String,
   ): Response<WorkerRecord>
 
-  @PUT("/worker")
+  @PUT("worker")
   suspend fun updateWorker(
     @Header("karya-id-token") idToken: String,
     @Body worker: WorkerRecord,
