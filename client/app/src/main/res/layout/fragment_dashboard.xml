@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_64sdp"
         android:text="@string/check_updates_underline"
-        android:textColor="@color/dk_blue"
+        android:textColor="@color/checkUpdatesColor"
         android:textSize="@dimen/_24ssp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
