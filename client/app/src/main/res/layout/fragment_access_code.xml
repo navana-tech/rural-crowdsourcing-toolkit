@@ -105,8 +105,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/creationCodeEt"
-        app:text="Increase Volume"
+        app:text="Increase volume"
         app:textColor="@color/colorBlack"
-        app:textSize="@dimen/_6ssp" />
+        app:textSize="@dimen/_5ssp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
