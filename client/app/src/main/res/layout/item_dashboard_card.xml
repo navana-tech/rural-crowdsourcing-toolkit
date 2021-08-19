@@ -8,13 +8,14 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/task_card"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_160sdp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_16sdp"
-        app:cardElevation="8dp"
+        android:maxHeight="@dimen/_180sdp"
         app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,21 +29,24 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/header"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:background="#fc6481">
+                android:layout_height="wrap_content"
+                android:background="#fc6481"
+                android:maxHeight="@dimen/_80sdp"
+                android:minHeight="@dimen/_60sdp"
+                android:paddingVertical="@dimen/_2sdp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/task_image"
                     android:layout_width="@dimen/_45sdp"
                     android:layout_height="@dimen/_45sdp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
                     android:background="@android:color/transparent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/ic_task_speech_data"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CircleShape" />
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CircleShape"
+                    tools:srcCompat="@drawable/ic_task_speech_data" />
 
                 <TextView
                     android:id="@+id/task_title"
@@ -50,29 +54,34 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_4sdp"
                     android:layout_marginEnd="@dimen/_4sdp"
+                    android:maxLines="2"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_18ssp"
+                    android:textSize="@dimen/_16ssp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/task_subtitle"
-                    app:layout_constraintStart_toEndOf="@id/task_image"
-                    app:layout_constraintTop_toTopOf="@id/task_image"
-                    app:layout_constraintVertical_chainStyle="packed"
                     app:layout_constraintEnd_toStartOf="@id/task_arrow_next"
-                    tools:text="Speech Data" />
+                    app:layout_constraintStart_toEndOf="@id/task_image"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="English Speech Collection" />
 
                 <TextView
                     android:id="@+id/task_subtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:layout_marginEnd="@dimen/_4sdp"
-                    android:textColor="@color/transparentWhite"
-                    android:textSize="@dimen/_14ssp"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="1"
+                    android:singleLine="true"
                     android:text="@string/d_sentences_available"
-                    app:layout_constraintBottom_toBottomOf="@id/task_image"
+                    android:textColor="@color/transparentWhite"
+                    android:textSize="@dimen/_13ssp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/task_arrow_next"
                     app:layout_constraintStart_toEndOf="@id/task_image"
                     app:layout_constraintTop_toBottomOf="@id/task_title"
-                    app:layout_constraintEnd_toStartOf="@id/task_arrow_next"
                     tools:text="10 sentences available" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -91,7 +100,7 @@
                 android:id="@+id/tasks_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="@string/d_tasks_available"
                 android:textColor="@color/colorBlack" />
@@ -100,7 +109,7 @@
                 android:id="@+id/tasks_completed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="@string/d_tasks_completed"
                 android:textColor="@color/colorBlack" />
@@ -109,7 +118,7 @@
                 android:id="@+id/tasks_submitted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="@string/d_tasks_submitted"
                 android:textColor="@color/colorBlack" />
@@ -118,8 +127,9 @@
                 android:id="@+id/tasks_verified"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
                 android:text="@string/d_tasks_verified"
                 android:textColor="@color/colorBlack" />
 
