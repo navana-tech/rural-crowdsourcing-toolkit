@@ -75,7 +75,7 @@
         android:layout_width="@dimen/_56sdp"
         android:layout_height="@dimen/_56sdp"
         android:layout_gravity="center_horizontal|bottom"
-        android:background="@color/dk_blue"
+        android:background="@color/assistantBackground"
         android:elevation="@dimen/_4sdp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_assistant"
