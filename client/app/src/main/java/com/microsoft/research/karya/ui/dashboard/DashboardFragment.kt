@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -47,6 +48,23 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
   private lateinit var syncWorkRequest: OneTimeWorkRequest
 
   private var dialog: AlertDialog? = null
+
+  private val lottieRefreshUpdateListener = object : Animator.AnimatorListener {
+      override fun onAnimationStart(animation: Animator?) {
+      }
+
+      override fun onAnimationEnd(animation: Animator?) {
+          hideLoading()
+      }
+
+      override fun onAnimationCancel(animation: Animator?) {
+          hideLoading()
+      }
+
+      override fun onAnimationRepeat(animation: Animator?) {
+      }
+
+  }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -143,7 +161,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
         layoutManager = LinearLayoutManager(context)
       }
 
-      tvCheckUpdates.setOnClickListener { syncWithServer() }
+      refreshLl.setOnClickListener { syncWithServer() }
 
       appTb.setProfileClickListener { findNavController().navigate(R.id.action_global_tempDataFlow) }
       loadProfilePic()
@@ -155,6 +173,19 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
     WorkManager.getInstance(requireContext())
       .enqueueUniqueWork(UNIQUE_SYNC_WORK_NAME, ExistingWorkPolicy.KEEP, syncWorkRequest)
   }
+
+    private fun updateTasks(data: DashboardStateSuccess) {
+        data.apply {
+            (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
+            // Show total credits if it is greater than 0
+            if (totalCreditsEarned > 0.0f) {
+                binding.rupeesEarnedCl.visible()
+                binding.rupeesEarnedTv.text = "%.2f".format(totalCreditsEarned)
+            } else {
+                binding.rupeesEarnedCl.gone()
+            }
+        }
+    }
 
   private fun showSuccessUi(data: DashboardStateSuccess) {
       WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(syncWorkRequest.id)
@@ -239,13 +270,28 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
     binding.syncErrorMessageTv.gone()
   }
 
-  private fun showLoading() {}
+  private fun showLoading() {
+      with(binding) {
+          refreshLl.isClickable = false
+          lottieRefresh.setAnimation(R.raw.refresh_loading)
+          tvRefresh.setText(R.string.refreshing)
+          lottieRefresh.playAnimation()
+      }
+  }
 
-  private fun hideLoading() {}
+  private fun hideLoading() {
+      with(binding) {
+          refreshLl.isClickable = true
+          lottieRefresh.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_refresh))
+          // Remove listener since we only need it for the last bit of the animation
+          lottieRefresh.removeAnimatorListener(lottieRefreshUpdateListener)
+          tvRefresh.setText(R.string.refresh_underline)
+          tvRefresh.setTextColor(ContextCompat.getColor(requireContext(), R.color.checkUpdatesColor))
+          lottieRefresh.playAnimation()
+      }
+  }
 
   private fun loadProfilePic() {
-    //    binding.appTb.showProfilePicture()
-
     lifecycleScope.launchWhenStarted {
       withContext(Dispatchers.IO) {
         val profilePicPath =

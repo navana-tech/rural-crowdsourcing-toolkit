@@ -29,8 +29,7 @@ constructor(
       taskInfo.taskID
     }
 
-  private val _dashboardUiState: MutableStateFlow<DashboardUiState> =
-    MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
+  private val _dashboardUiState: MutableStateFlow<DashboardUiState> = MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
   val dashboardUiState = _dashboardUiState.asStateFlow()
 
   private val _progress: MutableStateFlow<Int> =
@@ -157,5 +156,4 @@ constructor(
   fun setProgress(i: Int) {
     _progress.value = i
   }
-
 }

@@ -287,4 +287,7 @@
     <string name="d_sentences_available">%d sentences available</string>
     <string name="check_updates_underline"><u>Check Updates</u></string>
     <string name="rupees_d">₹%d</string>
+    <string name="refresh_underline"><u>Refresh</u></string>
+    <string name="refreshing">Refreshing…</string>
+    <string name="tasks_updated">Tasks Updated</string>
 </resources>

@@ -126,6 +126,7 @@ dependencies {
   implementation(Dependencies.ThirdParty.glide)
   implementation(Dependencies.ThirdParty.okhttp)
   implementation(Dependencies.ThirdParty.loggingInterceptor)
+  implementation(Dependencies.ThirdParty.lottie)
   implementation(Dependencies.ThirdParty.stateProgressBar)
 
   implementation(Dependencies.ThirdParty.Retrofit.retrofit)

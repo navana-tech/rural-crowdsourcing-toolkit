@@ -25,4 +25,5 @@
     <color name="colorGreenDarker">#29c07f</color>
     <color name="assistantBackground">#dbb2ff</color>
     <color name="checkUpdatesColor">#6900ff</color>
+    <color name="refreshSuccessColor">#46C579</color>
 </resources>
