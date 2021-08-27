@@ -535,6 +535,10 @@ abstract class MicrotaskRenderer(
           } else {
             JsonArray()
           }
+      } else {
+          outputData = JsonObject()
+          logs = JsonArray()
+          outputFiles = JsonArray()
       }
 
       // setup microtask
