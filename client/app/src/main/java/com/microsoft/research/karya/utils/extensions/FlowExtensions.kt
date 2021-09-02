@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
@@ -29,7 +30,7 @@ fun <T> Flow<T>.mapToResult(): Flow<Result> {
 }
 
 fun <T> Flow<T>.observe(lifecycle: Lifecycle, lifecycleScope: LifecycleCoroutineScope, observer: (T) -> Unit) {
-  flowWithLifecycle(lifecycle).onEach { observer(it) }.launchIn(lifecycleScope)
+  flowWithLifecycle(lifecycle).distinctUntilChanged().onEach { observer(it) }.launchIn(lifecycleScope)
 }
 
 @OptIn(InternalCoroutinesApi::class)

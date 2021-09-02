@@ -18,18 +18,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_check_updates"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/refresh_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_64sdp"
-        android:text="@string/check_updates_underline"
-        android:textColor="@color/checkUpdatesColor"
-        android:textSize="@dimen/_24ssp"
-        android:textStyle="bold"
+        android:layout_marginTop="@dimen/_56sdp"
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appTb" />
+        app:layout_constraintTop_toBottomOf="@id/appTb">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_refresh"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_refresh" />
+
+        <TextView
+            android:id="@+id/tv_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/refresh_underline"
+            android:textColor="@color/checkUpdatesColor"
+            android:textSize="@dimen/_20ssp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appTb" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksRv"
@@ -45,7 +63,7 @@
         app:layout_constraintBottom_toTopOf="@id/rupeesEarnedCl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_check_updates"
+        app:layout_constraintTop_toBottomOf="@id/refresh_ll"
         app:layout_constraintVertical_bias="0"
         tools:itemCount="2"
         tools:listitem="@layout/item_dashboard_card" />

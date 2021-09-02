@@ -98,6 +98,7 @@ object Dependencies {
     const val glide = "com.github.bumptech.glide:glide:4.12.0"
     const val stateProgressBar = "com.kofigyan.stateprogressbar:stateprogressbar:1.0.0"
     const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.9.1"
+    const val lottie = "com.airbnb.android:lottie:4.1.0"
     const val okhttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
 
     object Retrofit {
