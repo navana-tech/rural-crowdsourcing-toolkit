@@ -46,6 +46,7 @@ class KaryaToolbar : FrameLayout {
     val title = a.getString(R.styleable.KaryaToolbar_title)
     val startIcon = a.getDrawable(R.styleable.KaryaToolbar_startIcon)
     val endIcon = a.getDrawable(R.styleable.KaryaToolbar_endIcon)
+    val endText = a.getString(R.styleable.KaryaToolbar_endText)
     val showBackButton = a.getBoolean(R.styleable.KaryaToolbar_showBackButton, false)
 
     if (title != null) {
@@ -57,15 +58,17 @@ class KaryaToolbar : FrameLayout {
     if (endIcon != null) {
       setEndIcon(endIcon)
     }
+    if (endText != null) {
+      setEndText(endText)
+    }
     showBackIcon(showBackButton)
     a.recycle()
   }
 
   /**
-   * We do not want our FrameLayout to clip our Assistant Button which draws beyond the the Toolbar.
-   * In order to do that we need to disable clipping from all the parents of the [KaryaToolbar].
-   * This recursive method does that by checking all the parents and then setting the `clipChildren`
-   * property to `false`.
+   * We do not want our FrameLayout to clip our Assistant Button which draws beyond the the Toolbar. In order to do that
+   * we need to disable clipping from all the parents of the [KaryaToolbar]. This recursive method does that by checking
+   * all the parents and then setting the `clipChildren` property to `false`.
    */
   private fun disableClipping() {
     var parent = this.parent
@@ -100,6 +103,13 @@ class KaryaToolbar : FrameLayout {
   fun setEndIcon(endIcon: Drawable) {
     binding.endIcon.apply {
       setImageDrawable(endIcon)
+      visible()
+    }
+  }
+
+  fun setEndText(text: String) {
+    binding.endText.apply {
+      this.text = text
       visible()
     }
   }
