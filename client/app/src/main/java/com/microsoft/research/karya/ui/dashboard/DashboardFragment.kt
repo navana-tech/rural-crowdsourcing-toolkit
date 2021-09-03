@@ -1,9 +1,11 @@
 package com.microsoft.research.karya.ui.dashboard
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
@@ -90,10 +92,12 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
       (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
       // Show total credits if it is greater than 0
       if (totalCreditsEarned > 0.0f) {
-        binding.rupeesEarnedCl.visible()
-        binding.rupeesEarnedTv.text = "%.2f".format(totalCreditsEarned)
+        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
+        binding.appTb.setEndIcon(drawable)
+        binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
       } else {
-        binding.rupeesEarnedCl.gone()
+          binding.appTb.hideEndIcon()
+          binding.appTb.hideEndText()
       }
     }
   }

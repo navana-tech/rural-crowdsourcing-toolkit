@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.databinding.KaryaToolbarBinding
+import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.visible
 
 class KaryaToolbar : FrameLayout {
@@ -129,6 +130,10 @@ class KaryaToolbar : FrameLayout {
   fun showBackIcon(showIcon: Boolean) {
     binding.backIcon.isVisible = showIcon
   }
+
+  fun hideEndIcon() = binding.endIcon.gone()
+
+  fun hideEndText() = binding.endText.gone()
 
   fun setProfileClickListener(onClick: () -> Unit) {
     binding.startIcon.apply {
