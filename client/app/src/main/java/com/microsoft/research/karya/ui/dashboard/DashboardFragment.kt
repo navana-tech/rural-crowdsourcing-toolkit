@@ -1,10 +1,16 @@
 package com.microsoft.research.karya.ui.dashboard
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -63,7 +69,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
     }
 
     viewModel.progress.observe(lifecycle, lifecycleScope) { i ->
-      binding.syncProgressBar.progress = i
+      // binding.syncProgressBar.progress = i
     }
 
     WorkManager.getInstance(requireContext())
@@ -98,8 +104,6 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
         }
         if (workInfo != null && workInfo.state == WorkInfo.State.FAILED) {
           lifecycleScope.launch {
-
-          }
             showErrorUi(
               Throwable(workInfo.outputData.getString("errorMsg")),
               ERROR_TYPE.SYNC_ERROR,
@@ -109,7 +113,6 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
           }
         }
       })
-
   }
 
   override fun onSessionExpired() {
@@ -154,33 +157,35 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
   }
 
   private fun showSuccessUi(data: DashboardStateSuccess) {
-    WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(syncWorkRequest.id)
-      .observe(viewLifecycleOwner, Observer { workInfo ->
-        if (workInfo == null || workInfo.state == WorkInfo.State.SUCCEEDED || workInfo.state == WorkInfo.State.FAILED) {
-          hideLoading() // Only hide loading if no work is in queue
-        }
-      })
-    binding.syncCv.enable()
-    data.apply {
-      (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
-      // Show total credits if it is greater than 0
-      /* if (totalCreditsEarned > 0.0f) {
-        binding.rupeesEarnedCl.visible()
-        binding.rupeesEarnedTv.text = "%.2f".format(totalCreditsEarned)
-      } else {
-        binding.rupeesEarnedCl.gone()
-      } */
-    }
+      WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(syncWorkRequest.id)
+          .observe(viewLifecycleOwner, Observer { workInfo ->
+              if (workInfo == null || workInfo.state == WorkInfo.State.SUCCEEDED || workInfo.state == WorkInfo.State.FAILED) {
+                  hideLoading() // Only hide loading if no work is in queue
+              }
+          })
 
-    // Show a dialog box to sync with server if completed tasks and internet available
-    if (requireContext().isNetworkAvailable()) {
-      for (taskInfo in data.taskInfoData) {
-        if (taskInfo.taskStatus.completedMicrotasks > 0) {
-          showDialogueToSync()
-          return
-        }
+      binding.tvCheckUpdates.enable()
+      data.apply {
+          (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
+          if (totalCreditsEarned > 0.0f) {
+              val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
+              binding.appTb.setEndIcon(drawable)
+              binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
+          } else {
+              binding.appTb.hideEndIcon()
+              binding.appTb.hideEndText()
+          }
+
+          // Show a dialog box to sync with server if completed tasks and internet available
+          if (requireContext().isNetworkAvailable()) {
+              for (taskInfo in data.taskInfoData) {
+                  if (taskInfo.taskStatus.completedMicrotasks > 0) {
+                      showDialogueToSync()
+                      return
+                  }
+              }
+          }
       }
-    }
   }
 
   private fun showDialogueToSync() {
@@ -210,7 +215,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
   private fun showErrorUi(throwable: Throwable, errorType: ERROR_TYPE, errorLvl: ERROR_LVL) {
     hideLoading()
     showError(throwable.message ?: "Some error Occurred", errorType, errorLvl)
-    binding.syncCv.enable()
+    binding.tvCheckUpdates.enable()
   }
 
   private fun showError(message: String, errorType: ERROR_TYPE, errorLvl: ERROR_LVL) {
@@ -230,7 +235,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
 
   private fun showLoadingUi() {
     showLoading()
-    binding.syncCv.disable()
+    binding.tvCheckUpdates.disable()
     binding.syncErrorMessageTv.gone()
   }
 

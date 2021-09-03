@@ -286,4 +286,5 @@
     <string name="s_other">Other</string>
     <string name="d_sentences_available">%d sentences available</string>
     <string name="check_updates_underline"><u>Check Updates</u></string>
+    <string name="rupees_d">₹%d</string>
 </resources>
