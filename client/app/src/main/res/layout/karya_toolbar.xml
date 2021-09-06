@@ -53,20 +53,37 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/back_icon"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="A very long string to measure the maximument size" />
+            tools:text="A very long string to measure the maximum size" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/endIcon"
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/_8sdp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/endText"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/ic_coins"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/endText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:maxWidth="@dimen/_88sdp"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible"
-            tools:srcCompat="@drawable/ic_cross" />
+            tools:text="₹500"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

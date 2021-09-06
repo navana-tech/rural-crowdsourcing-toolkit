@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.databinding.KaryaToolbarBinding
+import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.visible
 
 class KaryaToolbar : FrameLayout {
@@ -46,6 +47,7 @@ class KaryaToolbar : FrameLayout {
     val title = a.getString(R.styleable.KaryaToolbar_title)
     val startIcon = a.getDrawable(R.styleable.KaryaToolbar_startIcon)
     val endIcon = a.getDrawable(R.styleable.KaryaToolbar_endIcon)
+    val endText = a.getString(R.styleable.KaryaToolbar_endText)
     val showBackButton = a.getBoolean(R.styleable.KaryaToolbar_showBackButton, false)
 
     if (title != null) {
@@ -57,15 +59,17 @@ class KaryaToolbar : FrameLayout {
     if (endIcon != null) {
       setEndIcon(endIcon)
     }
+    if (endText != null) {
+      setEndText(endText)
+    }
     showBackIcon(showBackButton)
     a.recycle()
   }
 
   /**
-   * We do not want our FrameLayout to clip our Assistant Button which draws beyond the the Toolbar.
-   * In order to do that we need to disable clipping from all the parents of the [KaryaToolbar].
-   * This recursive method does that by checking all the parents and then setting the `clipChildren`
-   * property to `false`.
+   * We do not want our FrameLayout to clip our Assistant Button which draws beyond the the Toolbar. In order to do that
+   * we need to disable clipping from all the parents of the [KaryaToolbar]. This recursive method does that by checking
+   * all the parents and then setting the `clipChildren` property to `false`.
    */
   private fun disableClipping() {
     var parent = this.parent
@@ -104,6 +108,13 @@ class KaryaToolbar : FrameLayout {
     }
   }
 
+  fun setEndText(text: String) {
+    binding.endText.apply {
+      this.text = text
+      visible()
+    }
+  }
+
   fun setProfilePicture(profilePicture: Bitmap) {
     require(!binding.title.isVisible) {
       "Toolbar cannot display both Title and StartIcon/Profile at the same time. Please remove Title before setting StartIcon/Profile"
@@ -119,6 +130,10 @@ class KaryaToolbar : FrameLayout {
   fun showBackIcon(showIcon: Boolean) {
     binding.backIcon.isVisible = showIcon
   }
+
+  fun hideEndIcon() = binding.endIcon.gone()
+
+  fun hideEndText() = binding.endText.gone()
 
   fun setProfileClickListener(onClick: () -> Unit) {
     binding.startIcon.apply {

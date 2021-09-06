@@ -56,6 +56,7 @@
         <attr name="title" />
         <attr name="startIcon" format="reference" />
         <attr name="endIcon" format="reference" />
+        <attr name="endText" format="string|reference" />
         <attr name="showBackButton" format="boolean" />
     </declare-styleable>
 

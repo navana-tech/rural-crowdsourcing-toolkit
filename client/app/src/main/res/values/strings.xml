@@ -244,6 +244,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="s_other">Other</string>
     <string name="d_sentences_available">%d sentences available</string>
+    <string name="rupees_d">₹%d</string>
     <string name="refresh_underline"><u>Refresh</u></string>
     <string name="refreshing">Refreshing…</string>
     <string name="tasks_updated">Tasks Updated</string>
