@@ -1,9 +1,11 @@
 package com.microsoft.research.karya.ui.dashboard
 
 import android.content.Context
+import android.animation.Animator
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -13,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.animation.keyframe.BaseKeyframeAnimation
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.modelsExtra.TaskInfo
@@ -25,10 +28,13 @@ import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycle
+import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import com.microsoft.research.karya.utils.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
@@ -38,6 +44,23 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
   val viewModel: DashboardViewModel by viewModels()
 
   @Inject lateinit var authManager: AuthManager
+
+  private val lottieRefreshUpdateListener = object : Animator.AnimatorListener {
+      override fun onAnimationStart(animation: Animator?) {
+      }
+
+      override fun onAnimationEnd(animation: Animator?) {
+          hideLoading()
+      }
+
+      override fun onAnimationCancel(animation: Animator?) {
+          hideLoading()
+      }
+
+      override fun onAnimationRepeat(animation: Animator?) {
+      }
+
+  }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -53,23 +76,12 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
   private fun setupViews() {
     with(binding) {
-      // TODO: Convert this to one string instead of joining multiple strings
-      /*
-      val syncText =
-        "${getString(R.string.s_get_new_tasks)} - " +
-          "${getString(R.string.s_submit_completed_tasks)} - " +
-          "${getString(R.string.s_update_verified_tasks)} - " +
-          getString(R.string.s_update_earning)
-
-      syncPromptTv.text = syncText
-      */
-
       tasksRv.apply {
         adapter = TaskListAdapter(emptyList(), ::onDashboardItemClick)
         layoutManager = LinearLayoutManager(context)
       }
 
-      tvCheckUpdates.setOnClickListener { viewModel.syncWithServer() }
+      refreshLl.setOnClickListener { viewModel.syncWithServer() }
 
       appTb.setProfileClickListener { findNavController().navigate(R.id.action_global_tempDataFlow) }
       loadProfilePic()
@@ -77,46 +89,76 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
   }
 
   private fun observeUi() {
-    viewModel.dashboardUiState.observe(lifecycle, lifecycleScope) { dashboardUiState ->
+    viewModel.dashboardUiState.observe(viewLifecycle, viewLifecycleScope) { dashboardUiState ->
       when (dashboardUiState) {
-        is DashboardUiState.Success -> showSuccessUi(dashboardUiState.data)
+        is DashboardUiState.Success -> if (dashboardUiState.userTriggered) {
+            showSuccessUi(dashboardUiState.data)
+        } else {
+            updateTasks(dashboardUiState.data)
+        }
         is DashboardUiState.Error -> showErrorUi(dashboardUiState.throwable)
         DashboardUiState.Loading -> showLoadingUi()
       }
     }
   }
 
-  private fun showSuccessUi(data: DashboardStateSuccess) {
-    hideLoading()
-    data.apply {
-      (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
-      // Show total credits if it is greater than 0
-      if (totalCreditsEarned > 0.0f) {
-        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
-        binding.appTb.setEndIcon(drawable)
-        binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
-      } else {
-          binding.appTb.hideEndIcon()
-          binding.appTb.hideEndText()
-      }
+    private fun updateTasks(data: DashboardStateSuccess) {
+        data.apply {
+            (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
+            // Show total credits if it is greater than 0
+            if (totalCreditsEarned > 0.0f) {
+                val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
+                binding.appTb.setEndIcon(drawable)
+                binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
+            } else {
+                binding.appTb.hideEndIcon()
+                binding.appTb.hideEndText()
+            }
+        }
     }
+
+  private fun showSuccessUi(data: DashboardStateSuccess) {
+    updateTasks(data)
+
+      with(binding) {
+          lottieRefresh.setAnimation(R.raw.refresh_success)
+          lottieRefresh.addAnimatorListener(lottieRefreshUpdateListener)
+          tvRefresh.setText(R.string.tasks_updated)
+          tvRefresh.setTextColor(ContextCompat.getColor(requireContext(), R.color.refreshSuccessColor))
+          lottieRefresh.playAnimation()
+      }
   }
 
   private fun showErrorUi(throwable: Throwable) {
-    hideLoading()
+      hideLoading()
   }
 
   private fun showLoadingUi() {
     showLoading()
   }
 
-  private fun showLoading() {}
+  private fun showLoading() {
+      with(binding) {
+          refreshLl.isClickable = false
+          lottieRefresh.setAnimation(R.raw.refresh_loading)
+          tvRefresh.setText(R.string.refreshing)
+          lottieRefresh.playAnimation()
+      }
+  }
 
-  private fun hideLoading() {}
+  private fun hideLoading() {
+      with(binding) {
+          refreshLl.isClickable = true
+          lottieRefresh.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_refresh))
+          // Remove listener since we only need it for the last bit of the animation
+          lottieRefresh.removeAnimatorListener(lottieRefreshUpdateListener)
+          tvRefresh.setText(R.string.refresh_underline)
+          tvRefresh.setTextColor(ContextCompat.getColor(requireContext(), R.color.checkUpdatesColor))
+          lottieRefresh.playAnimation()
+      }
+  }
 
   private fun loadProfilePic() {
-    //    binding.appTb.showProfilePicture()
-
     lifecycleScope.launchWhenStarted {
       withContext(Dispatchers.IO) {
         val profilePicPath = authManager.fetchLoggedInWorker().profilePicturePath ?: return@withContext

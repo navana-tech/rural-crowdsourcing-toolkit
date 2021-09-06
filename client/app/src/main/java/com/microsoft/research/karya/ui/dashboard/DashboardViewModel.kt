@@ -50,8 +50,7 @@ constructor(
   private val taskInfoComparator =
     compareByDescending<TaskInfo> { taskInfo -> taskInfo.assignedMicrotasks }.thenBy { taskInfo -> taskInfo.taskID }
 
-  private val _dashboardUiState: MutableStateFlow<DashboardUiState> =
-    MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
+  private val _dashboardUiState: MutableStateFlow<DashboardUiState> = MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
   val dashboardUiState = _dashboardUiState.asStateFlow()
 
   fun syncWithServer() {
@@ -62,7 +61,7 @@ constructor(
       fetchNewAssignments()
       fetchVerifiedAssignments()
       cleanupKaryaFiles()
-      getAllTasks()
+      getAllTasks(true)
     }
   }
 
@@ -196,7 +195,7 @@ constructor(
   }
 
   /** Fetches a list of tasks */
-  fun getAllTasks() {
+  fun getAllTasks(userTriggered: Boolean = false) {
     viewModelScope.launch {
       val worker = authManager.fetchLoggedInWorker()
 
@@ -205,9 +204,7 @@ constructor(
 
         val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
         val success =
-          DashboardUiState.Success(
-            DashboardStateSuccess(taskInfoList.sortedWith(taskInfoComparator), totalCreditsEarned)
-          )
+          DashboardUiState.Success(DashboardStateSuccess(taskInfoList.sortedWith(taskInfoComparator), totalCreditsEarned), userTriggered)
         _dashboardUiState.value = success
       } catch (throwable: Throwable) {
         _dashboardUiState.value = DashboardUiState.Error(throwable)
