@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">కార్య​</string>
+    <string name="app_name_full">కార్య యాప్</string>
+    <string name="help_support">సహాయం కొరకు</string>
+    <string name="privacy_policy">గోప్యతా విధానం</string>
+
+    <!-- Speech data quality definitions -->
+    <string name="recording_accuracy">ఖచ్చితత్వం</string>
+    <string name="accuracy_correct">సరైన</string>
+    <string name="accuracy_errors">లోపాలు</string>
+    <string name="accuracy_incorrect">తప్పు</string>
+
+    <string name="recording_volume">సౌండు</string>
+    <string name="volume_high">బాగుంది</string>
+    <string name="volume_okay">మెల్లగ వినిపించడం</string>
+    <string name="volume_low">వినబడుట లేదు</string>
+
+    <string name="recording_quality">నాణ్యత</string>
+    <string name="quality_good">మంచిది</string>
+    <string name="quality_noisy">గోలగోలగా ఉంది</string>
+    <string name="quality_bad">బాగోలేదు</string>
+
+    <string name="rating_undefined">నిర్వచించబడలేదు</string>
+</resources>
+
