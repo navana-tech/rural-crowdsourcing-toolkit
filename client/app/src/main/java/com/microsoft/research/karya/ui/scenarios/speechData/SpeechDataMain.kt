@@ -32,9 +32,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.File
 
 /** Audio recording parameters */
-private const val SAMPLE_RATE = 44100
+private const val SAMPLE_RATE = 16000
 private const val AUDIO_CHANNEL = AudioFormat.CHANNEL_IN_MONO
 private const val AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT
 
@@ -129,7 +130,7 @@ open class SpeechDataMain(
   private lateinit var scratchRecordingFileInitJob: Job
 
   /** Final recording file */
-  private val outputRecordingFileParams = Pair("", "m4a")
+  private val outputRecordingFileParams = Pair("", "wav")
   private lateinit var outputRecordingFilePath: String
   private var encodingJob: Job? = null
 
@@ -1282,8 +1283,14 @@ open class SpeechDataMain(
 
   /** Encode the scratch wav recording file into a compressed main file. */
   private suspend fun encodeRecording() {
-    CoroutineScope(Dispatchers.Default)
-      .launch { RawToAACEncoder().encode(scratchRecordingFilePath, outputRecordingFilePath) }
+    CoroutineScope(Dispatchers.IO)
+      .launch {
+          val inputFile = File(scratchRecordingFilePath)
+          val outputFile = File(outputRecordingFilePath)
+
+          inputFile.copyTo(target = outputFile, overwrite = true)
+          // RawToAACEncoder().encode(scratchRecordingFilePath, outputRecordingFilePath)
+      }
       .join()
     addOutputFile(outputRecordingFileParams)
   }
