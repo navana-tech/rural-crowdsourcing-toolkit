@@ -4,12 +4,17 @@
 package com.microsoft.research.karya.ui.scenarios.speechData
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import com.google.gson.JsonObject
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.local.enum.AssistantAudio
@@ -18,10 +23,8 @@ import com.microsoft.research.karya.ui.scenarios.common.MicrotaskRenderer
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.ACTIVE
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.DISABLED
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.ENABLED
-import com.microsoft.research.karya.utils.RawToAACEncoder
 import com.microsoft.research.karya.utils.extensions.invisible
 import com.microsoft.research.karya.utils.extensions.visible
-import kotlinx.android.synthetic.main.karya_toolbar.*
 import java.io.DataOutputStream
 import java.io.FileOutputStream
 import java.io.RandomAccessFile
@@ -180,7 +183,10 @@ open class SpeechDataMain(
     //    }
 
     /** Set on click listeners */
-    recordBtn.setOnClickListener { handleRecordClick() }
+    recordBtn.setOnClickListener {
+        vibratePhone(it.context)
+        handleRecordClick()
+    }
     playBtn.setOnClickListener { handlePlayClick() }
     nextBtn.setOnClickListener { handleNextClick() }
     backBtn.setOnClickListener { handleBackClick() }
@@ -342,6 +348,16 @@ open class SpeechDataMain(
       resetRecordingLength(mPlayer.duration)
       mPlayer.release()
       setActivityState(ActivityState.COMPLETED_PRERECORDING)
+    }
+  }
+
+  private fun vibratePhone(context: Context) {
+    val vibrator = context.getSystemService<Vibrator>() ?: return
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+        vibrator.vibrate(200)
     }
   }
 
