@@ -152,9 +152,6 @@
             app:destination="@id/imageLabellingFragment">
             <argument android:name="taskId" />
         </action>
-        <action
-            android:id="@+id/action_dashboardActivity_to_navanaSpeechDataMainFragment"
-            app:destination="@id/navanaSpeechDataMainFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_dashboardActivity4"
@@ -234,11 +231,27 @@
         android:name="com.microsoft.research.karya.ui.scenarios.speechData.NavanaSpeechDataMainFragment"
         android:label="NavanaSpeechDataMainFragment"
         tools:layout="@layout/ng_speech_data_main">
-        <action
-            android:id="@+id/action_navanaSpeechDataMainFragment_to_dashboardActivity"
-            app:destination="@id/dashboardActivity" />
         <argument
             android:name="taskId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/navanaDashboardFragment"
+        android:name="com.microsoft.research.karya.ui.dashboard.NavanaDashboardFragment"
+        android:label="NavanaDashboardFragment"
+        tools:layout="@layout/fragment_navana_dashboard">
+        <action
+            android:id="@+id/action_navana_dashboard_to_navana_speech_data"
+            app:destination="@id/navanaSpeechDataMainFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_navanaDashboardFragment"
+        app:destination="@id/navanaDashboardFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/app_nav_graph"
+        app:popUpToInclusive="true" />
 </navigation>

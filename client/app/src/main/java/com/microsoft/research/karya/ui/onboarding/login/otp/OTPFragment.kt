@@ -10,6 +10,7 @@ import com.microsoft.research.karya.data.model.karya.enums.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentOtpBinding
 import com.microsoft.research.karya.ui.Destination
 import com.microsoft.research.karya.ui.base.BaseFragment
+import com.microsoft.research.karya.utils.FeatureFlags
 import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.disable
 import com.microsoft.research.karya.utils.extensions.doOnlyOnce
@@ -133,8 +134,11 @@ class OTPFragment : BaseFragment(R.layout.fragment_otp) {
   }
 
   private fun navigateToDashBoard() {
-    findNavController().navigate(R.id.action_global_dashboardActivity4)
-    finish()
+      if (FeatureFlags.useNavanaFragments) {
+          findNavController().navigate(R.id.action_global_navanaDashboardFragment)
+      } else {
+          findNavController().navigate(R.id.action_global_dashboardActivity4)
+      }
   }
 
   private fun navigateToTempDataFlow() {

@@ -10,6 +10,7 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.databinding.FragmentSplashScreenBinding
 import com.microsoft.research.karya.ui.Destination
 import com.microsoft.research.karya.ui.MainActivity
+import com.microsoft.research.karya.utils.FeatureFlags
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
 import com.microsoft.research.karya.utils.extensions.viewLifecycle
@@ -69,7 +70,11 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
   }
 
   private fun navigateToDashboard() {
-    navController.navigate(R.id.action_global_dashboardActivity4)
+      if (FeatureFlags.useNavanaFragments) {
+          navController.navigate(R.id.action_global_navanaDashboardFragment)
+      } else {
+          navController.navigate(R.id.action_global_dashboardActivity4)
+      }
   }
 
   private fun navigateToLoginFlow() {

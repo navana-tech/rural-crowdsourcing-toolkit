@@ -4,6 +4,7 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -810,11 +811,15 @@ constructor(
 
   /** Play [mediaFilePath] */
   private fun playFile(mediaFilePath: String) {
-    val player: MediaPlayer = mediaPlayer!!
-    player.setDataSource(mediaFilePath)
-    player.prepare()
-    _playbackProgressPbMax.value = player.duration
-    player.start()
+    try {
+        val player: MediaPlayer = mediaPlayer!!
+        player.setDataSource(mediaFilePath)
+        player.prepare()
+        _playbackProgressPbMax.value = player.duration
+        player.start()
+    } catch (e: Exception) {
+
+    }
   }
 
   /** Update the progress bar for the player as long as the activity is in the specific state. */

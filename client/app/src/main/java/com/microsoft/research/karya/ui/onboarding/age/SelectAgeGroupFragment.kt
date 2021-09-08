@@ -10,6 +10,7 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.model.karya.enums.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentSelectAgeGroupBinding
 import com.microsoft.research.karya.ui.base.SessionFragment
+import com.microsoft.research.karya.utils.FeatureFlags
 import com.microsoft.research.karya.utils.extensions.disable
 import com.microsoft.research.karya.utils.extensions.enable
 import com.microsoft.research.karya.utils.extensions.dataStore
@@ -140,6 +141,10 @@ class SelectAgeGroupFragment : SessionFragment(R.layout.fragment_select_age_grou
   }
 
   private fun navigateToDashboard() {
-    findNavController().navigate(R.id.action_global_dashboardActivity4)
+      if (FeatureFlags.useNavanaFragments) {
+          findNavController().navigate(R.id.action_global_navanaDashboardFragment)
+      } else {
+          findNavController().navigate(R.id.action_global_dashboardActivity4)
+      }
   }
 }

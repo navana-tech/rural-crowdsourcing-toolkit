@@ -13,6 +13,7 @@ import com.microsoft.research.karya.data.model.karya.enums.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentProfilePictureBinding
 import com.microsoft.research.karya.ui.Destination
 import com.microsoft.research.karya.ui.base.BaseFragment
+import com.microsoft.research.karya.utils.FeatureFlags
 import com.microsoft.research.karya.utils.extensions.disable
 import com.microsoft.research.karya.utils.extensions.enable
 import com.microsoft.research.karya.utils.extensions.dataStore
@@ -137,7 +138,11 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile_picture) {
   }
 
   private fun navigateToDashboard() {
-    findNavController().navigate(R.id.action_global_dashboardActivity4)
+      if (FeatureFlags.useNavanaFragments) {
+          findNavController().navigate(R.id.action_global_navanaDashboardFragment)
+      } else {
+          findNavController().navigate(R.id.action_global_dashboardActivity4)
+      }
   }
 
   private fun showLoading() {

@@ -18,147 +18,145 @@ import javax.inject.Inject
 class DashboardViewModel
 @Inject
 constructor(
-  private val taskRepository: TaskRepository,
-  private val assignmentRepository: AssignmentRepository,
-  private val authManager: AuthManager,
+    private val taskRepository: TaskRepository,
+    private val assignmentRepository: AssignmentRepository,
+    private val authManager: AuthManager,
 ) : ViewModel() {
 
-  private var taskInfoList = listOf<TaskInfo>()
-  private val taskInfoComparator =
-    compareByDescending<TaskInfo> { taskInfo -> taskInfo.taskStatus.assignedMicrotasks }.thenBy { taskInfo ->
-      taskInfo.taskID
-    }
+    private var taskInfoList = listOf<TaskInfo>()
+    private val taskInfoComparator =
+        compareByDescending<TaskInfo> { taskInfo -> taskInfo.taskStatus.assignedMicrotasks }.thenBy { taskInfo ->
+            taskInfo.taskID
+        }
 
-  private val _dashboardUiState: MutableStateFlow<DashboardUiState> = MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f), false))
-  val dashboardUiState = _dashboardUiState.asStateFlow()
+    private val _dashboardUiState: MutableStateFlow<DashboardUiState> =
+        MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f), false))
+    val dashboardUiState = _dashboardUiState.asStateFlow()
 
-  private val _progress: MutableStateFlow<Int> = MutableStateFlow(0)
-  val progress = _progress.asStateFlow()
+    private val _progress: MutableStateFlow<Int> =
+        MutableStateFlow(0)
+    val progress = _progress.asStateFlow()
 
-  private var _triggerRefresh: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
-  suspend fun refreshList() {
-    val worker = authManager.getLoggedInWorker()
-    val tempList = mutableListOf<TaskInfo>()
-    taskInfoList.forEach { taskInfo ->
-      val taskStatus = fetchTaskStatus(taskInfo.taskID)
-      tempList.add(
-        TaskInfo(
-          taskInfo.taskID,
-          taskInfo.taskName,
-          taskInfo.scenarioName,
-          taskStatus,
-          taskInfo.isGradeCard
-        )
-      )
-    }
-    taskInfoList = tempList.sortedWith(taskInfoComparator)
-
-    val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
-    _dashboardUiState.value = DashboardUiState.Success(DashboardStateSuccess(taskInfoList, totalCreditsEarned), _triggerRefresh.value)
-    _triggerRefresh.value = false
-  }
-
-  /**
-   * Returns a hot flow connected to the DB
-   * @return [Flow] of list of [TaskRecord] wrapper in a [Result]
-   */
-  @Suppress("USELESS_CAST")
-  fun getAllTasks() {
-    viewModelScope.launch {
-      val worker = authManager.getLoggedInWorker()
-
-      taskRepository
-        .getAllTasksFlow()
-        .flowOn(Dispatchers.IO)
-        .onEach { taskList ->
-          val tempList = mutableListOf<TaskInfo>()
-          taskList.forEach { taskRecord ->
-            val taskStatus = fetchTaskStatus(taskRecord.id)
-            if (taskRecord.scenario_name.equals("SIGN_LANGUAGE_VIDEO")) {
-              if (taskStatus.assignedMicrotasks > 0 || taskStatus.completedMicrotasks > 0) {
-                tempList.add(
-                  TaskInfo(
-                    taskRecord.id,
-                    taskRecord.display_name,
-                    taskRecord.scenario_name,
-                    taskStatus,
-                    false
-                  )
-                )
-              }
-              if (taskStatus.verifiedMicrotasks > 0) {
-                tempList.add(
-                  TaskInfo(
-                    taskRecord.id,
-                    "${taskRecord.display_name} (Grades)",
-                    taskRecord.scenario_name,
-                    taskStatus,
-                    true
-                  )
-                )
-              }
-            } else {
-              tempList.add(
+    suspend fun refreshList() {
+        val worker = authManager.getLoggedInWorker()
+        val tempList = mutableListOf<TaskInfo>()
+        taskInfoList.forEach { taskInfo ->
+            val taskStatus = fetchTaskStatus(taskInfo.taskID)
+            tempList.add(
                 TaskInfo(
-                  taskRecord.id,
-                  taskRecord.display_name,
-                  taskRecord.scenario_name,
-                  taskStatus,
-                  false
+                    taskInfo.taskID,
+                    taskInfo.taskName,
+                    taskInfo.scenarioName,
+                    taskStatus,
+                    taskInfo.isGradeCard
                 )
-              )
-            }
-          }
-          taskInfoList = tempList
-
-          val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
-          val success = DashboardUiState.Success(DashboardStateSuccess(taskInfoList.sortedWith(taskInfoComparator), totalCreditsEarned), _triggerRefresh.value)
-
-            _dashboardUiState.value = success
-            _triggerRefresh.value = false
+            )
         }
-        .catch { _dashboardUiState.value = DashboardUiState.Error(it) }
-        .collect()
+        taskInfoList = tempList.sortedWith(taskInfoComparator)
+
+        val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
+        _dashboardUiState.value =
+            DashboardUiState.Success(DashboardStateSuccess(taskInfoList, totalCreditsEarned), true)
     }
-  }
 
-  fun setLoading() {
-    _dashboardUiState.value = DashboardUiState.Loading
-  }
+    /**
+     * Returns a hot flow connected to the DB
+     * @return [Flow] of list of [TaskRecord] wrapper in a [Result]
+     */
+    @Suppress("USELESS_CAST")
+    fun getAllTasks() {
+        viewModelScope.launch {
+            val worker = authManager.getLoggedInWorker()
 
-  fun updateTaskStatus(taskId: String) {
-    viewModelScope.launch {
-      val worker = authManager.getLoggedInWorker()
+            taskRepository
+                .getAllTasksFlow()
+                .flowOn(Dispatchers.IO)
+                .onEach { taskList ->
+                    val tempList = mutableListOf<TaskInfo>()
+                    taskList.forEach { taskRecord ->
+                        val taskStatus = fetchTaskStatus(taskRecord.id)
+                        if (taskRecord.scenario_name.equals("SIGN_LANGUAGE_VIDEO")) {
+                            if (taskStatus.assignedMicrotasks > 0 || taskStatus.completedMicrotasks > 0) {
+                                tempList.add(
+                                    TaskInfo(
+                                        taskRecord.id,
+                                        taskRecord.display_name,
+                                        taskRecord.scenario_name,
+                                        taskStatus,
+                                        false
+                                    )
+                                )
+                            }
+                            if (taskStatus.verifiedMicrotasks > 0) {
+                                tempList.add(
+                                    TaskInfo(
+                                        taskRecord.id,
+                                        "${taskRecord.display_name} (Grades)",
+                                        taskRecord.scenario_name,
+                                        taskStatus,
+                                        true
+                                    )
+                                )
+                            }
+                        } else {
+                            tempList.add(
+                                TaskInfo(
+                                    taskRecord.id,
+                                    taskRecord.display_name,
+                                    taskRecord.scenario_name,
+                                    taskStatus,
+                                    false
+                                )
+                            )
+                        }
+                    }
+                    taskInfoList = tempList
 
-      val taskStatus = fetchTaskStatus(taskId)
-
-      val updatedList =
-        taskInfoList.map { taskInfo ->
-          if (taskInfo.taskID == taskId) {
-            taskInfo.copy(taskStatus = taskStatus)
-          } else {
-            taskInfo
-          }
+                    val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
+                    val success =
+                        DashboardUiState.Success(
+                            DashboardStateSuccess(taskInfoList.sortedWith(taskInfoComparator), totalCreditsEarned),
+                            true
+                        )
+                    _dashboardUiState.value = success
+                }
+                .catch { _dashboardUiState.value = DashboardUiState.Error(it) }
+                .collect()
         }
-
-      taskInfoList = updatedList
-      val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
-      _dashboardUiState.value =
-        DashboardUiState.Success(DashboardStateSuccess(taskInfoList, totalCreditsEarned), _triggerRefresh.value)
-        _triggerRefresh.value = false
     }
-  }
 
-  private suspend fun fetchTaskStatus(taskId: String): TaskStatus {
-    return taskRepository.getTaskStatus(taskId)
-  }
+    fun setLoading() {
+        _dashboardUiState.value = DashboardUiState.Loading
+    }
 
-  fun setProgress(i: Int) {
-    _progress.value = i
-  }
+    fun updateTaskStatus(taskId: String) {
+        viewModelScope.launch {
+            val worker = authManager.getLoggedInWorker()
 
-  fun triggerRefreshOnNextUpdate() {
-      _triggerRefresh.value = true
-  }
+            val taskStatus = fetchTaskStatus(taskId)
+
+            val updatedList =
+                taskInfoList.map { taskInfo ->
+                    if (taskInfo.taskID == taskId) {
+                        taskInfo.copy(taskStatus = taskStatus)
+                    } else {
+                        taskInfo
+                    }
+                }
+
+            taskInfoList = updatedList
+            val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
+            _dashboardUiState.value =
+                DashboardUiState.Success(DashboardStateSuccess(taskInfoList, totalCreditsEarned), true)
+        }
+    }
+
+    private suspend fun fetchTaskStatus(taskId: String): TaskStatus {
+        return taskRepository.getTaskStatus(taskId)
+    }
+
+    fun setProgress(i: Int) {
+        _progress.value = i
+    }
+
 }

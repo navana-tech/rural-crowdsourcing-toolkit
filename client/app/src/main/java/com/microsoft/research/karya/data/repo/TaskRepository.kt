@@ -5,7 +5,9 @@ import com.microsoft.research.karya.data.local.daos.TaskDao
 import com.microsoft.research.karya.data.model.karya.TaskRecord
 import com.microsoft.research.karya.data.model.karya.enums.MicrotaskAssignmentStatus
 import com.microsoft.research.karya.data.model.karya.modelsExtra.TaskStatus
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class TaskRepository
@@ -19,6 +21,8 @@ constructor(
   }
 
   fun getAllTasksFlow(): Flow<List<TaskRecord>> = taskDao.getAllAsFlow()
+
+  suspend fun getAllTasks(): List<TaskRecord> = withContext(Dispatchers.IO) { taskDao.getAll() }
 
   suspend fun getTaskStatus(taskId: String): TaskStatus {
     val available =
