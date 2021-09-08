@@ -1,10 +1,11 @@
 <resources>
+<!--
     <string name="app_name">Karya</string>
     <string name="app_name_full">Karya App</string>
     <string name="help_support">Help Support</string>
     <string name="privacy_policy">Privacy Policy</string>
 
-    <!-- Speech data quality definitions -->
+    &lt;!&ndash; Speech data quality definitions &ndash;&gt;
     <string name="recording_accuracy">Accuracy</string>
     <string name="accuracy_correct">Correct</string>
     <string name="accuracy_errors">Errors</string>
@@ -21,5 +22,6 @@
     <string name="quality_bad">Bad</string>
 
     <string name="rating_undefined">Undefined</string>
+-->
 </resources>
 

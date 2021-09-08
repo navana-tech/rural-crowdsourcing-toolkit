@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SpeechDataMainFragment : BaseMTRendererFragment(R.layout.microtask_speech_data) {
+  override val TAG: String = "SPEECH_DATA_MAIN"
   override val viewModel: SpeechDataMainViewModel by viewModels()
   val args: SpeechDataMainFragmentArgs by navArgs()
 

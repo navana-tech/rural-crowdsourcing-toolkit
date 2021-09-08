@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.microtask_image_transcription.*
 
 @AndroidEntryPoint
 class ImageTranscriptionFragment : BaseMTRendererFragment(R.layout.microtask_image_transcription) {
+  override val TAG: String = "IMAGE_TRANSCRIPTION_FRAGMENT"
   override val viewModel: ImageTranscriptionViewModel by viewModels()
   val args: ImageTranscriptionFragmentArgs by navArgs()
 

@@ -22,7 +22,7 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
   private val binding by viewBinding(FragmentAccessCodeBinding::bind)
   private val viewModel by viewModels<AccessCodeViewModel>()
 
-  private val creationCodeLength = 8
+  private val creationCodeLength = 16
   private val creationCodeEtMax = creationCodeLength + (creationCodeLength - 1) / 4
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -150,11 +150,9 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
   }
 
   private fun isVolumeLowerThan(threshold: Float): Boolean {
-    Log.d("KaryaDialog", "isVolumeLower")
     val audioManager = requireContext().getSystemService<AudioManager>() ?: return false
     val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
     val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
-    Log.d("KaryaDialog", "currentVolume: $currentVolume")
     return (currentVolume / maxVolume < threshold)
   }
 

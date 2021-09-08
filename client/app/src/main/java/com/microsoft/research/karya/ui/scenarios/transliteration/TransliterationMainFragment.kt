@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.microtask_transliteration.*
 @AndroidEntryPoint
 class TransliterationMainFragment :
   BaseMTRendererFragment(R.layout.microtask_transliteration) {
+  override val TAG: String = "TRANSLITERATION_MAIN_FRAGMENT"
   override val viewModel: TransliterationViewModel by viewModels()
   val args: TransliterationMainFragmentArgs by navArgs()
 

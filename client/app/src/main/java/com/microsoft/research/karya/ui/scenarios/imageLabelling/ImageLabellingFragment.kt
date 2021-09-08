@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.microtask_image_labelling.*
 
 @AndroidEntryPoint
 class ImageLabellingFragment : BaseMTRendererFragment(R.layout.microtask_image_labelling) {
+  override val TAG: String = "IMAGE_LABELLING_FRAGMENT"
   override val viewModel: ImageLabellingViewModel by viewModels()
   private val args: ImageLabellingFragmentArgs by navArgs()
 

@@ -152,6 +152,9 @@
             app:destination="@id/imageLabellingFragment">
             <argument android:name="taskId" />
         </action>
+        <action
+            android:id="@+id/action_dashboardActivity_to_navanaSpeechDataMainFragment"
+            app:destination="@id/navanaSpeechDataMainFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_dashboardActivity4"
@@ -225,5 +228,17 @@
         <action
             android:id="@+id/action_imageLabellingFragment_to_dashboardActivity"
             app:destination="@id/dashboardActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/navanaSpeechDataMainFragment"
+        android:name="com.microsoft.research.karya.ui.scenarios.speechData.NavanaSpeechDataMainFragment"
+        android:label="NavanaSpeechDataMainFragment"
+        tools:layout="@layout/ng_speech_data_main">
+        <action
+            android:id="@+id/action_navanaSpeechDataMainFragment_to_dashboardActivity"
+            app:destination="@id/dashboardActivity" />
+        <argument
+            android:name="taskId"
+            app:argType="string" />
     </fragment>
 </navigation>

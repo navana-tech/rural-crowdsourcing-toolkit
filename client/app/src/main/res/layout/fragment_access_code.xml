@@ -52,7 +52,7 @@
         android:hint="@string/creation_code_hint"
         android:importantForAutofill="no"
         android:inputType="number"
-        android:maxLength="9"
+        android:maxLength="19"
         android:paddingHorizontal="@dimen/_10sdp"
         android:paddingVertical="@dimen/_10sdp"
         android:textSize="@dimen/_17ssp"
@@ -91,7 +91,7 @@
         app:layout_constraintEnd_toEndOf="@id/creationCodeEt"
         app:layout_constraintStart_toStartOf="@id/creationCodeEt"
         app:layout_constraintTop_toBottomOf="@id/creationCodeEt"
-        tools:text="@string/invalid_creation_code_desc" />
+        tools:text="@string/s_invalid_creation_code" />
 
     <com.microsoft.research.karya.ui.widgets.KaryaDialog
         android:id="@+id/volume_dialog"

@@ -1,19 +1,13 @@
 package com.microsoft.research.karya.ui.dashboard
 
+import android.animation.Animator
 import android.app.AlertDialog
-import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +17,6 @@ import com.microsoft.research.karya.data.model.karya.enums.ScenarioType
 import com.microsoft.research.karya.data.model.karya.modelsExtra.TaskInfo
 import com.microsoft.research.karya.databinding.FragmentDashboardBinding
 import com.microsoft.research.karya.ui.base.SessionFragment
-import com.microsoft.research.karya.ui.dashboard.PROGRESS_STATUS.MAX_RECEIVE_DB_UPDATES_PROGRESS
 import com.microsoft.research.karya.utils.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -43,9 +36,11 @@ enum class ERROR_LVL {
 @AndroidEntryPoint
 class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
 
+  override val TAG: String = "DASHBOARD_FRAGMENT"
   val binding by viewBinding(FragmentDashboardBinding::bind)
   val viewModel: DashboardViewModel by viewModels()
   private lateinit var syncWorkRequest: OneTimeWorkRequest
+  private var userRefresh = false
 
   private var dialog: AlertDialog? = null
 
@@ -71,12 +66,20 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
     setupViews()
     setupWorkRequests()
     observeUi()
+    viewModel.getAllTasks()
   }
 
   private fun observeUi() {
-    viewModel.dashboardUiState.observe(lifecycle, lifecycleScope) { dashboardUiState ->
+    viewModel.dashboardUiState.observe(viewLifecycle, viewLifecycleScope) { dashboardUiState ->
+      Log.d("dashboardState", dashboardUiState.toString())
       when (dashboardUiState) {
-        is DashboardUiState.Success -> showSuccessUi(dashboardUiState.data)
+        is DashboardUiState.Success -> {
+            if (dashboardUiState.userTriggered) {
+                showSuccessUi(dashboardUiState.data)
+            } else {
+                updateTaskList(dashboardUiState.data)
+            }
+        }
         is DashboardUiState.Error -> showErrorUi(
           dashboardUiState.throwable,
           ERROR_TYPE.TASK_ERROR,
@@ -86,61 +89,25 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
       }
     }
 
-    viewModel.progress.observe(lifecycle, lifecycleScope) { i ->
-      // binding.syncProgressBar.progress = i
-    }
-
     WorkManager.getInstance(requireContext())
-      .getWorkInfosForUniqueWorkLiveData(UNIQUE_SYNC_WORK_NAME)
-      .observe(viewLifecycleOwner, { workInfos ->
-        if (workInfos.size == 0) return@observe // Return if the workInfo List is empty
-        val workInfo = workInfos[0] // Picking the first workInfo
-        if (workInfo != null && workInfo.state == WorkInfo.State.SUCCEEDED) {
-          lifecycleScope.launch {
-            val warningMsg = workInfo.outputData.getString("warningMsg")
-            if (warningMsg != null) { // Check if there are any warning messages set by Workmanager
-              showErrorUi(Throwable(warningMsg), ERROR_TYPE.SYNC_ERROR, ERROR_LVL.WARNING)
+        .getWorkInfosForUniqueWorkLiveData(UNIQUE_SYNC_WORK_NAME)
+        .observe(viewLifecycleOwner) { workInfoList ->
+            if (workInfoList.isEmpty()) return@observe
+            val workInfo = workInfoList[0] ?: return@observe
+
+            if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                viewLifecycleScope.launch { viewModel.refreshList() }
             }
-            viewModel.setProgress(100)
-            viewModel.refreshList()
-          }
+
+            if (workInfo.state == WorkInfo.State.RUNNING) {
+                viewModel.setLoading()
+            }
         }
-        if (workInfo != null && workInfo.state == WorkInfo.State.ENQUEUED) {
-          viewModel.setProgress(0)
-          viewModel.setLoading()
-        }
-        if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING) {
-          // Check if the current work's state is "successfully finished"
-          val progress: Int = workInfo.progress.getInt("progress", 0)
-          viewModel.setProgress(progress)
-          viewModel.setLoading()
-          // refresh the UI to show microtasks
-          if (progress == MAX_RECEIVE_DB_UPDATES_PROGRESS )
-          viewLifecycleScope.launch {
-            viewModel.refreshList()
-          }
-        }
-        if (workInfo != null && workInfo.state == WorkInfo.State.FAILED) {
-          lifecycleScope.launch {
-            showErrorUi(
-              Throwable(workInfo.outputData.getString("errorMsg")),
-              ERROR_TYPE.SYNC_ERROR,
-              ERROR_LVL.ERROR
-            )
-            viewModel.refreshList()
-          }
-        }
-      })
   }
 
   override fun onSessionExpired() {
     WorkManager.getInstance(requireContext()).cancelAllWork()
     super.onSessionExpired()
-  }
-
-  override fun onResume() {
-    super.onResume()
-    viewModel.getAllTasks() // TODO: Remove onResume and get taskId from scenario viewmodel (similar to onActivity Result)
   }
 
   private fun setupWorkRequests() {
@@ -170,32 +137,26 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
 
   private fun syncWithServer() {
     setupWorkRequests()
-    WorkManager.getInstance(requireContext())
-      .enqueueUniqueWork(UNIQUE_SYNC_WORK_NAME, ExistingWorkPolicy.KEEP, syncWorkRequest)
+    WorkManager.getInstance(requireContext()).enqueueUniqueWork(UNIQUE_SYNC_WORK_NAME, ExistingWorkPolicy.KEEP, syncWorkRequest)
+    viewModel.triggerRefreshOnNextUpdate()
   }
 
-    private fun updateTasks(data: DashboardStateSuccess) {
-        data.apply {
-            (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
-            // Show total credits if it is greater than 0
-            if (totalCreditsEarned > 0.0f) {
-                binding.rupeesEarnedCl.visible()
-                binding.rupeesEarnedTv.text = "%.2f".format(totalCreditsEarned)
-            } else {
-                binding.rupeesEarnedCl.gone()
-            }
-        }
-    }
-
   private fun showSuccessUi(data: DashboardStateSuccess) {
-      WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(syncWorkRequest.id)
-          .observe(viewLifecycleOwner, Observer { workInfo ->
-              if (workInfo == null || workInfo.state == WorkInfo.State.SUCCEEDED || workInfo.state == WorkInfo.State.FAILED) {
-                  hideLoading() // Only hide loading if no work is in queue
-              }
-          })
+      hideLoading()
 
-      binding.tvCheckUpdates.enable()
+      with(binding) {
+          refreshLl.enable()
+          refreshLl.isClickable = true
+          lottieRefresh.setAnimation(R.raw.refresh_success)
+          lottieRefresh.addAnimatorListener(lottieRefreshUpdateListener)
+          tvRefresh.setText(R.string.tasks_updated)
+          tvRefresh.setTextColor(ContextCompat.getColor(requireContext(), R.color.refreshSuccessColor))
+          lottieRefresh.playAnimation()
+      }
+      updateTaskList(data)
+  }
+
+  private fun updateTaskList(data: DashboardStateSuccess) {
       data.apply {
           (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
           if (totalCreditsEarned > 0.0f) {
@@ -206,21 +167,22 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
               binding.appTb.hideEndIcon()
               binding.appTb.hideEndText()
           }
+      }
+  }
 
-          // Show a dialog box to sync with server if completed tasks and internet available
-          if (requireContext().isNetworkAvailable()) {
-              for (taskInfo in data.taskInfoData) {
-                  if (taskInfo.taskStatus.completedMicrotasks > 0) {
-                      showDialogueToSync()
-                      return
-                  }
+  private fun showSyncDialogueIfRequired(data: DashboardStateSuccess) {
+      // Show a dialog box to sync with server if completed tasks and internet available
+      if (requireContext().isNetworkAvailable()) {
+          for (taskInfo in data.taskInfoData) {
+              if (taskInfo.taskStatus.completedMicrotasks > 0) {
+                  showDialogueToSync()
+                  return
               }
           }
       }
   }
 
   private fun showDialogueToSync() {
-
     if (dialog != null && dialog!!.isShowing) return
 
     val builder: AlertDialog.Builder? = activity?.let {
@@ -246,32 +208,31 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
   private fun showErrorUi(throwable: Throwable, errorType: ERROR_TYPE, errorLvl: ERROR_LVL) {
     hideLoading()
     showError(throwable.message ?: "Some error Occurred", errorType, errorLvl)
-    binding.tvCheckUpdates.enable()
   }
 
   private fun showError(message: String, errorType: ERROR_TYPE, errorLvl: ERROR_LVL) {
     if (errorType == ERROR_TYPE.SYNC_ERROR) {
       WorkManager.getInstance(requireContext()).cancelAllWork()
-      with(binding) {
-        syncErrorMessageTv.text = message
-
-        when (errorLvl) {
-          ERROR_LVL.ERROR -> syncErrorMessageTv.setTextColor(Color.RED)
-          ERROR_LVL.WARNING -> syncErrorMessageTv.setTextColor(Color.YELLOW)
-        }
-        syncErrorMessageTv.visible()
-      }
+//      with(binding) {
+//        syncErrorMessageTv.text = message
+//
+//        when (errorLvl) {
+//          ERROR_LVL.ERROR -> syncErrorMessageTv.setTextColor(Color.RED)
+//          ERROR_LVL.WARNING -> syncErrorMessageTv.setTextColor(Color.YELLOW)
+//        }
+//        syncErrorMessageTv.visible()
+//      }
     }
   }
 
   private fun showLoadingUi() {
     showLoading()
-    binding.tvCheckUpdates.disable()
-    binding.syncErrorMessageTv.gone()
+    // binding.syncErrorMessageTv.gone()
   }
 
   private fun showLoading() {
       with(binding) {
+          refreshLl.disable()
           refreshLl.isClickable = false
           lottieRefresh.setAnimation(R.raw.refresh_loading)
           tvRefresh.setText(R.string.refreshing)
@@ -281,6 +242,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
 
   private fun hideLoading() {
       with(binding) {
+          refreshLl.enable()
           refreshLl.isClickable = true
           lottieRefresh.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_refresh))
           // Remove listener since we only need it for the last bit of the animation
@@ -308,7 +270,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
       val taskId = task.taskID
       val action = with(DashboardFragmentDirections) {
         when (task.scenarioName) {
-          ScenarioType.SPEECH_DATA -> actionDashboardActivityToSpeechDataMainFragment2(taskId)
+          ScenarioType.SPEECH_DATA -> actionDashboardActivityToNavanaSpeechDataMainFragment(taskId)
           ScenarioType.XLITERATION_DATA -> actionDashboardActivityToUniversalTransliterationMainFragment(taskId)
           ScenarioType.SPEECH_VERIFICATION -> actionDashboardActivityToSpeechVerificationFragment(taskId)
           ScenarioType.IMAGE_TRANSCRIPTION -> actionDashboardActivityToImageTranscription(taskId)

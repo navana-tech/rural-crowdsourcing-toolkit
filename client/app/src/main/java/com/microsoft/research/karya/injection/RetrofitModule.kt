@@ -35,14 +35,13 @@ class RetrofitModule {
   @Reusable
   @BaseUrl
   fun provideBaseUrl(): String {
-    return "https://karyaboxtest.eastus.cloudapp.azure.com"
+    return "https://navana-box-1.eastasia.cloudapp.azure.com/"
   }
 
   @Provides
   @Reusable
   fun provideLoggingInterceptor(): HttpLoggingInterceptor {
-    return HttpLoggingInterceptor()
-      .setLevel(HttpLoggingInterceptor.Level.BODY)
+    return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
   }
 
   @Provides
@@ -66,11 +65,13 @@ class RetrofitModule {
   @Reusable
   fun provideOkHttp(
     idTokenRenewInterceptor: IdTokenRenewInterceptor,
-    versionInterceptor: VersionInterceptor
+    versionInterceptor: VersionInterceptor,
+    httpLoggingInterceptor: HttpLoggingInterceptor,
   ): OkHttpClient {
     return OkHttpClient.Builder()
       .connectTimeout(10, TimeUnit.MINUTES)
       .readTimeout(10, TimeUnit.MINUTES)
+      .addInterceptor(httpLoggingInterceptor)
       .addInterceptor(idTokenRenewInterceptor)
       .addInterceptor(versionInterceptor)
       .build()

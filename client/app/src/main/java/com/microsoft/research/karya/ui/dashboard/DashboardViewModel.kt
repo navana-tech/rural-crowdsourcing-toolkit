@@ -29,12 +29,13 @@ constructor(
       taskInfo.taskID
     }
 
-  private val _dashboardUiState: MutableStateFlow<DashboardUiState> = MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
+  private val _dashboardUiState: MutableStateFlow<DashboardUiState> = MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f), false))
   val dashboardUiState = _dashboardUiState.asStateFlow()
 
-  private val _progress: MutableStateFlow<Int> =
-    MutableStateFlow(0)
+  private val _progress: MutableStateFlow<Int> = MutableStateFlow(0)
   val progress = _progress.asStateFlow()
+
+  private var _triggerRefresh: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
   suspend fun refreshList() {
     val worker = authManager.getLoggedInWorker()
@@ -54,8 +55,8 @@ constructor(
     taskInfoList = tempList.sortedWith(taskInfoComparator)
 
     val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
-    _dashboardUiState.value =
-      DashboardUiState.Success(DashboardStateSuccess(taskInfoList, totalCreditsEarned))
+    _dashboardUiState.value = DashboardUiState.Success(DashboardStateSuccess(taskInfoList, totalCreditsEarned), _triggerRefresh.value)
+    _triggerRefresh.value = false
   }
 
   /**
@@ -112,11 +113,10 @@ constructor(
           taskInfoList = tempList
 
           val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
-          val success =
-            DashboardUiState.Success(
-              DashboardStateSuccess(taskInfoList.sortedWith(taskInfoComparator), totalCreditsEarned)
-            )
-          _dashboardUiState.value = success
+          val success = DashboardUiState.Success(DashboardStateSuccess(taskInfoList.sortedWith(taskInfoComparator), totalCreditsEarned), _triggerRefresh.value)
+
+            _dashboardUiState.value = success
+            _triggerRefresh.value = false
         }
         .catch { _dashboardUiState.value = DashboardUiState.Error(it) }
         .collect()
@@ -145,7 +145,8 @@ constructor(
       taskInfoList = updatedList
       val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
       _dashboardUiState.value =
-        DashboardUiState.Success(DashboardStateSuccess(taskInfoList, totalCreditsEarned))
+        DashboardUiState.Success(DashboardStateSuccess(taskInfoList, totalCreditsEarned), _triggerRefresh.value)
+        _triggerRefresh.value = false
     }
   }
 
@@ -155,5 +156,9 @@ constructor(
 
   fun setProgress(i: Int) {
     _progress.value = i
+  }
+
+  fun triggerRefreshOnNextUpdate() {
+      _triggerRefresh.value = true
   }
 }

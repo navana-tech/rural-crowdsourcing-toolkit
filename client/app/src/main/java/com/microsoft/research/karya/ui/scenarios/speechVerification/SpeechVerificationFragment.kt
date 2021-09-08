@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.microtask_speech_verification.*
 
 @AndroidEntryPoint
 class SpeechVerificationFragment : BaseMTRendererFragment(R.layout.microtask_speech_verification) {
+  override val TAG: String = "SPEECH_VERIFICATION_FRAGMENT"
   override val viewModel: SpeechVerificationViewModel by viewModels()
   val args: SpeechDataMainFragmentArgs by navArgs()
 

@@ -247,4 +247,41 @@
     <string name="refresh_underline"><u>రిఫ్రెష్</u></string>
     <string name="refreshing">ఆగుము…</string>
     <string name="tasks_updated">పనులు నవీకరించబడ్డాయి</string>
+
+    <!-- strings-extra -->
+    <string name="app_name">కార్య​</string>
+    <string name="app_name_full">కార్య యాప్</string>
+    <string name="help_support">సహాయం కొరకు</string>
+    <string name="privacy_policy">గోప్యతా విధానం</string>
+
+    <!-- Speech data quality definitions -->
+    <string name="recording_accuracy">ఖచ్చితత్వం</string>
+    <string name="accuracy_correct">సరైన</string>
+    <string name="accuracy_errors">లోపాలు</string>
+    <string name="accuracy_incorrect">తప్పు</string>
+
+    <string name="recording_volume">సౌండు</string>
+    <string name="volume_high">బాగుంది</string>
+    <string name="volume_okay">మెల్లగ వినిపించడం</string>
+    <string name="volume_low">వినబడుట లేదు</string>
+
+    <string name="recording_quality">నాణ్యత</string>
+    <string name="quality_good">మంచిది</string>
+    <string name="quality_noisy">గోలగోలగా ఉంది</string>
+    <string name="quality_bad">బాగోలేదు</string>
+
+    <string name="rating_undefined">నిర్వచించబడలేదు</string>
+
+    <!-- content -->
+    <string name="karya_logo">ప్రాజెక్ట్ కార్య లోగో</string>
+    <string name="creation_code_hint">0000-0000-0000-0000</string>
+    <string name="status_check">పరిస్థితి</string>
+    <string name="otp_hint"> ------ </string>
+    <string name="phone_number_hint">----------</string>
+    <string name="next">తరువాత​</string>
+    <string name="retake">తిరిగి తీసుకోండి</string>
+    <string name="back">వెన్నక్కు</string>
+    <string name="profile_picture">ప్రొఫైల్ చిత్రం</string>
+    <string name="rotate_right">తిప్పండి</string>
+
 </resources>
