@@ -89,6 +89,8 @@ class TaskListAdapter(
               isClickable = false
               isEnabled = false
               dashboardItemClick(task)
+              isClickable = true
+              isEnabled = true
             }
           }
 

@@ -13,6 +13,7 @@ import com.microsoft.research.karya.data.local.enum.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentProfilePictureBinding
 import com.microsoft.research.karya.ui.Destination
 import com.microsoft.research.karya.ui.base.BaseFragment
+import com.microsoft.research.karya.ui.base.SessionFragment
 import com.microsoft.research.karya.utils.extensions.disable
 import com.microsoft.research.karya.utils.extensions.enable
 import com.microsoft.research.karya.utils.extensions.dataStore
@@ -25,7 +26,7 @@ import com.microsoft.research.karya.utils.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileFragment : BaseFragment(R.layout.fragment_profile_picture) {
+class ProfileFragment : SessionFragment(R.layout.fragment_profile_picture) {
 
   private val binding by viewBinding(FragmentProfilePictureBinding::bind)
   private val viewModel by viewModels<ProfileViewModel>()

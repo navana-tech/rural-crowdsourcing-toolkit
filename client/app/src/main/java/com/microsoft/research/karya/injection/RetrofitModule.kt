@@ -1,6 +1,10 @@
 package com.microsoft.research.karya.injection
 
 import com.microsoft.research.karya.BuildConfig
+import com.microsoft.research.karya.data.manager.AuthManager
+import com.microsoft.research.karya.data.remote.interceptors.IdTokenRenewInterceptor
+import com.microsoft.research.karya.data.remote.interceptors.VersionInterceptor
+import com.microsoft.research.karya.data.repo.AuthRepository
 import com.microsoft.research.karya.data.service.KaryaFileAPI
 import com.microsoft.research.karya.data.service.LanguageAPI
 import com.microsoft.research.karya.data.service.MicroTaskAssignmentAPI
@@ -15,6 +19,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -39,17 +44,41 @@ class RetrofitModule {
     return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
   }
 
-  @Provides
-  @Reusable
-  fun provideOkHttp(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
-    return OkHttpClient.Builder()
-      .apply {
-        if (BuildConfig.DEBUG) {
-          addNetworkInterceptor(httpLoggingInterceptor)
-        }
-      }
-      .build()
-  }
+    @Provides
+    @Reusable
+    fun provideIdTokenRenewInterceptor(
+        authRepository: AuthRepository,
+        authManager: AuthManager,
+        @BaseUrl baseUrl: String
+    ): IdTokenRenewInterceptor {
+        return IdTokenRenewInterceptor(authRepository, authManager, baseUrl)
+    }
+
+    @Provides
+    @Reusable
+    fun provideVersionInterceptor(): VersionInterceptor {
+        return VersionInterceptor()
+    }
+
+    @Provides
+    @Reusable
+    fun provideOkHttp(
+        idTokenRenewInterceptor: IdTokenRenewInterceptor,
+        versionInterceptor: VersionInterceptor,
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(httpLoggingInterceptor)
+                }
+            }
+            .connectTimeout(10, TimeUnit.MINUTES)
+            .readTimeout(10, TimeUnit.MINUTES)
+            .addInterceptor(idTokenRenewInterceptor)
+            .addInterceptor(versionInterceptor)
+            .build()
+    }
 
   @Provides
   @Reusable

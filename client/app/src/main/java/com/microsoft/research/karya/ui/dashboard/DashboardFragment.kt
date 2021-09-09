@@ -1,6 +1,5 @@
 package com.microsoft.research.karya.ui.dashboard
 
-import android.content.Context
 import android.animation.Animator
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -10,40 +9,34 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.lottie.animation.keyframe.BaseKeyframeAnimation
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.modelsExtra.TaskInfo
 import com.microsoft.research.karya.databinding.FragmentDashboardBinding
+import com.microsoft.research.karya.ui.base.SessionFragment
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain
 import com.microsoft.research.karya.ui.scenarios.speechVerification.SpeechVerificationMain
 import com.microsoft.research.karya.ui.scenarios.textToTextTranslation.TextToTextTranslationMain
 import com.microsoft.research.karya.utils.PreferenceKeys
 import com.microsoft.research.karya.utils.extensions.dataStore
-import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
 import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
-import com.microsoft.research.karya.utils.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
+class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
 
+  override val TAG: String = "DASHBOARD_FRAGMENT"
   val binding by viewBinding(FragmentDashboardBinding::bind)
   val viewModel: DashboardViewModel by viewModels()
-
-  @Inject lateinit var authManager: AuthManager
 
   private val lottieRefreshUpdateListener = object : Animator.AnimatorListener {
       override fun onAnimationStart(animation: Animator?) {
@@ -170,6 +163,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
   }
 
   fun onDashboardItemClick(task: TaskInfo) {
+    Log.d("onDashboardItemClick", "clicked")
     val nextIntent =
       when (task.scenarioName) {
         // TODO: MAKE THIS GENERAL ONCE API RESPONSE UPDATES

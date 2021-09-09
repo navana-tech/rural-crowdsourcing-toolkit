@@ -136,4 +136,9 @@
     <action
         android:id="@+id/action_global_tempDataFlow"
         app:destination="@id/tempDataFlow" />
+    <action
+        android:id="@+id/action_global_loginFlow"
+        app:destination="@id/loginFlow"
+        app:popUpTo="@id/app_nav_graph"
+        app:popUpToInclusive="true" />
 </navigation>
