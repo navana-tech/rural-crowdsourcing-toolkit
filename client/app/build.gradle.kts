@@ -12,16 +12,21 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdkVersion(31)
     defaultConfig {
         applicationId = "com.microsoft.research.karya"
         minSdkVersion(21)
-        targetSdkVersion(30)
+        targetSdkVersion(31)
         multiDexEnabled = true
         versionCode = 24
         versionName = "1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
+            }
+        }
     }
     buildTypes {
         named("release") {

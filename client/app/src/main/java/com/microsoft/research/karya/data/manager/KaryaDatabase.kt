@@ -46,7 +46,7 @@ import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
     ],
   views = [TaskInfo::class],
   version = 1,
-  exportSchema = false
+  exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class KaryaDatabase : RoomDatabase() {
