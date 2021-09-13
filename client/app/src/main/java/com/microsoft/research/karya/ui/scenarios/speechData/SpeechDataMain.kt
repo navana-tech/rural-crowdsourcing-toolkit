@@ -611,7 +611,7 @@ open class SpeechDataMain(
       )
       delay(1500)
       recordBtn.setImageResource(R.drawable.ic_stop)
-      recordBtn.setBackgroundResource(R.color.white)
+      recordBtn.setBackgroundResource(R.color.colorWhite)
     }
   }
 
@@ -1254,6 +1254,22 @@ open class SpeechDataMain(
         ACTIVE -> R.drawable.ic_prev
       }
     )
+
+      nextBtn.setBackgroundResource(
+          when (nextBtnState) {
+              DISABLED -> R.color.colorgrey
+              ENABLED -> R.color.colorGreenDarker
+              ACTIVE -> R.color.colorGreenDarker
+          }
+      )
+
+      backBtn.setBackgroundResource(
+          when (backBtnState) {
+              DISABLED -> R.color.colorgrey
+              ENABLED -> R.color.colorGreenDarker
+              ACTIVE -> R.color.colorGreenDarker
+          }
+      )
   }
 
   /** Reset wav file on a new recording creation */

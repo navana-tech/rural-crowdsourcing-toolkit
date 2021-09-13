@@ -4,6 +4,7 @@ import com.microsoft.research.karya.data.local.daos.KaryaFileDao
 import com.microsoft.research.karya.data.local.daos.MicroTaskDao
 import com.microsoft.research.karya.data.local.daosExtra.MicrotaskDaoExtra
 import com.microsoft.research.karya.data.local.ng.WorkerDao
+import com.microsoft.research.karya.data.repo.AuthRepository
 import com.microsoft.research.karya.data.repo.KaryaFileRepository
 import com.microsoft.research.karya.data.repo.LanguageRepository
 import com.microsoft.research.karya.data.repo.MicroTaskRepository
@@ -47,4 +48,10 @@ class RepositoryModule {
   fun provideKaryaFileRepository(karyaFileAPI: KaryaFileAPI, karyaFileDao: KaryaFileDao): KaryaFileRepository {
     return KaryaFileRepository(karyaFileAPI, karyaFileDao)
   }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(workerDao: WorkerDao): AuthRepository {
+        return AuthRepository(workerDao)
+    }
 }
