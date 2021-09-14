@@ -14,11 +14,11 @@ plugins {
 android {
     compileSdkVersion(31)
     defaultConfig {
-        applicationId = "com.microsoft.research.karya"
+        applicationId = "com.navana.bolo"
         minSdkVersion(21)
         targetSdkVersion(31)
         multiDexEnabled = true
-        versionCode = 24
+        versionCode = 1
         versionName = "1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
