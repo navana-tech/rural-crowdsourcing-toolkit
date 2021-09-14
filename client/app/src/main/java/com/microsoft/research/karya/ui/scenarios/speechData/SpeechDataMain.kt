@@ -322,12 +322,13 @@ open class SpeechDataMain(
     totalRecordedBytes = 0
     playbackProgressPb.progress = 0
 
-    if (firstTimeActivityVisit) {
+    /*if (firstTimeActivityVisit) {
       firstTimeActivityVisit = false
       onAssistantClick()
     } else {
       moveToPrerecording()
-    }
+    }*/
+    moveToPrerecording()
   }
 
   /** Move from init to pre-recording */

@@ -17,167 +17,221 @@
     <string name="s_dashboard_title">Dashboard</string>
     <string name="s_consent_form_agree">I agree</string>
     <string name="s_consent_form_disagree">No. I do not want to participate</string>
-    <string name="s_consent_form_text">
-        <![CDATA[
-        <h5>Karya Participation Consent Form</h5>
-<p>
-  Thank you for your participation on the Karya platform. This document
-  describes the goals of the platform and the various steps involved in your
-  participation. You have no obligation to participate. You may end your
-  participation at any time.
-</p>
-<h5>Purpose of the Platform</h5>
-<p>
-  The goal of the platform is to offer paid digital work to various users.
-  Through the Karya smartphone app, you can get access to simple tasks that can
-  be completed on your smartphone. You will get paid for all the correctly
-  completed tasks. The type of task assigned to you will depend on the specific
-  study you are participating in. For instance, a task may require you to record
-  yourself speaking out a sentence. Regardless, the Karya app will provide you
-  clear instructions on how to complete each task in your regional language. The
-  app will also inform you how much you will be paid if you complete the task
-  correctly. You can withdraw from participation at any time, and you will be
-  paid for the tasks you have completed till that point.
-</p>
-<h5>Procedure</h5>
-<ol>
-  <li>
-    To begin, you will be introduced to the Project Coordinator for your
-    location. This person will be your point of contact for help related to the
-    project.
-  </li>
-  <li>
-    Your project coordinator will provide you with instructions and if
-    necessary, help you to download and install the “Karya” mobile application
-    on your smartphone.
-  </li>
-  <li>
-    Your project coordinator will give you a “16-digit Access Code”. You need to
-    enter the code during the registration process. Each access code can be used
-    only once. Therefore, do not share the access code with anyone else.
-  </li>
-  <li>
-    The registration process may require you to sign-in with your phone number.
-    This information will be used to identify you on the platform when you close
-    the application and open it again.
-  </li>
-  <li>
-    In addition, we will also collect some demographic information about you,
-    e.g., your age range, gender, education level, etc.
-  </li>
-  <li>
-    The app will also ask you to choose a profile picture. This picture will
-    only be used for display in the application and will not be stored in our
-    platform.
-  </li>
-  <li>
-    To receive tasks on our platform, the app must “sync” with our server. This
-    operation will submit all the tasks you have completed on our platform to
-    the server and receive any new tasks. After registration, the app will
-    automatically sync with our server. You can trigger subsequent syncs by
-    clicking on the sync button in the app.
-  </li>
-  <li>
-    In the main app screen (dashboard), you will be presented with a list of
-    different type of tasks assigned to you, along with information on each type
-    of task: number of tasks assigned, number of tasks completed, number of
-    tasks submitted, etc. For each type of task, the app will provide detailed
-    instructions on how you must complete the task, and how much you will be
-    paid if you complete the task correctly. Please pay attention to these
-    instructions before proceeding with the tasks.
-  </li>
-  <li>
-    At the end of your participation, we request you to delete the application
-    from your phone. Should you want, your project coordinator will aid you in
-    installing, configuring, and deleting the application.
-  </li>
-  <li>
-    After the end of the study, we may request a short interview with you to
-    gather your feedback and understand your experience of using our platform.
-  </li>
-</ol>
-<h5>Risks and Benefits</h5>
-<ol>
-  <li>
-    This platform only offers supplemental work. As a result, we have a limited
-    number of tasks available. Do not let your participation in our platform
-    interfere with your current work. Your participation will only require upto
-    one to two hours of your time every day.
-  </li>
-  <li>
-    We recommend doing the provided work in a patient manner. This will allow
-    you to submit more accurate responses and will also make sure you don’t
-    spend too much time on the smartphone. Spending too much time on a
-    smartphone could be bad for your eyes and may affect your social life. We
-    recommend not working for more than 2 hours a day.
-  </li>
-  <li>
-    If we lend you a smartphone to participate (as part of a research study), we
-    trust you to use the provided smartphone responsibly. If you have not used a
-    smartphone before, it can be overwhelming. We are happy to help you in any
-    and every way possible. You can contact us via your project coordinator.
-  </li>
-</ol>
-<h5>Personal Information</h5>
-<p>
-  Any personal information we collect during the study will only be used to
-  identify you during the duration of the study. We will delete all personal
-  information as soon as the study is over. We will not share your personal
-  information with anyone. However, we may use pictures from the study in
-  presentations or posters without identifying specific individuals. We will
-  request your permission before taking pictures and obtain your permission to
-  use those pictures in our presentations or posters. Not providing consent for
-  taking pictures will not disqualify you from participating in the study. For
-  additional information or concerns about how Microsoft handles your personal
-  information, please see the Microsoft Privacy Statement,
-  https://go.microsoft.com/fwlink/?LinkId=521839
-</p>
-<h5>Payment for Participation</h5>
-<p>
-  You will be paid for all correctly completed tasks on the platform. The app or
-  your porject coordinator will also provide you feedback on how well you are
-  performing on the platform so that you can improve your responses for future
-  tasks. We will work with you and your project coordinator to identify the best
-  mode of payment. We will collect and store your payment information for the
-  duration of the study. We will pay you periodically for all your tasks that
-  have undergone quality verification. We will delete all payment information as
-  soon as your participation is completed. Please contact your project
-  coordinator if you have any queries regarding payments.
-</p>
-<h5>Dataset Collected from the Study</h5>
-<p>
-  We will use the dataset collected as part of your responses to different tasks
-  for further research and will aim to release them publicly for research
-  purposes. Most datasets will contain only text or audio data that is not
-  associated with personally identifiable information. In situations where a
-  dataset does contain personally identifiable information (e.g., video), we
-  will obtain explicit consent from you before providing such a task. If you
-  have any questions regarding how the dataset will be used, please feel free to
-  ask us through your project coordinator or using the phone number provided
-  below.
-</p>
-<h5>Contact Information</h5>
-<p>
-  Should you have any questions concerning the project, you can contact Vivek
-  Seshadri by phone at 0000000000. Should you have any questions about your
-  rights as a research subject, please report your concern via email to
-  Microsoft Research Ethics Program Feedback: MSRStudyfeedback@microsoft.com. In
-  case you do not have access to email, you can contact your project
-  coordinator, and have her relay your concerns.
-</p>
-<h5>Consent</h5>
-<p>
-  By clicking “I agree” below, you confirm that the goals and the procedure for
-  participation on the platform was explained to you, you had a chance to ask
-  questions before beginning your participation, and all your questions were
-  answered satisfactorily. By clicking “I agree” below, you voluntarily consent
-  to participate, and you do not give up any legal rights you have as a study
-  participant. On behalf of Karya Inc, we thank you for your contribution and
-  look forward to your participation. Do you understand and consent to these
-  terms?
-</p>
- ]]>
-    </string>
+    <string name="s_consent_form_text"><![CDATA[
+    <h5>Participant Privacy Policy</h5>
+    <p>This privacy policy (<b>Privacy Policy</b>) will help you understand what information we collect for the Project, why we collect it, how we
+            will use it, including if and how we share the information with third parties, and the choices you have with
+            respect to your information. When we talk about &ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo; in
+            this Privacy Policy, we are referring to Navana Tech India Private Limited (<b>Navana
+            Tech</b>). When we talk about &ldquo;you&rdquo; in this Privacy Policy, we are referring
+            to the participant / voice data contributor.
+    </p>        
+    <br>
+    <p>By agreeing to the Speech Recognition in Agriculture and Finance for the Poor in
+            India - Consent Form,&nbsp;you expressly agree to the terms of this Privacy Policy,
+            for your use of Navana Tech&#39;s voice data collection application (<b>
+           App</b>) and for the collection, processing, storage, use, disclosure,
+            transfer and otherwise handling of your personal and sensitive personal data in accordance with the terms
+            contained below. &nbsp;You have the option to not provide your sensitive personal data (as defined under
+            applicable law) to us, or withdraw consent once provided, however, we will not be able to provide you with
+            access to the App in case you elect to do so and further would be unable to process payment to you. If you
+            do not wish to provide us with your sensitive personal data please do not use the App and uninstall it from
+            your devices. &nbsp; &nbsp;
+    </p>
+    <br>
+    <p>We may revise the Privacy Policy from time to time. While we may not be able to
+            separately notify you of the revisions each time that we make them, we will notify you and obtain your
+            consent for any changes that we make to this policy when required under law. We encourage you to check this
+            page periodically for modifications or revisions to the Privacy Policy to understand how it affects the use
+            of your information.
+    </p>
+    <br>
+    <p>Any personal information collected in accordance with this Privacy Policy will be
+            collected and retained by us.</p>
+    <br>
+    <ol start="1">
+        <li>INFORMATION WE COLLECT AND RECEIVE</li>
+    </ol>
+    <br>
+    <ol start="1">
+        <li>Personal Information Collected from You </li>
+    </ol>
+    <br>
+    <ul>
+        <li>Registration Information: The registration
+                process may require you to sign-in with your phone number. This information will be used to identify you
+                on the platform when you close the App and open it again. The App will also ask you to choose a profile
+                picture. This picture will only be used for display in the App and will not be stored on our
+                platform.</li>
+    </ul>
+    <br>
+    <ul>
+        <li>Demographic Data:&nbsp;We will collect some
+                demographic information about you, e.g., your age range, gender, education level, the State you are in,
+                your mother tongue and languages you can read, write and speak, for research related purposes and to
+                improve our algorithm. </li>
+    </ul>
+    <br>
+    <ul>
+        <li>Identity Verification Information:&nbsp;We
+                also collect your name and PAN card details for the purposes of mapping with your voice sample and for
+                other administrative purposes. &nbsp;</li>
+    </ul>
+    <br>
+    <ul>
+        <li>Location Information:&nbsp;We may collect
+                your geographical location which will be restricted to an area of a village. We will not however require
+                your GPS coordinates.</li>
+    </ul>
+    <br>
+    <ul>
+        <li>Information for the purpose of promotion/posters: <span
+               >We may use pictures from the study in presentations or posters without identifying specific
+                individuals. We will request your permission before taking pictures and obtain your permission to use
+                those pictures in our presentations or posters. Not providing consent for taking pictures will not
+                disqualify you from participating in the study.</li>
+    </ul>
+    <br>
+    <ol start="2">
+        <li>Sensitive Personal Information collected from you:</li>
+    </ol>
+    <br>
+    <ul>
+        <li>Password Information:&nbsp;To begin, you
+                will be introduced to the Project Coordinator for your location. This person will be your point of
+                contact for help related to the project. Your project coordinator will provide you with instructions and
+                if necessary, help you download and install the App on your smartphone. Your project coordinator will
+                give you a &quot;16-digit Access Code&quot;. You need to enter the code during the registration process.
+                Each access code can be used only once. Therefore, do not share the access code with anyone else.
+            </li>
+    </ul>
+    <br>
+    <p>Payment Information:&nbsp;You will be paid for all
+            correctly completed tasks on the platform. We will pay you periodically for all your tasks that have
+            undergone quality verification. The financial information we collect for the purpose of payment may include
+            information such as your credit card number, your debit card number, your bank account number, bank IFSC
+            code, your UPI handle, payment wallet information and net-banking details. The information we collect would
+            depend on the payment method that you use. We may pass this information on to our third-party payment
+            services vendors, or these entities may also directly collect this information from you. We will collect and
+            store your payment information for the duration of the study. We will delete all payment information as soon
+            as your participation is completed. Please contact your project coordinator if you have any queries
+            regarding payments. We will not store this information, if we are not permitted under applicable law.
+            &nbsp;</p>
+    <br>
+    <ul>
+        <li>Health Related Information:&nbsp;We may
+                collect certain health related information about you such as if you have been diagnosed with any speech
+                related disorders in the past and if you are on any medications to treat the disorder. We will require
+                you to answer questions in relation to speech disorders as either yes or no.</li>
+    </ul>
+    <br>
+    <ol start="3">
+        <li>Non-Personal Information: </li>
+    </ol>
+    <br>
+    <ul>
+        <li>Feedback information:&nbsp;<span
+               >After the end of the study, we may request a short interview with you to gather your feedback
+                and understand your experience of using our platform.</li>
+    </ul>
+    <br>
+    <ul>
+        <li>Dataset Information:&nbsp;Datasets will
+                contain only text or audio data that is not associated with personally identifiable information and will
+                be used to create speech recognition technology. If you have any questions regarding how the dataset
+                will be used, please feel free to ask through your project coordinator.</li>
+    </ul>
+    <br>
+    <p>B.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PURPOSE OF COLLECTION</p>
+    <br>
+    <p>Any personal information we collect during the study will only be used to identify
+            you during the duration of the study. </p>
+    <br>
+    <p>Purpose of collection:</p>
+    <br>
+    <p>We use personal information of Users for the following purposes: </p>
+    <br>
+    <ul>
+        <li>Administrative and Legal Purposes:<span
+               >&nbsp;We will access and use your data as reasonably necessary to (a)
+                provide, maintain and improve the App; (b) prevent or address service, security, technical issues, or at
+                your request in connection with support matters; © act in a manner required by law; (d) register you
+                with the App and complete identity verification; (e) to enable payments to you; (f) to create datasets
+                as mentioned above for open access; and (g) act in the manner expressly permitted in writing by
+                you.</li>
+    </ul>
+    <br>
+    <ul>
+        <li>To improve our App and Services:&nbsp;We
+                will access and use your data to carry out research and analyze trends to better improve our algorithm.
+            </li>
+    </ul>
+    <br>
+    <ul>
+        <li>We will access and use your data for other purposes you consent to,
+                are notified of, or are disclosed when you provide personal information.</li>
+    </ul>
+    <br>
+    <p>At the end of your participation, we request you to delete the application from your
+            phone. Should you want, your project coordinator will aid you in uninstalling, configuring, and deleting the
+            application.</p>
+
+    <br>
+    <p>C.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YOUR CHOICES <span
+           >Access to Personal Data or Information</p>
+    <br>
+    <p>You will have the right, upon request, to access, change, modify and review the
+            personal information provided by you and held by us. Upon discovering that the information provided is
+            inaccurate or deficient in any manner, you will have the right to request suitable changes or amendments to
+            such information, which will be carried out by us, when feasible. </p>
+    <br>
+    <p>You will also have the option of withdrawing consent by reaching out to us at
+        <a
+                href="mailto:operations@navanatech.in">operations@navanatech.in</a>. However,
+            exercising this option will hamper our ability to provide you with any or all of the features of the
+            App.</p>
+    
+    <br>
+    <p>D.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHARING AND DISCLOSURE </p>
+
+    <br>
+    <p>We will not publish or disclose your personal information without your prior
+            consent, unless we are required to do so in order to facilitate use of the App, it is for the Purposes (as
+            indicated in Part B), it is mandated by law, or if you have previously provided your consent. We may
+            disclose personal information with our employees, officers, agents, consultants, business associates,
+            contractors, attorneys, etc., on a need-to-know basis for the Purposes. </p>
+
+   <br>
+    <p>We will disclose any sensitive personal data and information if there is a legal
+            requirement or if we are ordered to do so by a court of competent jurisdiction or to any government agency
+            if required by law for the purposes of verification of identity, or for prevention, detection, or
+            investigation of crime (including cyber incidents), or for prosecution or punishment of offences.</p>
+
+    <br>
+    <p>E.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSFER</p>
+    <br>
+    <p>We do not transfer personal information pertaining to you to third parties.
+    </p>
+
+    <br>
+    <p>F.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SECURITY</p>
+    <br>
+    <p>We ensure the confidentiality and security of the personal information and sensitive
+            personal data and information provided by you by implementing comprehensive information security practices
+            and standards as mandated by the Data Protection Rules. </p>
+
+    <br>
+    <p>G.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GRIEVANCE OFFICER</p>
+    <br>
+    <p>Should you have any questions in relation to this Privacy Policy , you may address
+            them to our grievance officer whose name and email address are as follows:</p>
+    <p>[&#9679;] Raoul Nanavati</p>
+    <p>[&#9679;] operations@navanatech.in</p>
+    <br>
+    <p>&nbsp; In case you do not have access to email, you can contact your project
+            coordinator, and have them relay your concerns to the grievance officer.</p>
+    ]]></string>
+
     <string name="s_consent_form_summary">Summary of the consent form</string>
     <string name="s_access_code_prompt">Enter 16-digit access code</string>
     <string name="s_download_prompt">Please Wait. Downloading files and other assets.</string>
