@@ -3,6 +3,8 @@ package com.microsoft.research.karya.ui
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.microsoft.research.karya.databinding.ActivityMainBinding
 import com.microsoft.research.karya.utils.extensions.viewBinding

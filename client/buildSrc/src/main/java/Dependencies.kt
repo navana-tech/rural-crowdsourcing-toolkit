@@ -85,7 +85,7 @@ object Dependencies {
     const val material = "com.google.android.material:material:1.4.0-alpha02"
 
     object Firebase {
-      const val bom = "com.google.firebase:firebase-bom:27.1.0"
+      const val bom = "com.google.firebase:firebase-bom:28.4.0"
       const val crashlytics = "com.google.firebase:firebase-crashlytics"
       const val analytics = "com.google.firebase:firebase-analytics"
     }
