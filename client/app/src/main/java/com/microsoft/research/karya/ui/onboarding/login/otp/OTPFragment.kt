@@ -2,6 +2,7 @@ package com.microsoft.research.karya.ui.onboarding.login.otp
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,6 +24,7 @@ import com.microsoft.research.karya.utils.extensions.viewBinding
 import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import com.microsoft.research.karya.utils.extensions.visible
+import com.zabaan.sdk.Zabaan
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,12 +41,17 @@ class OTPFragment : BaseFragment(R.layout.fragment_otp) {
     observeEffects()
   }
 
-  override fun onResume() {
-    super.onResume()
-    viewLifecycleScope.launchWhenResumed {
-      requireContext().dataStore.doOnlyOnce(audioTag) { assistant.playAssistantAudio(AssistantAudio.OTP_PROMPT) }
+    override fun onResume() {
+        super.onResume()
+        Zabaan.getInstance().show(binding.root, viewLifecycle)
+        Zabaan.getInstance().setCurrentState("IDLE")
+        Zabaan.getInstance().setScreenName("OTP", true)
     }
-  }
+
+    override fun onPause() {
+        Zabaan.getInstance().stopZabaanInteraction()
+        super.onPause()
+    }
 
   private fun setupView() {
     // registrationActivity.current_assistant_audio = R.string.audio_otp_prompt

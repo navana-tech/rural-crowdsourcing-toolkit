@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         app:startIcon="@drawable/access_code_title_icon"
         app:showBackButton="true"
+        app:useCustomAssistant="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

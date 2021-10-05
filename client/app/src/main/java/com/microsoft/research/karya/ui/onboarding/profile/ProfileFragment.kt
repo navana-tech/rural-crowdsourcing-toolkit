@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -21,12 +22,18 @@ import com.microsoft.research.karya.utils.extensions.doOnlyOnce
 import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import com.microsoft.research.karya.utils.extensions.visible
+import com.zabaan.sdk.AssistantStateListener
+import com.zabaan.sdk.Zabaan
+import com.zabaan.sdk.internal.interaction.StateInteractionRequest
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfileFragment : SessionFragment(R.layout.fragment_profile_picture) {
+class ProfileFragment : SessionFragment(R.layout.fragment_profile_picture), AssistantStateListener {
 
   private val binding by viewBinding(FragmentProfilePictureBinding::bind)
   private val viewModel by viewModels<ProfileViewModel>()
@@ -45,19 +52,17 @@ class ProfileFragment : SessionFragment(R.layout.fragment_profile_picture) {
     setupView()
     observeUi()
     observeEffects()
-
-    // registrationActivity.current_assistant_audio = R.string.audio_profile_picture_prompt
-    // disableRotateButton()
   }
 
-  override fun onResume() {
-    super.onResume()
-    viewLifecycleScope.launchWhenResumed {
-      requireContext().dataStore.doOnlyOnce(audioTag) {
-        assistant.playAssistantAudio(AssistantAudio.PROFILE_PICTURE_PROMPT)
-      }
+    override fun onResume() {
+        super.onResume()
+        Zabaan.getInstance().apply {
+            show(binding.root, viewLifecycle)
+            setAssistantStateListener(this@ProfileFragment)
+            setCurrentState("IDLE")
+            setScreenName("PROFILE_PICTURE")
+        }
     }
-  }
 
   private fun setupView() {
     with(binding) {
@@ -169,4 +174,17 @@ class ProfileFragment : SessionFragment(R.layout.fragment_profile_picture) {
     binding.loadingPb.gone()
     binding.profilePictureNextBtn.visible()
   }
+
+    override fun assistantAvailable() {
+        lifecycleScope.launch {
+            requireContext().dataStore.doOnlyOnce(audioTag) {
+                val interaction = StateInteractionRequest.Builder().setState("IDLE").build()
+                Zabaan.getInstance().playInteraction(interaction)
+            }
+        }
+    }
+
+    override fun assistantClicked() {}
+
+    override fun assistantLanguageNotSupported() {}
 }

@@ -58,6 +58,7 @@
         <attr name="endIcon" format="reference" />
         <attr name="endText" format="string|reference" />
         <attr name="showBackButton" format="boolean" />
+        <attr name="useCustomAssistant" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="KaryaDialog">

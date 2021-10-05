@@ -12,6 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:showBackButton="true"
+        app:useCustomAssistant="true"
         app:startIcon="@drawable/ic_profile" />
 
     <TextView

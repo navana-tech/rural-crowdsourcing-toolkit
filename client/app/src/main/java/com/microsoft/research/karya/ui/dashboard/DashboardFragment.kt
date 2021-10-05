@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -14,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.microsoft.research.karya.R
-import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.modelsExtra.TaskInfo
 import com.microsoft.research.karya.databinding.FragmentDashboardBinding
 import com.microsoft.research.karya.ui.base.SessionFragment
@@ -27,12 +27,17 @@ import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
 import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
+import com.zabaan.sdk.AssistantStateListener
+import com.zabaan.sdk.Zabaan
+import com.zabaan.sdk.internal.interaction.Interaction
+import com.zabaan.sdk.internal.interaction.StateInteractionRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
+class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), AssistantStateListener {
 
   override val TAG: String = "DASHBOARD_FRAGMENT"
   val binding by viewBinding(FragmentDashboardBinding::bind)
@@ -59,12 +64,17 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
     super.onViewCreated(view, savedInstanceState)
     setupViews()
     observeUi()
-    fetchTasksOnFirstRun()
   }
 
   override fun onResume() {
     super.onResume()
-    viewModel.getAllTasks()
+      viewModel.getAllTasks()
+      Zabaan.getInstance().apply {
+          show(binding.root, viewLifecycle)
+          setAssistantStateListener(this@DashboardFragment)
+          setCurrentState("IDLE")
+          setScreenName("DASHBOARD", false)
+      }
   }
 
   private fun setupViews() {
@@ -180,19 +190,30 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard) {
     startActivity(nextIntent)
   }
 
-  private fun fetchTasksOnFirstRun() {
+  private fun performOnFirstRun() {
     val firstFetchKey = booleanPreferencesKey(PreferenceKeys.IS_FIRST_FETCH)
 
-    lifecycleScope.launchWhenStarted {
+    lifecycleScope.launch {
       this@DashboardFragment.requireContext().dataStore.edit { prefs ->
         val isFirstFetch = prefs[firstFetchKey] ?: true
 
         if (isFirstFetch) {
           viewModel.syncWithServer()
+          Zabaan.getInstance().playInteraction(StateInteractionRequest.Builder().setState("IDLE").build())
         }
 
         prefs[firstFetchKey] = false
       }
     }
+  }
+
+  override fun assistantAvailable() {
+    performOnFirstRun()
+  }
+
+  override fun assistantClicked() {
+  }
+
+  override fun assistantLanguageNotSupported() {
   }
 }

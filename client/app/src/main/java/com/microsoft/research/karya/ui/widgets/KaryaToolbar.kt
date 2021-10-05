@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.databinding.KaryaToolbarBinding
 import com.microsoft.research.karya.utils.extensions.gone
+import com.microsoft.research.karya.utils.extensions.invisible
 import com.microsoft.research.karya.utils.extensions.visible
 
 class KaryaToolbar : FrameLayout {
@@ -49,6 +50,7 @@ class KaryaToolbar : FrameLayout {
     val endIcon = a.getDrawable(R.styleable.KaryaToolbar_endIcon)
     val endText = a.getString(R.styleable.KaryaToolbar_endText)
     val showBackButton = a.getBoolean(R.styleable.KaryaToolbar_showBackButton, false)
+    val useCustomAssistant = a.getBoolean(R.styleable.KaryaToolbar_useCustomAssistant, false)
 
     if (title != null) {
       setTitle(title)
@@ -62,6 +64,7 @@ class KaryaToolbar : FrameLayout {
     if (endText != null) {
       setEndText(endText)
     }
+    setCustomAssistant(useCustomAssistant)
     showBackIcon(showBackButton)
     a.recycle()
   }
@@ -151,5 +154,10 @@ class KaryaToolbar : FrameLayout {
 
   fun setAssistantClickListener(onClick: () -> Unit) {
     binding.assistant.apply { setOnClickListener { onClick() } }
+  }
+
+  fun setCustomAssistant(value: Boolean) {
+      if (value) binding.assistant.invisible() else binding.assistant.visible()
+      invalidate()
   }
 }

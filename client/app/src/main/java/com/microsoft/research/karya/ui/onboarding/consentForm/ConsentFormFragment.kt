@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.microsoft.research.karya.R
@@ -21,6 +22,7 @@ import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
 import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
+import com.zabaan.sdk.Zabaan
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -42,14 +44,17 @@ class ConsentFormFragment : BaseFragment(R.layout.fragment_consent_form) {
     observeEffects()
   }
 
-  override fun onResume() {
-    super.onResume()
-    viewLifecycleScope.launchWhenResumed {
-      requireContext().dataStore.doOnlyOnce(audioTag) {
-        assistant.playAssistantAudio(AssistantAudio.CONSENT_FORM_SUMMARY)
-      }
+    override fun onResume() {
+        super.onResume()
+        Zabaan.getInstance().show(binding.root, viewLifecycle)
+        Zabaan.getInstance().setCurrentState("IDLE")
+        Zabaan.getInstance().setScreenName("CONSENT_FORM", true)
     }
-  }
+
+    override fun onPause() {
+        Zabaan.getInstance().stopZabaanInteraction()
+        super.onPause()
+    }
 
   private fun setupViews() {
     val consentFormText = getString(R.string.s_consent_form_text)

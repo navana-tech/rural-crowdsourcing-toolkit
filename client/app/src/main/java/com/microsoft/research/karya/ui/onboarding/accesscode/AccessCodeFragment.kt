@@ -4,7 +4,7 @@ import android.media.AudioManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.content.ContextCompat.getSystemService
+import android.widget.Toast
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,6 +15,8 @@ import com.microsoft.research.karya.databinding.FragmentAccessCodeBinding
 import com.microsoft.research.karya.ui.MainActivity
 import com.microsoft.research.karya.utils.SeparatorTextWatcher
 import com.microsoft.research.karya.utils.extensions.*
+import com.zabaan.sdk.Zabaan
+import com.zabaan.common.ZabaanLanguages
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,10 +33,18 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
     observeUi()
     observeEffects()
 
+      Zabaan.getInstance().show(binding.rootCl, viewLifecycle)
+      Zabaan.getInstance().setCurrentState("IDLE")
+      Zabaan.getInstance().setScreenName("ACCESS_CODE", autoPlay = false)
+
     binding.volumeDialog.isVisible = isVolumeLowerThan(MIN_VOLUME)
   }
 
-  private fun setupViews() {
+  override fun onResume() {
+    super.onResume()
+  }
+
+    private fun setupViews() {
     with(binding) {
       creationCodeEt.addTextChangedListener(
         object : SeparatorTextWatcher('-', 4) {
@@ -87,6 +97,7 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
   }
 
   private fun showSuccessUi(languageCode: String) {
+    Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(languageCode))
     updateActivityLanguage(languageCode)
 
     hideLoading()

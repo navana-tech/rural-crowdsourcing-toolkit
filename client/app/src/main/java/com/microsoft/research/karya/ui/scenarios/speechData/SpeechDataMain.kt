@@ -13,8 +13,13 @@ import android.media.MediaRecorder
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.JsonObject
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.local.enum.AssistantAudio
@@ -23,8 +28,17 @@ import com.microsoft.research.karya.ui.scenarios.common.MicrotaskRenderer
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.ACTIVE
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.DISABLED
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.ENABLED
+import com.microsoft.research.karya.utils.PreferenceKeys
+import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.invisible
+import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.visible
+import com.zabaan.common.ZabaanLanguages
+import com.zabaan.common.ZabaanSpeakable
+import com.zabaan.sdk.AssistantInteractionListener
+import com.zabaan.sdk.AssistantStateListener
+import com.zabaan.sdk.Zabaan
+import com.zabaan.sdk.internal.interaction.StateInteractionRequest
 import java.io.DataOutputStream
 import java.io.FileOutputStream
 import java.io.RandomAccessFile
@@ -185,11 +199,21 @@ open class SpeechDataMain(
     /** Set on click listeners */
     recordBtn.setOnClickListener {
         vibratePhone(it.context)
+        Zabaan.getInstance().stopZabaanInteraction()
         handleRecordClick()
     }
-    playBtn.setOnClickListener { handlePlayClick() }
-    nextBtn.setOnClickListener { handleNextClick() }
-    backBtn.setOnClickListener { handleBackClick() }
+    playBtn.setOnClickListener {
+        Zabaan.getInstance().stopZabaanInteraction()
+        handlePlayClick()
+    }
+    nextBtn.setOnClickListener {
+        Zabaan.getInstance().stopZabaanInteraction()
+        handleNextClick()
+    }
+    backBtn.setOnClickListener {
+        Zabaan.getInstance().stopZabaanInteraction()
+        handleBackClick()
+    }
 
     setButtonStates(DISABLED, DISABLED, DISABLED, DISABLED)
 
@@ -304,7 +328,18 @@ open class SpeechDataMain(
     }
   }
 
-  /**
+  override fun onResume() {
+      // Show zabaan before onResume because onResume calls setupMicroTasks and that will play the first time zabaan
+      // audio
+      Zabaan.getInstance().apply {
+          show(window.decorView.rootView, this@SpeechDataMain.lifecycle)
+          setCurrentState("IDLE")
+          setScreenName("SPEECH_DATA", false)
+      }
+      super.onResume()
+  }
+
+    /**
    * Setup a new microtask. Extract the sentence from the microtask input and set [sentenceTv] to
    * that sentence. Create the wav file in the scratch folder and write the WAV header. Depending on
    * whether the current microtask is completed or not, move to PRERECORDING or
@@ -322,13 +357,13 @@ open class SpeechDataMain(
     totalRecordedBytes = 0
     playbackProgressPb.progress = 0
 
-    /*if (firstTimeActivityVisit) {
+    if (firstTimeActivityVisit) {
       firstTimeActivityVisit = false
-      onAssistantClick()
+      Zabaan.getInstance().playInteraction(StateInteractionRequest.Builder().setState("IDLE").build())
+      moveToPrerecording()
     } else {
       moveToPrerecording()
-    }*/
-    moveToPrerecording()
+    }
   }
 
   /** Move from init to pre-recording */
