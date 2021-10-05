@@ -28,13 +28,16 @@ buildscript {
     }
 }
 
+val localProperties = java.util.Properties()
+localProperties.load(java.io.FileInputStream(rootProject.file("local.properties")))
+
 apply(plugin = "in.navanatech.zabaan")
 
 configure<`in`.navanatech.zabaan.ZabaanExtension> {
     apkPath = "/home/skrilltrax/Work/rural-crowdsourcing-toolkit/client/app/release/app-release.aab"
     upload {
-        releaseNumber = project.findProperty("zbn.release") as String
-        releaseToken = project.findProperty("zbn.token") as String
+        releaseNumber = localProperties.getProperty("zbn.release") as String
+        releaseToken = localProperties.getProperty("zbn.token") as String
     }
 }
 
@@ -44,8 +47,8 @@ allprojects {
         google()
         maven(url = "https://maven.pkg.github.com/navana-tech/zabaan-sdk") {
             credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("PASSWORD")
+                username = localProperties.getProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = localProperties.getProperty("gpr.key") ?: System.getenv("PASSWORD")
             }
         }
         mavenCentral()

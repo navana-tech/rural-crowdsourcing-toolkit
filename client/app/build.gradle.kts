@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -27,7 +30,9 @@ android {
                 arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
             }
         }
-        buildConfigField("String", "ZABAAN_ACCESS_TOKEN", project.findProperty("zbn.token") as String)
+        val localProperties = Properties()
+        localProperties.load(FileInputStream(rootProject.file("local.properties")))
+        buildConfigField("String", "ZABAAN_ACCESS_TOKEN", localProperties.getProperty("zbn.token") as String)
     }
     buildTypes {
         named("release") {
