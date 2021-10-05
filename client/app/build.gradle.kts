@@ -27,6 +27,7 @@ android {
                 arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
             }
         }
+        buildConfigField("String", "ZABAAN_ACCESS_TOKEN", project.findProperty("zbn.token") as String)
     }
     buildTypes {
         named("release") {
@@ -79,7 +80,7 @@ dependencyLocking {
 
 dependencies {
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
 
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.constraintLayout)
@@ -129,6 +130,10 @@ dependencies {
     implementation(Dependencies.ThirdParty.lottie)
     implementation(Dependencies.ThirdParty.stateProgressBar)
 
+    implementation(Dependencies.ThirdParty.zabaan) {
+        exclude(group = "androidx.room")
+    }
+
     implementation(Dependencies.ThirdParty.Retrofit.retrofit)
     implementation(Dependencies.ThirdParty.Retrofit.gsonConverter)
 
@@ -137,5 +142,4 @@ dependencies {
     implementation(project(":app-dropdown"))
     implementation(project(":app-bow"))
     implementation("com.mcxiaoke.volley:library:1.0.19")
-
 }

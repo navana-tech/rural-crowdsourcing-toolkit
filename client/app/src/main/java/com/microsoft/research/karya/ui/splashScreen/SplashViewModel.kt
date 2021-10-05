@@ -6,6 +6,8 @@ import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
 import com.microsoft.research.karya.data.repo.WorkerRepository
 import com.microsoft.research.karya.ui.Destination
+import com.zabaan.sdk.Zabaan
+import com.zabaan.common.ZabaanLanguages
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,6 +55,7 @@ constructor(
   private suspend fun handleSingleUser() {
     val worker = getLoggedInWorker()
     _splashEffects.emit(SplashEffects.UpdateLanguage(worker.language))
+    if (worker.language.isNotEmpty()) Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(worker.language))
 
     val destination =
       when {

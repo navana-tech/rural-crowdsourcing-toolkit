@@ -2,6 +2,7 @@ package com.microsoft.research.karya.ui.onboarding.gender
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.microsoft.research.karya.R
@@ -19,6 +20,7 @@ import com.microsoft.research.karya.utils.extensions.viewBinding
 import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import com.microsoft.research.karya.utils.extensions.visible
+import com.zabaan.sdk.Zabaan
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,12 +38,12 @@ class SelectGenderFragment : SessionFragment(R.layout.fragment_select_gender) {
     observeEffects()
   }
 
-  override fun onResume() {
-    super.onResume()
-    viewLifecycleScope.launchWhenResumed {
-      requireContext().dataStore.doOnlyOnce(audioTag) { assistant.playAssistantAudio(AssistantAudio.GENDER_PROMPT) }
+    override fun onResume() {
+        super.onResume()
+        Zabaan.getInstance().show(binding.root, viewLifecycle)
+        Zabaan.getInstance().setCurrentState("IDLE")
+        Zabaan.getInstance().setScreenName("GENDER", autoPlay = true)
     }
-  }
 
   private fun setupViews() {
     with(binding) {

@@ -2,6 +2,7 @@ package com.microsoft.research.karya.ui.onboarding.login.phone
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,8 +21,10 @@ import com.microsoft.research.karya.utils.extensions.hideKeyboard
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.requestSoftKeyFocus
 import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import com.microsoft.research.karya.utils.extensions.visible
+import com.zabaan.sdk.Zabaan
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,15 +42,17 @@ class PhoneNumberFragment : BaseFragment(R.layout.fragment_phone_number) {
     requestSoftKeyFocus(binding.phoneNumberEt)
   }
 
-  override fun onResume() {
-    super.onResume()
-    viewLifecycleScope.launchWhenResumed {
-      requireContext().dataStore.doOnlyOnce(audioTag) {
-        assistant.playAssistantAudio(AssistantAudio.PHONE_NUMBER_PROMPT)
-      }
+    override fun onResume() {
+        super.onResume()
+        Zabaan.getInstance().show(binding.root, viewLifecycle)
+        Zabaan.getInstance().setCurrentState("IDLE")
+        Zabaan.getInstance().setScreenName("PHONE_NUMBER", true)
     }
-  }
 
+    override fun onPause() {
+        Zabaan.getInstance().stopZabaanInteraction()
+        super.onPause()
+    }
   private fun setupViews() {
     // registrationActivity = activity as RegistrationActivity
     // registrationActivity.current_assistant_audio = R.string.audio_phone_number_prompt

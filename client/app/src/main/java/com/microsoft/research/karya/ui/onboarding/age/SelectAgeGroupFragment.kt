@@ -2,6 +2,7 @@ package com.microsoft.research.karya.ui.onboarding.age
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,8 +18,10 @@ import com.microsoft.research.karya.utils.extensions.doOnlyOnce
 import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
+import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import com.microsoft.research.karya.utils.extensions.visible
+import com.zabaan.sdk.Zabaan
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,12 +40,12 @@ class SelectAgeGroupFragment : BaseFragment(R.layout.fragment_select_age_group) 
     // registrationActivity.current_assistant_audio = R.string.audio_age_prompt
   }
 
-  override fun onResume() {
-    super.onResume()
-    viewLifecycleScope.launchWhenResumed {
-      requireContext().dataStore.doOnlyOnce(audioTag) { assistant.playAssistantAudio(AssistantAudio.AGE_PROMPT) }
+    override fun onResume() {
+        super.onResume()
+        Zabaan.getInstance().show(binding.root, viewLifecycle)
+        Zabaan.getInstance().setCurrentState("IDLE")
+        Zabaan.getInstance().setScreenName("AGE", autoPlay = true)
     }
-  }
 
   private fun setupView() {
     with(binding) {
