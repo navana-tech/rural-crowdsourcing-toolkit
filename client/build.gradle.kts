@@ -45,13 +45,13 @@ configure<`in`.navanatech.zabaan.ZabaanExtension> {
 allprojects {
     repositories {
         google()
+        mavenCentral()
         maven(url = "https://maven.pkg.github.com/navana-tech/zabaan-sdk") {
             credentials {
                 username = localProperties.getProperty("gpr.user") ?: System.getenv("USERNAME")
                 password = localProperties.getProperty("gpr.key") ?: System.getenv("PASSWORD")
             }
         }
-        mavenCentral()
         maven(url = "https://jitpack.io")
         // TODO: Remove JCenter
         @Suppress("JcenterRepositoryObsolete")
