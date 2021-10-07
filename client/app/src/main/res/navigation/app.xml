@@ -19,22 +19,22 @@
         <action
             android:id="@+id/action_splashScreenFragment2_to_fileDownloadFragment2"
             app:destination="@id/accessCodeFlow"
-            app:popUpTo="@id/splashScreenFragment2"
+            app:popUpTo="@id/app_nav_graph"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashScreenFragment2_to_tempDataFlow"
             app:destination="@id/tempDataFlow"
-            app:popUpTo="@id/splashScreenFragment2"
+            app:popUpTo="@id/app_nav_graph"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashScreenFragment2_to_mandatoryDataFlow"
             app:destination="@id/mandatoryDataFlow"
-            app:popUpTo="@id/splashScreenFragment2"
+            app:popUpTo="@id/app_nav_graph"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashScreenFragment2_to_loginFlow2"
             app:destination="@id/loginFlow"
-            app:popUpTo="@id/splashScreenFragment2"
+            app:popUpTo="@id/app_nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
     <navigation android:id="@+id/loginFlow"
