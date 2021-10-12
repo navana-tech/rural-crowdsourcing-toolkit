@@ -23,8 +23,8 @@ import { ErrorMessageWithRetry, ProgressBar } from '../templates/Status';
 // HoCs
 import { DataProps, withData } from '../hoc/WithData';
 
-// Recharts library
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+// Material Table
+import MaterialTable from 'material-table';
 
 // For CSV file download
 import { CSVLink } from 'react-csv';
@@ -155,12 +155,32 @@ class WorkerOverview extends React.Component<WorkerOverviewProps, WorkerOverview
     }
 
     // Data to be fed into graph
-    var data = workers.map((w) => ({
-      id: w.id,
-      access_code: w.access_code,
-      phone_number: w.phone_number,
-      ...w.extras,
-    }));
+    var data = workers.map((w) => {
+      const startDate = new Date(w.registered_at);
+      const endDate = new Date(w.sent_to_server_at);
+      // Discard the time and time-zone information.
+      const utc1 = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+      const utc2 = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      const difference = Math.floor((utc2 - utc1) / 1000 * 60 * 60 * 24);
+      var status;
+      if (difference > 7) {
+        status = "INACTIVE"
+      } else {
+        status = "ACTIVE"
+      }
+
+      return {
+        id: w.id,
+        access_code: w.access_code,
+        startDate: w.registered_at,
+        lastUpdated: w.sent_to_server_at,
+        gender: w.gender,
+        yearOfBirth: w.year_of_birth,
+        phoneNumber: w.phone_number,
+        status: status,
+        ...w.extras,
+      };
+    });
 
     // Sorting the data
     if (sort_by !== undefined) {
@@ -280,19 +300,27 @@ class WorkerOverview extends React.Component<WorkerOverviewProps, WorkerOverview
                   <span>Earned</span>
                 </label>
               </div>
-              <ResponsiveContainer width='90%' height={400}>
-                <LineChart data={data} margin={{ top: 30, right: 10, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray='3 3' />
-                  <XAxis dataKey='id' tick={false} label='Worker ID' />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend verticalAlign='top' />
-                  {graph_display.assigned && <Line type='monotone' dataKey='assigned' stroke='#8884d8' dot={false} />}
-                  {graph_display.completed && <Line type='monotone' dataKey='completed' stroke='#82ca9d' dot={false} />}
-                  {graph_display.verified && <Line type='monotone' dataKey='verified' stroke='#4dd0e1' dot={false} />}
-                  {graph_display.earned && <Line type='monotone' dataKey='earned' stroke='#ea80fc' dot={false} />}
-                </LineChart>
-              </ResponsiveContainer>
+              <div className='row' id='table-row'>
+                <div className='col s12' style={{ maxWidth: '100%' }}>
+                  <MaterialTable
+                    columns={[
+                      { title: 'Access Code', field: 'access_code', type: 'string' },
+                      { title: 'Phone Number', field: 'phoneNumber', type: 'string' },
+                      { title: 'Gender', field: 'gender', type: 'string' },
+                      { title: 'Year of Birth', field: 'yearOfBirth', type: 'string' },
+                      { title: 'Registration Date', field: 'startDate', type: 'date' },
+                      { title: 'Last Task Submission', field: 'lastUpdated', type: 'date' },
+                      { title: 'Status', field: 'status', type: 'string' },
+                      { title: 'Assigned', field: 'assigned', type: 'numeric' },
+                      { title: 'Completed', field: 'completed', type: 'numeric' },
+                      { title: 'Verified', field: 'verified', type: 'numeric' },
+                      { title: 'Earned (In rupees)', field: 'earned', type: 'numeric' },
+                    ]}
+                    data={ data }
+                    title='Workers'
+                  />
+                </div>
+              </div>
 
               <div className='row' id='reg_row'>
                 <p>Show </p>
