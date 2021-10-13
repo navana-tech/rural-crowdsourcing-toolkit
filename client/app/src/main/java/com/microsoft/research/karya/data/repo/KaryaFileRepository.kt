@@ -39,6 +39,6 @@ constructor(private val karyaFileAPI: KaryaFileAPI, private val karyaFileDao: Ka
   }
 
   suspend fun insertKaryaFile(karyaFileRecord: KaryaFileRecord) {
-    withContext(Dispatchers.IO) { karyaFileDao.insert(karyaFileRecord) }
+    withContext(Dispatchers.IO) { karyaFileDao.upsert(karyaFileRecord) }
   }
 }
