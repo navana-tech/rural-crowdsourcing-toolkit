@@ -3,6 +3,8 @@ package com.microsoft.research.karya
 import android.app.Application
 import android.util.Log
 import android.view.Gravity
+import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.zabaan.sdk.AssistantUi
 import com.zabaan.sdk.CUSTOM_POSITION
 import com.zabaan.sdk.InitializeParams
@@ -14,6 +16,9 @@ import dagger.hilt.android.HiltAndroidApp
 
     override fun onCreate() {
         super.onCreate()
+
+        FirebaseApp.initializeApp(this)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         try {
             val params = InitializeParams.Builder()

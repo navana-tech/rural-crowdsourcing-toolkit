@@ -3,6 +3,7 @@ package com.microsoft.research.karya.ui.dashboard
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.ChecksumAlgorithm
@@ -21,6 +22,7 @@ import com.microsoft.research.karya.utils.MicrotaskAssignmentOutput
 import com.microsoft.research.karya.utils.MicrotaskInput
 import com.microsoft.research.karya.utils.extensions.getBlobPath
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,9 +30,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.lang.RuntimeException
 
 @HiltViewModel
 class DashboardViewModel
@@ -56,12 +60,22 @@ constructor(
   fun syncWithServer() {
     viewModelScope.launch {
       _dashboardUiState.value = DashboardUiState.Loading
-
-      submitCompletedAssignments()
-      fetchNewAssignments()
-      fetchVerifiedAssignments()
-      cleanupKaryaFiles()
-      getAllTasks(true)
+      withContext(Dispatchers.IO) {
+          val accessCode = authManager.fetchLoggedInWorkerAccessCode()
+          try {
+              submitCompletedAssignments()
+              fetchNewAssignments()
+              fetchVerifiedAssignments()
+              cleanupKaryaFiles()
+              getAllTasks(true)
+          } catch (e: Exception) {
+              FirebaseCrashlytics.getInstance().setUserId(accessCode)
+              FirebaseCrashlytics.getInstance().log("Exception in syncing with server")
+              FirebaseCrashlytics.getInstance().recordException(e)
+              FirebaseCrashlytics.getInstance().sendUnsentReports()
+              getAllTasks(true)
+          }
+      }
     }
   }
 
