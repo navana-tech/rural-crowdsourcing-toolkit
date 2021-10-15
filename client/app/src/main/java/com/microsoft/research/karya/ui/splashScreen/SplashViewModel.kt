@@ -2,6 +2,7 @@ package com.microsoft.research.karya.ui.splashScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
 import com.microsoft.research.karya.data.repo.WorkerRepository
@@ -54,6 +55,7 @@ constructor(
 
   private suspend fun handleSingleUser() {
     val worker = getLoggedInWorker()
+    FirebaseCrashlytics.getInstance().setUserId(worker.accessCode)
     _splashEffects.emit(SplashEffects.UpdateLanguage(worker.language))
     if (worker.language.isNotEmpty()) Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(worker.language))
 
