@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -496,7 +497,17 @@ abstract class MicrotaskRenderer(
         } else {
           microtaskInputFileJob =
             ioScope.launch {
-              FileUtils.extractGZippedTarBallIntoDirectory(microtaskTarBallPath, microtaskInputDirectory)
+                try {
+                    FileUtils.extractGZippedTarBallIntoDirectory(microtaskTarBallPath, microtaskInputDirectory)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    FirebaseCrashlytics.getInstance().log("assignment id: ${currentAssignment.id}")
+                    FirebaseCrashlytics.getInstance().log("microtask id: ${currentMicroTask.id}")
+                    FirebaseCrashlytics.getInstance().log("task id: ${currentMicroTask.task_id}")
+                    FirebaseCrashlytics.getInstance().recordException(e)
+                    FirebaseCrashlytics.getInstance().sendUnsentReports()
+                    inputFileDoesNotExist = true
+                }
             }
         }
       }

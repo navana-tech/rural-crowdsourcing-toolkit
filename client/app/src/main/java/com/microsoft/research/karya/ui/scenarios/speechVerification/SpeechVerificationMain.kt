@@ -139,12 +139,11 @@ class SpeechVerificationMain :
 
     sentenceTv.text = sentence
 
-    /** setup media player */
-    mediaPlayer = MediaPlayer()
-    mediaPlayer!!.setOnCompletionListener { setActivityState(ActivityState.REVIEW_ENABLED) }
-    mediaPlayer!!.setDataSource(recordingFile)
-
     try {
+      /** setup media player */
+      mediaPlayer = MediaPlayer()
+      mediaPlayer!!.setOnCompletionListener { setActivityState(ActivityState.REVIEW_ENABLED) }
+      mediaPlayer!!.setDataSource(recordingFile)
       mediaPlayer!!.prepare()
       resetRecordingLength(mediaPlayer!!.duration)
       playbackProgressPb.max = mediaPlayer!!.duration

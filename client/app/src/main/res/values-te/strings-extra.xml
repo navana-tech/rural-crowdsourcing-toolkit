@@ -5,7 +5,7 @@
     <string name="privacy_policy">గోప్యతా విధానం</string>
 
     <!-- Speech data quality definitions -->
-    <string name="recording_accuracy">ఖచ్చితత్వం</string>
+<!--    <string name="recording_accuracy">ఖచ్చితత్వం</string>
     <string name="accuracy_correct">సరైన</string>
     <string name="accuracy_errors">లోపాలు</string>
     <string name="accuracy_incorrect">తప్పు</string>
@@ -20,6 +20,6 @@
     <string name="quality_noisy">గోలగోలగా ఉంది</string>
     <string name="quality_bad">బాగోలేదు</string>
 
-    <string name="rating_undefined">నిర్వచించబడలేదు</string>
+    <string name="rating_undefined">నిర్వచించబడలేదు</string>-->
 </resources>
 
