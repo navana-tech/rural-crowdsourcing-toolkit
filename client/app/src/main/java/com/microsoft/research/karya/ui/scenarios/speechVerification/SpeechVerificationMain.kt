@@ -276,9 +276,11 @@ class SpeechVerificationMain :
     setButtonStates(ButtonState.DISABLED, ButtonState.DISABLED, ButtonState.DISABLED)
 
     if (activityState == ActivityState.PLAYBACK) {
-      mediaPlayer!!.stop()
+      // Try stopping the mediaPlayer
+      mediaPlayer?.stop()
     }
-    mediaPlayer!!.release()
+    // Try releasing the mediaPlayer
+    mediaPlayer?.release()
     mediaPlayer = null
 
     val accuracy =
