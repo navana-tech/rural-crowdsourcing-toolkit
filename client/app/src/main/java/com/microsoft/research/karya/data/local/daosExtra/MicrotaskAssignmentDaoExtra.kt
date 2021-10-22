@@ -6,6 +6,7 @@ package com.microsoft.research.karya.data.local.daosExtra
 import androidx.room.Dao
 import androidx.room.Query
 import com.google.gson.JsonElement
+import com.google.gson.JsonNull
 import com.microsoft.research.karya.data.model.karya.MicroTaskAssignmentRecord
 import com.microsoft.research.karya.data.model.karya.enums.MicrotaskAssignmentStatus
 
@@ -62,6 +63,21 @@ interface MicrotaskAssignmentDaoExtra {
       getIDsForTask(taskId, arrayListOf(MicrotaskAssignmentStatus.ASSIGNED))
     }
   }
+
+  /**
+   * Query to mark the microtask assignment with the given [id] as assigned with the given [output].
+   */
+  @Query(
+        "UPDATE microtask_assignment SET " +
+            "status=:status, output=:output, last_updated_at=:date " +
+            "WHERE id=:id"
+    )
+  suspend fun markAssigned(
+      id: String,
+      date: String,
+      output: JsonElement = JsonNull.INSTANCE,
+      status: MicrotaskAssignmentStatus = MicrotaskAssignmentStatus.ASSIGNED,
+  )
 
   /**
    * Query to mark the microtask assignment with the given [id] as complete with the given [output].

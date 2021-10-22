@@ -15,6 +15,7 @@ import com.microsoft.research.karya.data.repo.KaryaFileRepository
 import com.microsoft.research.karya.data.repo.MicroTaskRepository
 import com.microsoft.research.karya.data.repo.TaskRepository
 import com.microsoft.research.karya.injection.qualifier.FilesDir
+import com.microsoft.research.karya.utils.DateUtils
 import com.microsoft.research.karya.utils.FileUtils.createTarBall
 import com.microsoft.research.karya.utils.FileUtils.downloadFileToLocalPath
 import com.microsoft.research.karya.utils.FileUtils.getMD5Digest
@@ -165,13 +166,19 @@ constructor(
       }
 
     for (assignment in filteredAssignments) {
-      val assignmentTarBallPath = microtaskOutputContainer.getBlobPath(assignment.id)
-      val tarBallName = microtaskOutputContainer.getBlobName(assignment.id)
-      val outputDir = microtaskOutputContainer.getDirectory()
-      val fileNames = assignment.output.asJsonObject.get("files").asJsonArray.map { it.asString }
-      val outputFilePaths = fileNames.map { "$outputDir/${it}" }
-      createTarBall(assignmentTarBallPath, outputFilePaths, fileNames)
-      uploadTarBall(assignment, assignmentTarBallPath, tarBallName)
+      try {
+          val assignmentTarBallPath = microtaskOutputContainer.getBlobPath(assignment.id)
+          val tarBallName = microtaskOutputContainer.getBlobName(assignment.id)
+          val outputDir = microtaskOutputContainer.getDirectory()
+          val fileNames = assignment.output.asJsonObject.get("files").asJsonArray.map { it.asString }
+          val outputFilePaths = fileNames.map { "$outputDir/${it}" }
+          createTarBall(assignmentTarBallPath, outputFilePaths, fileNames)
+          uploadTarBall(assignment, assignmentTarBallPath, tarBallName)
+      } catch (e: Exception) {
+          assignmentRepository.markAssigned(assignment.id, DateUtils.getCurrentDate())
+          FirebaseCrashlytics.getInstance().recordException(e)
+          FirebaseCrashlytics.getInstance().sendUnsentReports()
+      }
     }
   }
 

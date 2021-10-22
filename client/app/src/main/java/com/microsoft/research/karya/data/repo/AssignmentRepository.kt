@@ -138,6 +138,10 @@ constructor(
     return assignmentDaoExtra.getAssignmentsWithUploadedFiles()
   }
 
+  suspend fun markAssigned(id: String, date: String) {
+    assignmentDaoExtra.markAssigned(id, date)
+  }
+
   suspend fun updateOutputFileId(assignmentId: String, fileRecordId: String) =
     withContext(Dispatchers.IO) { assignmentDaoExtra.updateOutputFileID(assignmentId, fileRecordId) }
 
