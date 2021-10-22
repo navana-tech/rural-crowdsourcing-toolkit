@@ -13,14 +13,9 @@ import android.media.MediaRecorder
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.withCreated
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.JsonObject
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.local.enum.AssistantAudio
@@ -1037,9 +1032,21 @@ open class SpeechDataMain(
 
   /** Initialize [audioRecorder] */
   private fun initializeAndStartRecorder() {
-    audioRecorder =
-      AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, AUDIO_CHANNEL, AUDIO_ENCODING, _recorderBufferSize)
-    audioRecorder!!.startRecording()
+    try {
+        audioRecorder = AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, AUDIO_CHANNEL, AUDIO_ENCODING, _recorderBufferSize)
+        if (audioRecorder!!.state != AudioRecord.STATE_INITIALIZED) {
+            FirebaseCrashlytics.getInstance().log("audioRecorder is not initialized properly")
+            FirebaseCrashlytics.getInstance().log("audioRecorder state: ${audioRecorder!!.state}")
+            FirebaseCrashlytics.getInstance().log("audioRecorder recording state: ${audioRecorder!!.recordingState}")
+            FirebaseCrashlytics.getInstance().log("audioRecorder min buffer size: ${AudioRecord.getMinBufferSize(SAMPLE_RATE, AUDIO_CHANNEL, AUDIO_ENCODING)}")
+        }
+        audioRecorder!!.startRecording()
+    } catch (e: Exception) {
+        FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
+        FirebaseCrashlytics.getInstance().recordException(e)
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
+        onBackPressed()
+    }
   }
 
   /** Reset recording length */
