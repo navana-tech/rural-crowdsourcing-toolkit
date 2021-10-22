@@ -22,6 +22,7 @@ import com.microsoft.research.karya.utils.MicrotaskAssignmentOutput
 import com.microsoft.research.karya.utils.MicrotaskInput
 import com.microsoft.research.karya.utils.extensions.getBlobPath
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import java.io.File
 import javax.inject.Inject
@@ -57,8 +58,14 @@ constructor(
   private val _dashboardUiState: MutableStateFlow<DashboardUiState> = MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
   val dashboardUiState = _dashboardUiState.asStateFlow()
 
+  private val coroutineExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+      FirebaseCrashlytics.getInstance().log("Coroutine Exception")
+      FirebaseCrashlytics.getInstance().recordException(throwable)
+      FirebaseCrashlytics.getInstance().sendUnsentReports()
+  }
+
   fun syncWithServer() {
-    viewModelScope.launch {
+    viewModelScope.launch(coroutineExceptionHandler) {
       _dashboardUiState.value = DashboardUiState.Loading
       withContext(Dispatchers.IO) {
           val accessCode = authManager.fetchLoggedInWorkerAccessCode()
