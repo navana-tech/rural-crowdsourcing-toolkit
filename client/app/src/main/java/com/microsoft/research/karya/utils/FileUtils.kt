@@ -114,10 +114,10 @@ object FileUtils {
     for ((filePath, fileName) in filePaths zip fileNames) {
       val assignmentOutputFile = File(filePath)
       if (!assignmentOutputFile.exists()) {
-          tarStream.close()
-          gzipStream.close()
-          fileStream.close()
-          throw FileNotFoundException("File: $filePath does not exist")
+        tarStream.close()
+        gzipStream.close()
+        fileStream.close()
+        throw FileNotFoundException("File: $filePath does not exist")
       }
 
       // Update the tar header

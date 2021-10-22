@@ -49,10 +49,7 @@ import kotlinx.coroutines.runBlocking
 /** Code to request necessary permissions */
 private const val REQUEST_PERMISSIONS = 201
 
-/**
- * Abstract microtask renderer class. Each scenario supported in the karya platform should implement
- * this interface.
- */
+/** Abstract microtask renderer class. Each scenario supported in the karya platform should implement this interface. */
 @AndroidEntryPoint
 abstract class MicrotaskRenderer(
   private val activityName: String,
@@ -112,8 +109,8 @@ abstract class MicrotaskRenderer(
   }
 
   /**
-   * Setup the view for the microtask renderer. Called at the end of the [onCreate]. This function
-   * can also be used to extract specific objects in the views.
+   * Setup the view for the microtask renderer. Called at the end of the [onCreate]. This function can also be used to
+   * extract specific objects in the views.
    */
   protected abstract fun setupActivity()
 
@@ -124,8 +121,8 @@ abstract class MicrotaskRenderer(
   protected abstract fun resetOnRestart()
 
   /**
-   * Setup microtask after updating [currentAssignmentIndex]. Called at the end of [onResume], and
-   * navigating to next or previous tasks
+   * Setup microtask after updating [currentAssignmentIndex]. Called at the end of [onResume], and navigating to next or
+   * previous tasks
    */
   protected abstract fun setupMicrotask()
 
@@ -170,9 +167,9 @@ abstract class MicrotaskRenderer(
   }
 
   /**
-   * Get the unique file name of the output for current assignment. [params] is a pair of strings: a
-   * file identifier and extension. The file name is usually the current assignmentID appended with
-   * the identifier. The full file name is unique for a unique [params] pair.
+   * Get the unique file name of the output for current assignment. [params] is a pair of strings: a file identifier and
+   * extension. The file name is usually the current assignmentID appended with the identifier. The full file name is
+   * unique for a unique [params] pair.
    */
   private fun getAssignmentFileName(params: Pair<String, String>): String {
     val identifier = params.first
@@ -231,8 +228,8 @@ abstract class MicrotaskRenderer(
   }
 
   /**
-   * Mark the current microtask as complete with the [outputData], [outputFiles], and [logs]
-   * attached to the current assignment's output field. Delete all scratch files.
+   * Mark the current microtask as complete with the [outputData], [outputFiles], and [logs] attached to the current
+   * assignment's output field. Delete all scratch files.
    */
   protected suspend fun completeAndSaveCurrentMicrotask() {
     /** Delete all scratch files */
@@ -282,10 +279,7 @@ abstract class MicrotaskRenderer(
     }
   }
 
-  /**
-   * Move to previous microtask and setup. Returns false if there is no previous microtask. Else
-   * true
-   */
+  /** Move to previous microtask and setup. Returns false if there is no previous microtask. Else true */
   protected fun moveToPreviousMicrotask() {
     if (hasPreviousMicrotask()) {
       currentAssignmentIndex--
@@ -302,10 +296,9 @@ abstract class MicrotaskRenderer(
   }
 
   /**
-   * On create, set [karyaDb]. extract the taskID from Intent and fetch the [task] object from the
-   * db. If either of these is not set, then display an error and go back to the dashboard. Fetch
-   * all [microtaskAssignmentIDs] for the current task. Set the [currentAssignmentIndex] pointer
-   * appropriately.
+   * On create, set [karyaDb]. extract the taskID from Intent and fetch the [task] object from the db. If either of
+   * these is not set, then display an error and go back to the dashboard. Fetch all [microtaskAssignmentIDs] for the
+   * current task. Set the [currentAssignmentIndex] pointer appropriately.
    */
   final override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -497,17 +490,17 @@ abstract class MicrotaskRenderer(
         } else {
           microtaskInputFileJob =
             ioScope.launch {
-                try {
-                    FileUtils.extractGZippedTarBallIntoDirectory(microtaskTarBallPath, microtaskInputDirectory)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    FirebaseCrashlytics.getInstance().log("assignment id: ${currentAssignment.id}")
-                    FirebaseCrashlytics.getInstance().log("microtask id: ${currentMicroTask.id}")
-                    FirebaseCrashlytics.getInstance().log("task id: ${currentMicroTask.task_id}")
-                    FirebaseCrashlytics.getInstance().recordException(e)
-                    FirebaseCrashlytics.getInstance().sendUnsentReports()
-                    inputFileDoesNotExist = true
-                }
+              try {
+                FileUtils.extractGZippedTarBallIntoDirectory(microtaskTarBallPath, microtaskInputDirectory)
+              } catch (e: Exception) {
+                e.printStackTrace()
+                FirebaseCrashlytics.getInstance().log("assignment id: ${currentAssignment.id}")
+                FirebaseCrashlytics.getInstance().log("microtask id: ${currentMicroTask.id}")
+                FirebaseCrashlytics.getInstance().log("task id: ${currentMicroTask.task_id}")
+                FirebaseCrashlytics.getInstance().recordException(e)
+                FirebaseCrashlytics.getInstance().sendUnsentReports()
+                inputFileDoesNotExist = true
+              }
             }
         }
       }
@@ -547,9 +540,9 @@ abstract class MicrotaskRenderer(
             JsonArray()
           }
       } else {
-          outputData = JsonObject()
-          logs = JsonArray()
-          outputFiles = JsonArray()
+        outputData = JsonObject()
+        logs = JsonArray()
+        outputFiles = JsonArray()
       }
 
       // setup microtask

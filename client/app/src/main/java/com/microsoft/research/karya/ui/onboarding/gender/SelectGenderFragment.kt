@@ -2,17 +2,12 @@ package com.microsoft.research.karya.ui.onboarding.gender
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.microsoft.research.karya.R
-import com.microsoft.research.karya.data.local.enum.AssistantAudio
 import com.microsoft.research.karya.databinding.FragmentSelectGenderBinding
-import com.microsoft.research.karya.ui.base.BaseFragment
 import com.microsoft.research.karya.ui.base.SessionFragment
-import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.disable
-import com.microsoft.research.karya.utils.extensions.doOnlyOnce
 import com.microsoft.research.karya.utils.extensions.enable
 import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.observe
@@ -38,12 +33,12 @@ class SelectGenderFragment : SessionFragment(R.layout.fragment_select_gender) {
     observeEffects()
   }
 
-    override fun onResume() {
-        super.onResume()
-        Zabaan.getInstance().show(binding.root, viewLifecycle)
-        Zabaan.getInstance().setCurrentState("IDLE")
-        Zabaan.getInstance().setScreenName("GENDER", autoPlay = true)
-    }
+  override fun onResume() {
+    super.onResume()
+    Zabaan.getInstance().show(binding.root, viewLifecycle)
+    Zabaan.getInstance().setCurrentState("IDLE")
+    Zabaan.getInstance().setScreenName("GENDER", autoPlay = true)
+  }
 
   private fun setupViews() {
     with(binding) {

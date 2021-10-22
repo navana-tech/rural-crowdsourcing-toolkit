@@ -60,8 +60,8 @@ class SpeechVerificationMain :
   private lateinit var playbackProgressThread: Thread
 
   /**
-   * Setup the view for the microtask renderer. Called at the end of the [onCreate]. This function
-   * can also be used to extract specific objects in the views.
+   * Setup the view for the microtask renderer. Called at the end of the [onCreate]. This function can also be used to
+   * extract specific objects in the views.
    */
   override fun setupActivity() {
     /** Setup view */
@@ -122,8 +122,8 @@ class SpeechVerificationMain :
   }
 
   /**
-   * Setup microtask after updating [currentAssignmentIndex]. Called at the end of [onResume], and
-   * navigating to next or previous tasks
+   * Setup microtask after updating [currentAssignmentIndex]. Called at the end of [onResume], and navigating to next or
+   * previous tasks
    */
   override fun setupMicrotask() {
     handleAccuracyChange(R.string.rating_undefined)

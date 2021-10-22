@@ -3,7 +3,6 @@ package com.microsoft.research.karya.ui.onboarding.fileDownload
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -35,19 +34,19 @@ class FileDownloadFragment : Fragment(R.layout.fragment_file_download) {
     downloadResourceFiles()
   }
 
-   override fun onResume() {
-       super.onResume()
-       Zabaan.getInstance().show(binding.root, viewLifecycle)
-       Zabaan.getInstance().setScreenName("FILE_DOWNLOAD")
-       Zabaan.getInstance().setCurrentState("IDLE")
-    }
+  override fun onResume() {
+    super.onResume()
+    Zabaan.getInstance().show(binding.root, viewLifecycle)
+    Zabaan.getInstance().setScreenName("FILE_DOWNLOAD")
+    Zabaan.getInstance().setCurrentState("IDLE")
+  }
 
-   override fun onPause() {
-     Zabaan.getInstance().stopZabaanInteraction()
-     super.onPause()
-   }
+  override fun onPause() {
+    Zabaan.getInstance().stopZabaanInteraction()
+    super.onPause()
+  }
 
-    private fun downloadResourceFiles() {
+  private fun downloadResourceFiles() {
     viewLifecycleScope.launch {
       val worker = authManager.fetchLoggedInWorker()
 

@@ -157,7 +157,7 @@ class KaryaToolbar : FrameLayout {
   }
 
   fun setCustomAssistant(value: Boolean) {
-      if (value) binding.assistant.invisible() else binding.assistant.visible()
-      invalidate()
+    if (value) binding.assistant.invisible() else binding.assistant.visible()
+    invalidate()
   }
 }
