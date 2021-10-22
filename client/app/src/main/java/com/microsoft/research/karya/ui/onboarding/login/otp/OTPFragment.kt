@@ -2,7 +2,6 @@ package com.microsoft.research.karya.ui.onboarding.login.otp
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,11 +11,8 @@ import com.microsoft.research.karya.databinding.FragmentOtpBinding
 import com.microsoft.research.karya.ui.Destination
 import com.microsoft.research.karya.ui.base.BaseFragment
 import com.microsoft.research.karya.utils.AppConstants
-import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.disable
-import com.microsoft.research.karya.utils.extensions.doOnlyOnce
 import com.microsoft.research.karya.utils.extensions.enable
-import com.microsoft.research.karya.utils.extensions.finish
 import com.microsoft.research.karya.utils.extensions.gone
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.requestSoftKeyFocus
@@ -41,17 +37,17 @@ class OTPFragment : BaseFragment(R.layout.fragment_otp) {
     observeEffects()
   }
 
-    override fun onResume() {
-        super.onResume()
-        Zabaan.getInstance().show(binding.root, viewLifecycle)
-        Zabaan.getInstance().setCurrentState("IDLE")
-        Zabaan.getInstance().setScreenName("OTP", true)
-    }
+  override fun onResume() {
+    super.onResume()
+    Zabaan.getInstance().show(binding.root, viewLifecycle)
+    Zabaan.getInstance().setCurrentState("IDLE")
+    Zabaan.getInstance().setScreenName("OTP", true)
+  }
 
-    override fun onPause() {
-        Zabaan.getInstance().stopZabaanInteraction()
-        super.onPause()
-    }
+  override fun onPause() {
+    Zabaan.getInstance().stopZabaanInteraction()
+    super.onPause()
+  }
 
   private fun setupView() {
     // registrationActivity.current_assistant_audio = R.string.audio_otp_prompt

@@ -48,8 +48,8 @@ class TextToTextTranslationMain :
   }
 
   /**
-   * Setup the view for the microtask renderer. Called at the end of the [onCreate]. This function
-   * can also be used to extract specific objects in the views.
+   * Setup the view for the microtask renderer. Called at the end of the [onCreate]. This function can also be used to
+   * extract specific objects in the views.
    */
   private var nextBtnDropDownState: ButtonState = ButtonState.DISABLED
   private var nextBtnBOWState: ButtonState = ButtonState.DISABLED
@@ -103,8 +103,8 @@ class TextToTextTranslationMain :
   override fun resetOnRestart() = Unit
 
   /**
-   * Setup microtask after updating [currentAssignmentIndex]. Called at the end of [onResume], and
-   * navigating to next or previous tasks
+   * Setup microtask after updating [currentAssignmentIndex]. Called at the end of [onResume], and navigating to next or
+   * previous tasks
    */
   override fun setupMicrotask() {
     microTaskStartTime = System.nanoTime()

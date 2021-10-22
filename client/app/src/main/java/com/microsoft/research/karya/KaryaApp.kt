@@ -12,32 +12,35 @@ import com.zabaan.sdk.Zabaan
 import com.zabaan.sdk.internal.views.AssistantMargin
 import dagger.hilt.android.HiltAndroidApp
 
-@HiltAndroidApp class KaryaApp : Application() {
+@HiltAndroidApp
+class KaryaApp : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
+  override fun onCreate() {
+    super.onCreate()
 
-        FirebaseApp.initializeApp(this)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+    FirebaseApp.initializeApp(this)
+    FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
-        try {
-            val params = InitializeParams.Builder()
-                .context(this)
-                .assistantImage(R.drawable.img_asst_new)
-                .accessToken(BuildConfig.ZABAAN_ACCESS_TOKEN)
-                .build()
+    try {
+      val params =
+        InitializeParams.Builder()
+          .context(this)
+          .assistantImage(R.drawable.img_asst_new)
+          .accessToken(BuildConfig.ZABAAN_ACCESS_TOKEN)
+          .build()
 
-            Zabaan.setDebug(BuildConfig.DEBUG)
-            Zabaan.init(params)
+      Zabaan.setDebug(BuildConfig.DEBUG)
+      Zabaan.init(params)
 
-            val assistantUi = AssistantUi.Builder()
-                .setAssistantPosition(CUSTOM_POSITION(Gravity.CENTER_HORIZONTAL)) // optional
-                .setAssistantMargin(AssistantMargin(32)) // optional
-                .build()
+      val assistantUi =
+        AssistantUi.Builder()
+          .setAssistantPosition(CUSTOM_POSITION(Gravity.CENTER_HORIZONTAL)) // optional
+          .setAssistantMargin(AssistantMargin(32)) // optional
+          .build()
 
-            Zabaan.getInstance().setAssistantUi(assistantUi)
-        } catch(e: Exception){
-            Log.e("ZabaanException", e.stackTrace.toString())
-        }
+      Zabaan.getInstance().setAssistantUi(assistantUi)
+    } catch (e: Exception) {
+      Log.e("ZabaanException", e.stackTrace.toString())
     }
+  }
 }

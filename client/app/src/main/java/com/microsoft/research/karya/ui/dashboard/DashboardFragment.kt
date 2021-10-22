@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -29,7 +28,6 @@ import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
 import com.zabaan.sdk.AssistantStateListener
 import com.zabaan.sdk.Zabaan
-import com.zabaan.sdk.internal.interaction.Interaction
 import com.zabaan.sdk.internal.interaction.StateInteractionRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -43,22 +41,20 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
   val binding by viewBinding(FragmentDashboardBinding::bind)
   val viewModel: DashboardViewModel by viewModels()
 
-  private val lottieRefreshUpdateListener = object : Animator.AnimatorListener {
-      override fun onAnimationStart(animation: Animator?) {
-      }
+  private val lottieRefreshUpdateListener =
+    object : Animator.AnimatorListener {
+      override fun onAnimationStart(animation: Animator?) {}
 
       override fun onAnimationEnd(animation: Animator?) {
-          hideLoading()
+        hideLoading()
       }
 
       override fun onAnimationCancel(animation: Animator?) {
-          hideLoading()
+        hideLoading()
       }
 
-      override fun onAnimationRepeat(animation: Animator?) {
-      }
-
-  }
+      override fun onAnimationRepeat(animation: Animator?) {}
+    }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -68,13 +64,13 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
 
   override fun onResume() {
     super.onResume()
-      viewModel.getAllTasks()
-      Zabaan.getInstance().apply {
-          show(binding.root, viewLifecycle)
-          setAssistantStateListener(this@DashboardFragment)
-          setCurrentState("IDLE")
-          setScreenName("DASHBOARD", false)
-      }
+    viewModel.getAllTasks()
+    Zabaan.getInstance().apply {
+      show(binding.root, viewLifecycle)
+      setAssistantStateListener(this@DashboardFragment)
+      setCurrentState("IDLE")
+      setScreenName("DASHBOARD", false)
+    }
   }
 
   private fun setupViews() {
@@ -94,46 +90,47 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
   private fun observeUi() {
     viewModel.dashboardUiState.observe(viewLifecycle, viewLifecycleScope) { dashboardUiState ->
       when (dashboardUiState) {
-        is DashboardUiState.Success -> if (dashboardUiState.userTriggered) {
+        is DashboardUiState.Success ->
+          if (dashboardUiState.userTriggered) {
             showSuccessUi(dashboardUiState.data)
-        } else {
+          } else {
             updateTasks(dashboardUiState.data)
-        }
+          }
         is DashboardUiState.Error -> showErrorUi(dashboardUiState.throwable)
         DashboardUiState.Loading -> showLoadingUi()
       }
     }
   }
 
-    private fun updateTasks(data: DashboardStateSuccess) {
-        data.apply {
-            (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
-            // Show total credits if it is greater than 0
-            if (totalCreditsEarned > 0.0f) {
-                val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
-                binding.appTb.setEndIcon(drawable)
-                binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
-            } else {
-                binding.appTb.hideEndIcon()
-                binding.appTb.hideEndText()
-            }
-        }
+  private fun updateTasks(data: DashboardStateSuccess) {
+    data.apply {
+      (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
+      // Show total credits if it is greater than 0
+      if (totalCreditsEarned > 0.0f) {
+        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
+        binding.appTb.setEndIcon(drawable)
+        binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
+      } else {
+        binding.appTb.hideEndIcon()
+        binding.appTb.hideEndText()
+      }
     }
+  }
 
   private fun showSuccessUi(data: DashboardStateSuccess) {
     updateTasks(data)
 
-      with(binding) {
-          lottieRefresh.setAnimation(R.raw.refresh_success)
-          lottieRefresh.addAnimatorListener(lottieRefreshUpdateListener)
-          tvRefresh.setText(R.string.tasks_updated)
-          tvRefresh.setTextColor(ContextCompat.getColor(requireContext(), R.color.refreshSuccessColor))
-          lottieRefresh.playAnimation()
-      }
+    with(binding) {
+      lottieRefresh.setAnimation(R.raw.refresh_success)
+      lottieRefresh.addAnimatorListener(lottieRefreshUpdateListener)
+      tvRefresh.setText(R.string.tasks_updated)
+      tvRefresh.setTextColor(ContextCompat.getColor(requireContext(), R.color.refreshSuccessColor))
+      lottieRefresh.playAnimation()
+    }
   }
 
   private fun showErrorUi(throwable: Throwable) {
-      hideLoading()
+    hideLoading()
   }
 
   private fun showLoadingUi() {
@@ -141,24 +138,24 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
   }
 
   private fun showLoading() {
-      with(binding) {
-          refreshLl.isClickable = false
-          lottieRefresh.setAnimation(R.raw.refresh_loading)
-          tvRefresh.setText(R.string.refreshing)
-          lottieRefresh.playAnimation()
-      }
+    with(binding) {
+      refreshLl.isClickable = false
+      lottieRefresh.setAnimation(R.raw.refresh_loading)
+      tvRefresh.setText(R.string.refreshing)
+      lottieRefresh.playAnimation()
+    }
   }
 
   private fun hideLoading() {
-      with(binding) {
-          refreshLl.isClickable = true
-          lottieRefresh.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_refresh))
-          // Remove listener since we only need it for the last bit of the animation
-          lottieRefresh.removeAnimatorListener(lottieRefreshUpdateListener)
-          tvRefresh.setText(R.string.refresh_underline)
-          tvRefresh.setTextColor(ContextCompat.getColor(requireContext(), R.color.checkUpdatesColor))
-          lottieRefresh.playAnimation()
-      }
+    with(binding) {
+      refreshLl.isClickable = true
+      lottieRefresh.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_refresh))
+      // Remove listener since we only need it for the last bit of the animation
+      lottieRefresh.removeAnimatorListener(lottieRefreshUpdateListener)
+      tvRefresh.setText(R.string.refresh_underline)
+      tvRefresh.setTextColor(ContextCompat.getColor(requireContext(), R.color.checkUpdatesColor))
+      lottieRefresh.playAnimation()
+    }
   }
 
   private fun loadProfilePic() {
@@ -211,9 +208,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
     performOnFirstRun()
   }
 
-  override fun assistantClicked() {
-  }
+  override fun assistantClicked() {}
 
-  override fun assistantLanguageNotSupported() {
-  }
+  override fun assistantLanguageNotSupported() {}
 }

@@ -101,28 +101,25 @@ class OutlineTextView : androidx.appcompat.widget.AppCompatTextView {
   }
 
   /**
-   * This method draws the text with an outline and a hard shadow. We achieve this by updating the
-   * [Paint] object's properties and then drawing text using that [Paint] object.
+   * This method draws the text with an outline and a hard shadow. We achieve this by updating the [Paint] object's
+   * properties and then drawing text using that [Paint] object.
    *
    * The actual drawing takes place in 3 parts:
    *
-   * 1. Drawing the shadow: We first translate the canvas with the pixel value of `mShadowDx` and
-   * `mShadowDy`. Then we update our [Paint] object to match the `mShadowColor` provided by the
-   * user. After that we call `super.onDraw()` to let TextView draw the text with those properties.
-   * (We save the canvas state first before translating and restore it back after drawing the shadow
-   * text. This is abstracted away by the `withTranslation` extension method)
+   * 1. Drawing the shadow: We first translate the canvas with the pixel value of `mShadowDx` and `mShadowDy`. Then we
+   * update our [Paint] object to match the `mShadowColor` provided by the user. After that we call `super.onDraw()` to
+   * let TextView draw the text with those properties. (We save the canvas state first before translating and restore it
+   * back after drawing the shadow text. This is abstracted away by the `withTranslation` extension method)
    *
-   * 2. Drawing the outline: Drawing the outline is simple, we just update the [Paint.Style] to
-   * [Paint.Style.STROKE] and then call `super.onDraw()` to let TextView draw the text with those
-   * properties.
+   * 2. Drawing the outline: Drawing the outline is simple, we just update the [Paint.Style] to [Paint.Style.STROKE] and
+   * then call `super.onDraw()` to let TextView draw the text with those properties.
    *
-   * 3. Drawing the filled text: Drawing filed text is similar to outline, we just update the
-   * [Paint.Style] to [Paint.Style.FILL] and then call `super.onDraw()` to let TextView draw the
-   * text with those properties.
+   * 3. Drawing the filled text: Drawing filed text is similar to outline, we just update the [Paint.Style] to
+   * [Paint.Style.FILL] and then call `super.onDraw()` to let TextView draw the text with those properties.
    *
-   * The problem which can be faced using this approach is that if something calls invalidate it'll
-   * run in an infinite draw loop, to solve that we save the isDrawing state. If an `invalidate()`
-   * call is made during the draw phase we ignore it.
+   * The problem which can be faced using this approach is that if something calls invalidate it'll run in an infinite
+   * draw loop, to solve that we save the isDrawing state. If an `invalidate()` call is made during the draw phase we
+   * ignore it.
    *
    * @param[canvas] canvas on which the text will be drawn
    */
@@ -149,8 +146,7 @@ class OutlineTextView : androidx.appcompat.widget.AppCompatTextView {
   }
 
   /**
-   * Convenience method to convert density independent pixel(dp) value into device display specific
-   * pixel value.
+   * Convenience method to convert density independent pixel(dp) value into device display specific pixel value.
    * @param context Context to access device specific display metrics
    * @param dp density independent pixel value
    * @return device specific pixel value.

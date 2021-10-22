@@ -15,13 +15,11 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -46,41 +44,41 @@ class RetrofitModule {
     return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
   }
 
-    @Provides
-    @Reusable
-    fun provideIdTokenRenewInterceptor(
-        authRepository: AuthRepository,
-        authManager: AuthManager,
-        @BaseUrl baseUrl: String
-    ): IdTokenRenewInterceptor {
-        return IdTokenRenewInterceptor(authRepository, authManager, baseUrl)
-    }
+  @Provides
+  @Reusable
+  fun provideIdTokenRenewInterceptor(
+    authRepository: AuthRepository,
+    authManager: AuthManager,
+    @BaseUrl baseUrl: String
+  ): IdTokenRenewInterceptor {
+    return IdTokenRenewInterceptor(authRepository, authManager, baseUrl)
+  }
 
-    @Provides
-    @Reusable
-    fun provideVersionInterceptor(): VersionInterceptor {
-        return VersionInterceptor()
-    }
+  @Provides
+  @Reusable
+  fun provideVersionInterceptor(): VersionInterceptor {
+    return VersionInterceptor()
+  }
 
-    @Provides
-    @Reusable
-    fun provideOkHttp(
-        idTokenRenewInterceptor: IdTokenRenewInterceptor,
-        versionInterceptor: VersionInterceptor,
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .apply {
-                if (BuildConfig.DEBUG) {
-                    addInterceptor(httpLoggingInterceptor)
-                }
-            }
-            .connectTimeout(10, TimeUnit.MINUTES)
-            .readTimeout(10, TimeUnit.MINUTES)
-            .addInterceptor(idTokenRenewInterceptor)
-            .addInterceptor(versionInterceptor)
-            .build()
-    }
+  @Provides
+  @Reusable
+  fun provideOkHttp(
+    idTokenRenewInterceptor: IdTokenRenewInterceptor,
+    versionInterceptor: VersionInterceptor,
+    httpLoggingInterceptor: HttpLoggingInterceptor,
+  ): OkHttpClient {
+    return OkHttpClient.Builder()
+      .apply {
+        if (BuildConfig.DEBUG) {
+          addInterceptor(httpLoggingInterceptor)
+        }
+      }
+      .connectTimeout(10, TimeUnit.MINUTES)
+      .readTimeout(10, TimeUnit.MINUTES)
+      .addInterceptor(idTokenRenewInterceptor)
+      .addInterceptor(versionInterceptor)
+      .build()
+  }
 
   @Provides
   @Reusable

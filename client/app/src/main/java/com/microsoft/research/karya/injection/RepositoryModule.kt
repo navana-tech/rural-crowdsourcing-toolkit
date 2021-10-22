@@ -49,9 +49,9 @@ class RepositoryModule {
     return KaryaFileRepository(karyaFileAPI, karyaFileDao)
   }
 
-    @Provides
-    @Singleton
-    fun provideAuthRepository(workerDao: WorkerDao): AuthRepository {
-        return AuthRepository(workerDao)
-    }
+  @Provides
+  @Singleton
+  fun provideAuthRepository(workerDao: WorkerDao): AuthRepository {
+    return AuthRepository(workerDao)
+  }
 }

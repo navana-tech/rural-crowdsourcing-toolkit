@@ -13,14 +13,9 @@ import android.media.MediaRecorder
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.withCreated
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.JsonObject
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.local.enum.AssistantAudio
@@ -29,29 +24,21 @@ import com.microsoft.research.karya.ui.scenarios.common.MicrotaskRenderer
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.ACTIVE
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.DISABLED
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.ENABLED
-import com.microsoft.research.karya.utils.PreferenceKeys
-import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.invisible
-import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.visible
-import com.zabaan.common.ZabaanLanguages
-import com.zabaan.common.ZabaanSpeakable
-import com.zabaan.sdk.AssistantInteractionListener
-import com.zabaan.sdk.AssistantStateListener
 import com.zabaan.sdk.Zabaan
 import com.zabaan.sdk.internal.interaction.StateInteractionRequest
 import java.io.DataOutputStream
+import java.io.File
 import java.io.FileOutputStream
 import java.io.RandomAccessFile
 import kotlinx.android.synthetic.main.ng_speech_data_main.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.io.File
 
 /** Audio recording parameters */
 private const val SAMPLE_RATE = 16000
@@ -59,9 +46,9 @@ private const val AUDIO_CHANNEL = AudioFormat.CHANNEL_IN_MONO
 private const val AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT
 
 /**
- * Microtask renderer for the speech-data scenario. Each microtask is a sentence. The activity
- * displays the sentence and prompts the user to record themselves reading out the sentence. The
- * activity presents a next and previous button to navigate around microtasks.
+ * Microtask renderer for the speech-data scenario. Each microtask is a sentence. The activity displays the sentence and
+ * prompts the user to record themselves reading out the sentence. The activity presents a next and previous button to
+ * navigate around microtasks.
  */
 open class SpeechDataMain(
   includeCompleted: Boolean = false,
@@ -166,10 +153,10 @@ open class SpeechDataMain(
     /** setup view */
     setContentView(R.layout.ng_speech_data_main)
     microtaskTb.apply {
-        setTitle("Task")
-        ContextCompat.getDrawable(context, R.drawable.ic_cross)?.let { setEndIcon(it) }
-        // Use `onBackPressed` logic
-        setEndIconClickListener { onBackPressed() }
+      setTitle("Task")
+      ContextCompat.getDrawable(context, R.drawable.ic_cross)?.let { setEndIcon(it) }
+      // Use `onBackPressed` logic
+      setEndIconClickListener { onBackPressed() }
     }
 
     /** record instruction */
@@ -200,21 +187,21 @@ open class SpeechDataMain(
 
     /** Set on click listeners */
     recordBtn.setOnClickListener {
-        vibratePhone(it.context)
-        Zabaan.getInstance().stopZabaanInteraction()
-        handleRecordClick()
+      vibratePhone(it.context)
+      Zabaan.getInstance().stopZabaanInteraction()
+      handleRecordClick()
     }
     playBtn.setOnClickListener {
-        Zabaan.getInstance().stopZabaanInteraction()
-        handlePlayClick()
+      Zabaan.getInstance().stopZabaanInteraction()
+      handlePlayClick()
     }
     nextBtn.setOnClickListener {
-        Zabaan.getInstance().stopZabaanInteraction()
-        handleNextClick()
+      Zabaan.getInstance().stopZabaanInteraction()
+      handleNextClick()
     }
     backBtn.setOnClickListener {
-        Zabaan.getInstance().stopZabaanInteraction()
-        handleBackClick()
+      Zabaan.getInstance().stopZabaanInteraction()
+      handleBackClick()
     }
 
     setButtonStates(DISABLED, DISABLED, DISABLED, DISABLED)
@@ -223,10 +210,7 @@ open class SpeechDataMain(
     preRecordBuffer = Array(2) { ByteArray(maxPreRecordBytes) }
   }
 
-  /**
-   * Clean up on activity stop. Depending on the state, we may have to wait for some jobs to
-   * complete.
-   */
+  /** Clean up on activity stop. Depending on the state, we may have to wait for some jobs to complete. */
   final override fun cleanupOnStop() {
     setButtonStates(DISABLED, DISABLED, DISABLED, DISABLED)
     setActivityState(ActivityState.ACTIVITY_STOPPED)
@@ -242,10 +226,7 @@ open class SpeechDataMain(
           releaseRecorder()
         }
 
-        /**
-         * If recording, join preRecordingFlushJob, recordingJob. Reset buffers and release
-         * recorder.
-         */
+        /** If recording, join preRecordingFlushJob, recordingJob. Reset buffers and release recorder. */
         ActivityState.RECORDING -> {
           recordingJob?.join()
           preRecordBufferConsumed[0] = 0
@@ -331,21 +312,21 @@ open class SpeechDataMain(
   }
 
   override fun onResume() {
-      // Show zabaan before onResume because onResume calls setupMicroTasks and that will play the first time zabaan
-      // audio
-      Zabaan.getInstance().apply {
-          show(window.decorView.rootView, this@SpeechDataMain.lifecycle)
-          setCurrentState("IDLE")
-          setScreenName("SPEECH_DATA", false)
-      }
-      super.onResume()
+    // Show zabaan before onResume because onResume calls setupMicroTasks and that will play the
+    // first time zabaan
+    // audio
+    Zabaan.getInstance().apply {
+      show(window.decorView.rootView, this@SpeechDataMain.lifecycle)
+      setCurrentState("IDLE")
+      setScreenName("SPEECH_DATA", false)
+    }
+    super.onResume()
   }
 
-    /**
-   * Setup a new microtask. Extract the sentence from the microtask input and set [sentenceTv] to
-   * that sentence. Create the wav file in the scratch folder and write the WAV header. Depending on
-   * whether the current microtask is completed or not, move to PRERECORDING or
-   * COMPLETED_PRERECORDING state.
+  /**
+   * Setup a new microtask. Extract the sentence from the microtask input and set [sentenceTv] to that sentence. Create
+   * the wav file in the scratch folder and write the WAV header. Depending on whether the current microtask is
+   * completed or not, move to PRERECORDING or COMPLETED_PRERECORDING state.
    */
   final override fun setupMicrotask() {
     /** Get the scratch and output file paths */
@@ -393,9 +374,9 @@ open class SpeechDataMain(
     val vibrator = context.getSystemService<Vibrator>() ?: return
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+      vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
     } else {
-        vibrator.vibrate(200)
+      vibrator.vibrate(200)
     }
   }
 
@@ -415,8 +396,8 @@ open class SpeechDataMain(
     // Handle state change
     when (activityState) {
       /**
-       * INIT: release audio recorder and media player. May not be necessary? Microtask setup will
-       * transition to next state
+       * INIT: release audio recorder and media player. May not be necessary? Microtask setup will transition to next
+       * state
        */
       ActivityState.INIT -> {
         releasePlayer()
@@ -436,8 +417,8 @@ open class SpeechDataMain(
       }
 
       /**
-       * RECORDING: If not coming from prerecording states, initialize the audio recorder and start
-       * recording. Start chronometer. Write audio data to file.
+       * RECORDING: If not coming from prerecording states, initialize the audio recorder and start recording. Start
+       * chronometer. Write audio data to file.
        */
       ActivityState.RECORDING -> {
         if (!isPrerecordingState(previousActivityState)) initializeAndStartRecorder()
@@ -451,10 +432,7 @@ open class SpeechDataMain(
         finishRecordingAndFinalizeWavFile()
       }
 
-      /**
-       * FIRST_PLAYBACK: Start media player and play the scratch wav file If coming from paused
-       * state, resume player
-       */
+      /** FIRST_PLAYBACK: Start media player and play the scratch wav file If coming from paused state, resume player */
       ActivityState.FIRST_PLAYBACK -> {
         if (previousActivityState == ActivityState.RECORDED || previousActivityState == ActivityState.ACTIVITY_STOPPED
         ) {
@@ -484,8 +462,8 @@ open class SpeechDataMain(
       }
 
       /**
-       * NEW_PLAYING: if coming from paused state, start player. Else initialize and start the
-       * player. Set the onCompletion listener to go back to the completed state
+       * NEW_PLAYING: if coming from paused state, start player. Else initialize and start the player. Set the
+       * onCompletion listener to go back to the completed state
        */
       ActivityState.NEW_PLAYING -> {
         if (previousActivityState == ActivityState.NEW_PAUSED) {
@@ -508,9 +486,8 @@ open class SpeechDataMain(
       }
 
       /**
-       * OLD_PLAYING: if coming from paused state, start player. Else initialize and start the
-       * player. Set the onCompletion listener to go back to the completed state. Play old output
-       * file.
+       * OLD_PLAYING: if coming from paused state, start player. Else initialize and start the player. Set the
+       * onCompletion listener to go back to the completed state. Play old output file.
        */
       ActivityState.OLD_PLAYING -> {
         if (previousActivityState == ActivityState.OLD_PAUSED) {
@@ -532,10 +509,7 @@ open class SpeechDataMain(
         mediaPlayer!!.pause()
       }
 
-      /**
-       * SIMPLE_NEXT: If prerecording, then wait for prerecording job to finish. Then move to next
-       * microtask
-       */
+      /** SIMPLE_NEXT: If prerecording, then wait for prerecording job to finish. Then move to next microtask */
       ActivityState.SIMPLE_NEXT -> {
         runBlocking {
           if (isPrerecordingState(previousActivityState)) {
@@ -546,10 +520,7 @@ open class SpeechDataMain(
         }
       }
 
-      /**
-       * SIMPLE_BACK: If prerecording, then wait for prerecording job to finish. Then move to
-       * previous microtask
-       */
+      /** SIMPLE_BACK: If prerecording, then wait for prerecording job to finish. Then move to previous microtask */
       ActivityState.SIMPLE_BACK -> {
         runBlocking {
           if (isPrerecordingState(previousActivityState)) {
@@ -574,9 +545,7 @@ open class SpeechDataMain(
         }
       }
 
-      /**
-       * ENCODING_BACK: Encode scratch file to compressed output file. Move to previous microtask.
-       */
+      /** ENCODING_BACK: Encode scratch file to compressed output file. Move to previous microtask. */
       ActivityState.ENCODING_BACK -> {
         runBlocking {
           encodingJob =
@@ -594,8 +563,8 @@ open class SpeechDataMain(
       }
       ActivityState.ACTIVITY_STOPPED -> {
         /**
-         * This is a dummy state to trigger events (e.g., end recordings). [cleanupOnStop] should
-         * take care of handling actual cleanup.
+         * This is a dummy state to trigger events (e.g., end recordings). [cleanupOnStop] should take care of handling
+         * actual cleanup.
          */
       }
     }
@@ -789,8 +758,8 @@ open class SpeechDataMain(
     /** Determine action based on current state */
     when (activityState) {
       /**
-       * Prerecording states: Set target button states. Wait for wave file init job and prerecording
-       * job to finish. Write the prerecord buffer to wav file. Start regular recording.
+       * Prerecording states: Set target button states. Wait for wave file init job and prerecording job to finish.
+       * Write the prerecord buffer to wav file. Start regular recording.
        */
       ActivityState.PRERECORDING,
       ActivityState.COMPLETED_PRERECORDING -> {
@@ -827,8 +796,7 @@ open class SpeechDataMain(
       }
 
       /**
-       * All other states: Record button is not clickable. This function should not have been
-       * called. Throw an error.
+       * All other states: Record button is not clickable. This function should not have been called. Throw an error.
        */
       ActivityState.INIT,
       ActivityState.RECORDED,
@@ -1037,9 +1005,25 @@ open class SpeechDataMain(
 
   /** Initialize [audioRecorder] */
   private fun initializeAndStartRecorder() {
-    audioRecorder =
-      AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, AUDIO_CHANNEL, AUDIO_ENCODING, _recorderBufferSize)
-    audioRecorder!!.startRecording()
+    try {
+      audioRecorder =
+        AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, AUDIO_CHANNEL, AUDIO_ENCODING, _recorderBufferSize)
+      if (audioRecorder!!.state != AudioRecord.STATE_INITIALIZED) {
+        FirebaseCrashlytics.getInstance().log("audioRecorder is not initialized properly")
+        FirebaseCrashlytics.getInstance().log("audioRecorder state: ${audioRecorder!!.state}")
+        FirebaseCrashlytics.getInstance().log("audioRecorder recording state: ${audioRecorder!!.recordingState}")
+        FirebaseCrashlytics.getInstance()
+          .log(
+            "audioRecorder min buffer size: ${AudioRecord.getMinBufferSize(SAMPLE_RATE, AUDIO_CHANNEL, AUDIO_ENCODING)}"
+          )
+      }
+      audioRecorder!!.startRecording()
+    } catch (e: Exception) {
+      FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
+      FirebaseCrashlytics.getInstance().recordException(e)
+      FirebaseCrashlytics.getInstance().sendUnsentReports()
+      onBackPressed()
+    }
   }
 
   /** Reset recording length */
@@ -1119,8 +1103,8 @@ open class SpeechDataMain(
   }
 
   /**
-   * Start recording. Wait for prerecording to complete, if coming from prerecording state. Write
-   * recorded data directly to the wav file.
+   * Start recording. Wait for prerecording to complete, if coming from prerecording state. Write recorded data directly
+   * to the wav file.
    */
   private fun writeAudioDataToRecordBuffer() {
     recordingJob =
@@ -1224,10 +1208,7 @@ open class SpeechDataMain(
           scratchFile.close()
         }
 
-      /**
-       * If still in recorded state, switch to playback. User may have stopped activity by pressing
-       * home button.
-       */
+      /** If still in recorded state, switch to playback. User may have stopped activity by pressing home button. */
       uiScope.launch {
         audioFileFlushJob!!.join()
         if (activityState == ActivityState.RECORDED) {
@@ -1310,21 +1291,21 @@ open class SpeechDataMain(
       }
     )
 
-      nextBtn.setBackgroundResource(
-          when (nextBtnState) {
-              DISABLED -> R.color.colorgrey
-              ENABLED -> R.color.colorGreenDarker
-              ACTIVE -> R.color.colorGreenDarker
-          }
-      )
+    nextBtn.setBackgroundResource(
+      when (nextBtnState) {
+        DISABLED -> R.color.colorgrey
+        ENABLED -> R.color.colorGreenDarker
+        ACTIVE -> R.color.colorGreenDarker
+      }
+    )
 
-      backBtn.setBackgroundResource(
-          when (backBtnState) {
-              DISABLED -> R.color.colorgrey
-              ENABLED -> R.color.colorGreenDarker
-              ACTIVE -> R.color.colorGreenDarker
-          }
-      )
+    backBtn.setBackgroundResource(
+      when (backBtnState) {
+        DISABLED -> R.color.colorgrey
+        ENABLED -> R.color.colorGreenDarker
+        ACTIVE -> R.color.colorGreenDarker
+      }
+    )
   }
 
   /** Reset wav file on a new recording creation */
@@ -1352,12 +1333,13 @@ open class SpeechDataMain(
   }
 
   /** Encode the scratch wav recording file into a compressed main file. */
-  private suspend fun encodeRecording() = withContext(Dispatchers.IO) {
-    val inputFile = File(scratchRecordingFilePath)
-    val outputFile = File(outputRecordingFilePath)
-    inputFile.copyTo(target = outputFile, overwrite = true)
-    addOutputFile(outputRecordingFileParams)
-  }
+  private suspend fun encodeRecording() =
+    withContext(Dispatchers.IO) {
+      val inputFile = File(scratchRecordingFilePath)
+      val outputFile = File(outputRecordingFilePath)
+      inputFile.copyTo(target = outputFile, overwrite = true)
+      addOutputFile(outputRecordingFileParams)
+    }
 
   /** Helper methods to convert [time] in milliseconds to number of samples */
   private fun timeToSamples(time: Int): Int {

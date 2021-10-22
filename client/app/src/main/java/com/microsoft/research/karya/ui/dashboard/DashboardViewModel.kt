@@ -15,6 +15,7 @@ import com.microsoft.research.karya.data.repo.KaryaFileRepository
 import com.microsoft.research.karya.data.repo.MicroTaskRepository
 import com.microsoft.research.karya.data.repo.TaskRepository
 import com.microsoft.research.karya.injection.qualifier.FilesDir
+import com.microsoft.research.karya.utils.DateUtils
 import com.microsoft.research.karya.utils.FileUtils.createTarBall
 import com.microsoft.research.karya.utils.FileUtils.downloadFileToLocalPath
 import com.microsoft.research.karya.utils.FileUtils.getMD5Digest
@@ -22,10 +23,10 @@ import com.microsoft.research.karya.utils.MicrotaskAssignmentOutput
 import com.microsoft.research.karya.utils.MicrotaskInput
 import com.microsoft.research.karya.utils.extensions.getBlobPath
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import java.io.File
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -35,7 +36,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.lang.RuntimeException
 
 @HiltViewModel
 class DashboardViewModel
@@ -55,33 +55,34 @@ constructor(
   private val taskInfoComparator =
     compareByDescending<TaskInfo> { taskInfo -> taskInfo.assignedMicrotasks }.thenBy { taskInfo -> taskInfo.taskID }
 
-  private val _dashboardUiState: MutableStateFlow<DashboardUiState> = MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
+  private val _dashboardUiState: MutableStateFlow<DashboardUiState> =
+    MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
   val dashboardUiState = _dashboardUiState.asStateFlow()
 
   private val coroutineExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-      FirebaseCrashlytics.getInstance().log("Coroutine Exception")
-      FirebaseCrashlytics.getInstance().recordException(throwable)
-      FirebaseCrashlytics.getInstance().sendUnsentReports()
+    FirebaseCrashlytics.getInstance().log("Coroutine Exception")
+    FirebaseCrashlytics.getInstance().recordException(throwable)
+    FirebaseCrashlytics.getInstance().sendUnsentReports()
   }
 
   fun syncWithServer() {
     viewModelScope.launch(coroutineExceptionHandler) {
       _dashboardUiState.value = DashboardUiState.Loading
       withContext(Dispatchers.IO) {
-          val accessCode = authManager.fetchLoggedInWorkerAccessCode()
-          try {
-              submitCompletedAssignments()
-              fetchNewAssignments()
-              fetchVerifiedAssignments()
-              cleanupKaryaFiles()
-              getAllTasks(true)
-          } catch (e: Exception) {
-              FirebaseCrashlytics.getInstance().setUserId(accessCode)
-              FirebaseCrashlytics.getInstance().log("Exception in syncing with server")
-              FirebaseCrashlytics.getInstance().recordException(e)
-              FirebaseCrashlytics.getInstance().sendUnsentReports()
-              getAllTasks(true)
-          }
+        val accessCode = authManager.fetchLoggedInWorkerAccessCode()
+        try {
+          submitCompletedAssignments()
+          fetchNewAssignments()
+          fetchVerifiedAssignments()
+          cleanupKaryaFiles()
+          getAllTasks(true)
+        } catch (e: Exception) {
+          FirebaseCrashlytics.getInstance().setUserId(accessCode)
+          FirebaseCrashlytics.getInstance().log("Exception in syncing with server")
+          FirebaseCrashlytics.getInstance().recordException(e)
+          FirebaseCrashlytics.getInstance().sendUnsentReports()
+          getAllTasks(true)
+        }
       }
     }
   }
@@ -165,13 +166,19 @@ constructor(
       }
 
     for (assignment in filteredAssignments) {
-      val assignmentTarBallPath = microtaskOutputContainer.getBlobPath(assignment.id)
-      val tarBallName = microtaskOutputContainer.getBlobName(assignment.id)
-      val outputDir = microtaskOutputContainer.getDirectory()
-      val fileNames = assignment.output.asJsonObject.get("files").asJsonArray.map { it.asString }
-      val outputFilePaths = fileNames.map { "$outputDir/${it}" }
-      createTarBall(assignmentTarBallPath, outputFilePaths, fileNames)
-      uploadTarBall(assignment, assignmentTarBallPath, tarBallName)
+      try {
+        val assignmentTarBallPath = microtaskOutputContainer.getBlobPath(assignment.id)
+        val tarBallName = microtaskOutputContainer.getBlobName(assignment.id)
+        val outputDir = microtaskOutputContainer.getDirectory()
+        val fileNames = assignment.output.asJsonObject.get("files").asJsonArray.map { it.asString }
+        val outputFilePaths = fileNames.map { "$outputDir/${it}" }
+        createTarBall(assignmentTarBallPath, outputFilePaths, fileNames)
+        uploadTarBall(assignment, assignmentTarBallPath, tarBallName)
+      } catch (e: Exception) {
+        assignmentRepository.markAssigned(assignment.id, DateUtils.getCurrentDate())
+        FirebaseCrashlytics.getInstance().recordException(e)
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
+      }
     }
   }
 
@@ -225,7 +232,10 @@ constructor(
 
         val totalCreditsEarned = assignmentRepository.getTotalCreditsEarned(worker.id) ?: 0.0f
         val success =
-          DashboardUiState.Success(DashboardStateSuccess(taskInfoList.sortedWith(taskInfoComparator), totalCreditsEarned), userTriggered)
+          DashboardUiState.Success(
+            DashboardStateSuccess(taskInfoList.sortedWith(taskInfoComparator), totalCreditsEarned),
+            userTriggered
+          )
         _dashboardUiState.value = success
       } catch (throwable: Throwable) {
         _dashboardUiState.value = DashboardUiState.Error(throwable)
@@ -233,10 +243,7 @@ constructor(
     }
   }
 
-  /**
-   * Remove karya files that are already uploaded to the server. Remove input files of submitted
-   * microtasks
-   */
+  /** Remove karya files that are already uploaded to the server. Remove input files of submitted microtasks */
   private suspend fun cleanupKaryaFiles() {
     // Get all assignments whose output karya files are uploaded to the server
     val uploadedAssignments = assignmentRepository.getAssignmentsWithUploadedFiles()

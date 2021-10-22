@@ -2,9 +2,9 @@
 // Licensed under the MIT license.
 
 /**
- * This activity defines an abstract class that performs some common functions and provides some
- * common helper functions for other activities in the application. For instance, almost every
- * activity needs to access the database, fetch values for specific string resources, etc.
+ * This activity defines an abstract class that performs some common functions and provides some common helper functions
+ * for other activities in the application. For instance, almost every activity needs to access the database, fetch
+ * values for specific string resources, etc.
  */
 package com.microsoft.research.karya.ui.base
 
@@ -225,8 +225,8 @@ abstract class BaseActivity() : AppCompatActivity() {
   protected abstract suspend fun setInitialUIStrings()
 
   /**
-   * Get value from language resource using the resource Id and language Id By value we mean what a
-   * particular word is known in a particular language
+   * Get value from language resource using the resource Id and language Id By value we mean what a particular word is
+   * known in a particular language
    */
   suspend fun getValueFromName(@StringRes resId: Int, languageId: Int = appLanguageId!!): String {
     //        val name = getString(resId)

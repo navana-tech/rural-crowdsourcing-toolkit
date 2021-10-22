@@ -70,9 +70,7 @@ abstract class NetworkActivity(
   /** Function to execute the network request. Called within an IO scope. */
   abstract suspend fun executeRequest()
 
-  /**
-   * Function to start the next activity. Called right after executing network request in UI scope.
-   */
+  /** Function to start the next activity. Called right after executing network request in UI scope. */
   abstract fun startNextActivity()
 
   /** Wrapper function to execute the request */
@@ -127,8 +125,8 @@ abstract class NetworkActivity(
   }
 
   /**
-   * Check the Id token of the worker. If it was created more than a day ago, refresh. If it has
-   * expired, then request for new token.
+   * Check the Id token of the worker. If it was created more than a day ago, refresh. If it has expired, then request
+   * for new token.
    */
   private suspend fun checkIdToken() {
     /** Extract the created time from id token */

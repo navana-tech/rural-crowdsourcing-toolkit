@@ -57,10 +57,7 @@ class TaskListAdapter(
       with(binding) {
         task.apply {
           val context = binding.root.context
-          val total = assignedMicrotasks +
-              completedMicrotasks +
-              submittedMicrotasks +
-              verifiedMicrotasks
+          val total = assignedMicrotasks + completedMicrotasks + submittedMicrotasks + verifiedMicrotasks
 
           val available = assignedMicrotasks
           val completed = completedMicrotasks + submittedMicrotasks + verifiedMicrotasks

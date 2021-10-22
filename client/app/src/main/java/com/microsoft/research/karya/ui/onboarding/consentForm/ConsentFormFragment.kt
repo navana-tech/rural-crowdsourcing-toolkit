@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.microsoft.research.karya.R
@@ -14,9 +13,7 @@ import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.manager.ResourceManager
 import com.microsoft.research.karya.databinding.FragmentConsentFormBinding
 import com.microsoft.research.karya.ui.base.BaseFragment
-import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.disable
-import com.microsoft.research.karya.utils.extensions.doOnlyOnce
 import com.microsoft.research.karya.utils.extensions.enable
 import com.microsoft.research.karya.utils.extensions.observe
 import com.microsoft.research.karya.utils.extensions.viewBinding
@@ -44,17 +41,17 @@ class ConsentFormFragment : BaseFragment(R.layout.fragment_consent_form) {
     observeEffects()
   }
 
-    override fun onResume() {
-        super.onResume()
-        Zabaan.getInstance().show(binding.root, viewLifecycle)
-        Zabaan.getInstance().setCurrentState("IDLE")
-        Zabaan.getInstance().setScreenName("CONSENT_FORM", true)
-    }
+  override fun onResume() {
+    super.onResume()
+    Zabaan.getInstance().show(binding.root, viewLifecycle)
+    Zabaan.getInstance().setCurrentState("IDLE")
+    Zabaan.getInstance().setScreenName("CONSENT_FORM", true)
+  }
 
-    override fun onPause() {
-        Zabaan.getInstance().stopZabaanInteraction()
-        super.onPause()
-    }
+  override fun onPause() {
+    Zabaan.getInstance().stopZabaanInteraction()
+    super.onPause()
+  }
 
   private fun setupViews() {
     val consentFormText = getString(R.string.s_consent_form_text)

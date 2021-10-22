@@ -3,7 +3,6 @@ package com.microsoft.research.karya.injection
 import android.content.Context
 import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.repo.AuthRepository
-import com.microsoft.research.karya.data.repo.WorkerRepository
 import com.microsoft.research.karya.injection.qualifier.IoDispatcher
 import dagger.Module
 import dagger.Provides

@@ -25,11 +25,10 @@ import kotlin.math.sqrt
 /**
  * Top edge treatment for the bottom app bar which "cutouts" a circular [ ].
  *
- * This edge features a downward semi-circular cutout from the edge line. The two corners created by
- * the cutout can optionally be rounded. The circular cutout can also support a vertically offset
- * FloatingActionButton; i.e., the cut-out need not be a perfect semi-circle, but could be an arc of
- * less than 180 degrees that does not start or finish with a vertical path. This vertical offset
- * must be positive.
+ * This edge features a downward semi-circular cutout from the edge line. The two corners created by the cutout can
+ * optionally be rounded. The circular cutout can also support a vertically offset FloatingActionButton; i.e., the
+ * cut-out need not be a perfect semi-circle, but could be an arc of less than 180 degrees that does not start or finish
+ * with a vertical path. This vertical offset must be positive.
  */
 class KaryaToolbarEdgeCutoutTreatment(
   private var cutoutMargin: Float = 0F,
