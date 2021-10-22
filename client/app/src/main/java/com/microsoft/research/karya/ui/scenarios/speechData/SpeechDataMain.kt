@@ -20,6 +20,7 @@ import androidx.core.content.getSystemService
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withCreated
 import com.google.gson.JsonObject
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.local.enum.AssistantAudio
@@ -49,6 +50,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /** Audio recording parameters */
@@ -1350,16 +1352,10 @@ open class SpeechDataMain(
   }
 
   /** Encode the scratch wav recording file into a compressed main file. */
-  private suspend fun encodeRecording() {
-    CoroutineScope(Dispatchers.IO)
-      .launch {
-          val inputFile = File(scratchRecordingFilePath)
-          val outputFile = File(outputRecordingFilePath)
-
-          inputFile.copyTo(target = outputFile, overwrite = true)
-          // RawToAACEncoder().encode(scratchRecordingFilePath, outputRecordingFilePath)
-      }
-      .join()
+  private suspend fun encodeRecording() = withContext(Dispatchers.IO) {
+    val inputFile = File(scratchRecordingFilePath)
+    val outputFile = File(outputRecordingFilePath)
+    inputFile.copyTo(target = outputFile, overwrite = true)
     addOutputFile(outputRecordingFileParams)
   }
 
