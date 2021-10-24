@@ -1055,11 +1055,19 @@ open class SpeechDataMain(
 
   /** Play [mediaFilePath] */
   private fun playFile(mediaFilePath: String) {
-    val player: MediaPlayer = mediaPlayer!!
-    player.setDataSource(mediaFilePath)
-    player.prepare()
-    playbackProgressPb.max = player.duration
-    player.start()
+    try {
+        val player: MediaPlayer = mediaPlayer!!
+        player.setDataSource(mediaFilePath)
+        player.prepare()
+        playbackProgressPb.max = player.duration
+        player.start()
+    } catch (e: Exception) {
+        val file = File(mediaFilePath)
+        FirebaseCrashlytics.getInstance().log("file_path: $mediaFilePath\nexists: ${file.exists()}")
+        FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
+        FirebaseCrashlytics.getInstance().recordException(e)
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
+    }
   }
 
   /** Update the progress bar for the player as long as the activity is in the specific state. */
@@ -1335,10 +1343,16 @@ open class SpeechDataMain(
   /** Encode the scratch wav recording file into a compressed main file. */
   private suspend fun encodeRecording() =
     withContext(Dispatchers.IO) {
-      val inputFile = File(scratchRecordingFilePath)
-      val outputFile = File(outputRecordingFilePath)
-      inputFile.copyTo(target = outputFile, overwrite = true)
-      addOutputFile(outputRecordingFileParams)
+        try {
+            val inputFile = File(scratchRecordingFilePath)
+            val outputFile = File(outputRecordingFilePath)
+            inputFile.copyTo(target = outputFile, overwrite = true)
+            addOutputFile(outputRecordingFileParams)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
+            FirebaseCrashlytics.getInstance().recordException(e)
+            FirebaseCrashlytics.getInstance().sendUnsentReports()
+        }
     }
 
   /** Helper methods to convert [time] in milliseconds to number of samples */
