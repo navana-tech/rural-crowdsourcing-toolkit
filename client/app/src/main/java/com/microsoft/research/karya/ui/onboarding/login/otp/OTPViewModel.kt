@@ -4,6 +4,10 @@ package com.microsoft.research.karya.ui.onboarding.login.otp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.microsoft.research.karya.data.exceptions.IncorrectAccessCodeException
+import com.microsoft.research.karya.data.exceptions.IncorrectOtpException
+import com.microsoft.research.karya.data.exceptions.PhoneNumberAlreadyUsedException
+import com.microsoft.research.karya.data.exceptions.UnknownException
 import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
 import com.microsoft.research.karya.data.repo.WorkerRepository
@@ -64,7 +68,17 @@ constructor(
           _otpUiState.value = OTPUiState.Success
           handleNavigation(worker)
         }
-        .catch { throwable -> _otpUiState.value = OTPUiState.Error(throwable) }
+        .catch { throwable ->
+          val exception =
+            when (throwable) {
+              is IncorrectOtpException -> throwable
+              is PhoneNumberAlreadyUsedException -> throwable
+              is IncorrectAccessCodeException -> throwable
+              is UnknownException -> throwable
+              else -> Exception("Error verifying OTP. Please try again later.")
+            }
+          _otpUiState.value = OTPUiState.Error(exception)
+        }
         .collect()
     }
   }

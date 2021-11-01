@@ -28,7 +28,7 @@ class WorkerRepository @Inject constructor(private val workerAPI: WorkerAPI, pri
     if (!response.isSuccessful) {
       throw when (response.code()) {
         404 -> IncorrectOtpException("Incorrect OTP")
-        403 -> PhoneNumberAlreadyUsedException("Phone Number is Already in use")
+        403 -> PhoneNumberAlreadyUsedException("The access code is already linked to a different phone number")
         401 -> IncorrectAccessCodeException("Access Code is incorrect")
         else -> UnknownException("Something went wrong")
       }
@@ -77,7 +77,7 @@ class WorkerRepository @Inject constructor(private val workerAPI: WorkerAPI, pri
     if (!response.isSuccessful) {
       throw when (response.code()) {
         404 -> IncorrectOtpException("Incorrect OTP")
-        403 -> PhoneNumberAlreadyUsedException("Phone Number is Already in use")
+        403 -> PhoneNumberAlreadyUsedException("The access code is already linked to a different phone number")
         401 -> IncorrectAccessCodeException("Access Code is incorrect")
         else -> UnknownException("Something went wrong")
       }

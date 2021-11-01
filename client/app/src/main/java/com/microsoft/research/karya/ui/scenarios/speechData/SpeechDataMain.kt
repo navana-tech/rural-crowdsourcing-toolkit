@@ -1056,17 +1056,17 @@ open class SpeechDataMain(
   /** Play [mediaFilePath] */
   private fun playFile(mediaFilePath: String) {
     try {
-        val player: MediaPlayer = mediaPlayer!!
-        player.setDataSource(mediaFilePath)
-        player.prepare()
-        playbackProgressPb.max = player.duration
-        player.start()
+      val player: MediaPlayer = mediaPlayer!!
+      player.setDataSource(mediaFilePath)
+      player.prepare()
+      playbackProgressPb.max = player.duration
+      player.start()
     } catch (e: Exception) {
-        val file = File(mediaFilePath)
-        FirebaseCrashlytics.getInstance().log("file_path: $mediaFilePath\nexists: ${file.exists()}")
-        FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
-        FirebaseCrashlytics.getInstance().recordException(e)
-        FirebaseCrashlytics.getInstance().sendUnsentReports()
+      val file = File(mediaFilePath)
+      FirebaseCrashlytics.getInstance().log("file_path: $mediaFilePath\nexists: ${file.exists()}")
+      FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
+      FirebaseCrashlytics.getInstance().recordException(e)
+      FirebaseCrashlytics.getInstance().sendUnsentReports()
     }
   }
 
@@ -1343,16 +1343,16 @@ open class SpeechDataMain(
   /** Encode the scratch wav recording file into a compressed main file. */
   private suspend fun encodeRecording() =
     withContext(Dispatchers.IO) {
-        try {
-            val inputFile = File(scratchRecordingFilePath)
-            val outputFile = File(outputRecordingFilePath)
-            inputFile.copyTo(target = outputFile, overwrite = true)
-            addOutputFile(outputRecordingFileParams)
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
-            FirebaseCrashlytics.getInstance().recordException(e)
-            FirebaseCrashlytics.getInstance().sendUnsentReports()
-        }
+      try {
+        val inputFile = File(scratchRecordingFilePath)
+        val outputFile = File(outputRecordingFilePath)
+        inputFile.copyTo(target = outputFile, overwrite = true)
+        addOutputFile(outputRecordingFileParams)
+      } catch (e: Exception) {
+        FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
+        FirebaseCrashlytics.getInstance().recordException(e)
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
+      }
     }
 
   /** Helper methods to convert [time] in milliseconds to number of samples */
