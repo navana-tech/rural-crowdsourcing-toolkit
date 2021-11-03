@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
 import com.microsoft.research.karya.data.repo.WorkerRepository
+import com.microsoft.research.karya.ui.onboarding.IncorrectAccessCodeException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +40,12 @@ constructor(private val workerRepository: WorkerRepository, private val authMana
         _accessCodeUiState.value = AccessCodeUiState.Success(worker.language)
         _accessCodeEffects.emit(AccessCodeEffects.Navigate)
       }
-      .catch { exception -> _accessCodeUiState.value = AccessCodeUiState.Error(exception) }
+      .catch { _ ->
+        _accessCodeUiState.value =
+          AccessCodeUiState.Error(
+            IncorrectAccessCodeException("Cannot verify this access code, please try again later.")
+          )
+      }
       .launchIn(viewModelScope)
   }
 
