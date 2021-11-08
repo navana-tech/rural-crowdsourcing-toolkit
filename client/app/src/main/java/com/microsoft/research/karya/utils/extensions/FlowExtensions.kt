@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
@@ -70,3 +71,15 @@ fun <T> SavedStateHandle.getStateFlow(
 
     mutableStateFlow
   }
+
+fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
+  var lastEmissionTime = 0L
+  collect { upstream ->
+    val currentTime = System.currentTimeMillis()
+    val mayEmit = currentTime - lastEmissionTime > windowDuration
+    if (mayEmit) {
+      lastEmissionTime = currentTime
+      emit(upstream)
+    }
+  }
+}
