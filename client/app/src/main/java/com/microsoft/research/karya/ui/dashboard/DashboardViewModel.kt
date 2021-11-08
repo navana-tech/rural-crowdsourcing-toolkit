@@ -66,8 +66,8 @@ constructor(
   }
 
   fun syncWithServer() {
+    _dashboardUiState.value = DashboardUiState.Loading
     viewModelScope.launch(coroutineExceptionHandler) {
-      _dashboardUiState.value = DashboardUiState.Loading
       withContext(Dispatchers.IO) {
         val accessCode = authManager.fetchLoggedInWorkerAccessCode()
         try {

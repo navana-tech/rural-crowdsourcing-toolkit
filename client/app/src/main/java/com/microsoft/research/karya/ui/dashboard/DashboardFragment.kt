@@ -21,8 +21,10 @@ import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain
 import com.microsoft.research.karya.ui.scenarios.speechVerification.SpeechVerificationMain
 import com.microsoft.research.karya.ui.scenarios.textToTextTranslation.TextToTextTranslationMain
 import com.microsoft.research.karya.utils.PreferenceKeys
+import com.microsoft.research.karya.utils.extensions.clicks
 import com.microsoft.research.karya.utils.extensions.dataStore
 import com.microsoft.research.karya.utils.extensions.observe
+import com.microsoft.research.karya.utils.extensions.throttleFirst
 import com.microsoft.research.karya.utils.extensions.viewBinding
 import com.microsoft.research.karya.utils.extensions.viewLifecycle
 import com.microsoft.research.karya.utils.extensions.viewLifecycleScope
@@ -31,6 +33,8 @@ import com.zabaan.sdk.Zabaan
 import com.zabaan.sdk.internal.interaction.StateInteractionRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -80,7 +84,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
         layoutManager = LinearLayoutManager(context)
       }
 
-      refreshLl.setOnClickListener { viewModel.syncWithServer() }
+      refreshLl.clicks().throttleFirst(500L).onEach { viewModel.syncWithServer() }.launchIn(lifecycleScope)
 
       appTb.setProfileClickListener { findNavController().navigate(R.id.action_global_tempDataFlow) }
       loadProfilePic()

@@ -361,19 +361,19 @@ open class SpeechDataMain(
     } else {
       setButtonStates(ENABLED, ENABLED, ENABLED, ENABLED)
 
-        try {
-            val mPlayer = MediaPlayer()
-            mPlayer.setDataSource(outputRecordingFilePath)
-            mPlayer.prepare()
-            resetRecordingLength(mPlayer.duration)
-            mPlayer.release()
-        }  catch (iex: java.io.IOException) {
-            val file = File(outputRecordingFilePath)
-            FirebaseCrashlytics.getInstance().log("file_path: $outputRecordingFilePath\nexists: ${file.exists()}")
-            FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
-            FirebaseCrashlytics.getInstance().recordException(e)
-            FirebaseCrashlytics.getInstance().sendUnsentReports()
-        }
+      try {
+        val mPlayer = MediaPlayer()
+        mPlayer.setDataSource(outputRecordingFilePath)
+        mPlayer.prepare()
+        resetRecordingLength(mPlayer.duration)
+        mPlayer.release()
+      } catch (iex: java.io.IOException) {
+        val file = File(outputRecordingFilePath)
+        FirebaseCrashlytics.getInstance().log("file_path: $outputRecordingFilePath\nexists: ${file.exists()}")
+        FirebaseCrashlytics.getInstance().setUserId(thisWorker.id)
+        FirebaseCrashlytics.getInstance().recordException(iex)
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
+      }
       setActivityState(ActivityState.COMPLETED_PRERECORDING)
     }
   }

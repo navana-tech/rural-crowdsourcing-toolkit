@@ -76,7 +76,7 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
     viewModel.accessCodeUiState.observe(viewLifecycle, viewLifecycleScope) { state ->
       when (state) {
         is AccessCodeUiState.Success -> showSuccessUi(state.languageCode)
-        is AccessCodeUiState.Error -> showErrorUi(state.throwable.message!!)
+        is AccessCodeUiState.Error -> showErrorUi(state.throwable.message ?: "Incorrect Access Code")
         AccessCodeUiState.Initial -> showInitialUi()
         AccessCodeUiState.Loading -> showLoadingUi()
       }
