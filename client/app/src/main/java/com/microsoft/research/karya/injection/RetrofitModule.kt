@@ -8,6 +8,7 @@ import com.microsoft.research.karya.data.repo.AuthRepository
 import com.microsoft.research.karya.data.service.KaryaFileAPI
 import com.microsoft.research.karya.data.service.LanguageAPI
 import com.microsoft.research.karya.data.service.MicroTaskAssignmentAPI
+import com.microsoft.research.karya.data.service.PaymentAPI
 import com.microsoft.research.karya.data.service.WorkerAPI
 import com.microsoft.research.karya.injection.qualifier.BaseUrl
 import dagger.Module
@@ -112,5 +113,11 @@ class RetrofitModule {
   @Reusable
   fun provideKaryaFileAPIService(retrofit: Retrofit): KaryaFileAPI {
     return retrofit.create(KaryaFileAPI::class.java)
+  }
+
+  @Provides
+  @Reusable
+  fun providePaymentAPIService(retrofit: Retrofit): PaymentAPI {
+    return retrofit.create(PaymentAPI::class.java)
   }
 }
