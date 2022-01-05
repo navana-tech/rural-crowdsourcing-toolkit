@@ -261,4 +261,20 @@ class Converters {
     val gson = Gson()
     return gson.toJson(list)
   }
+
+    @TypeConverter
+    fun fromStringToAccountRecordStatus(value: String?): AccountRecordStatus? {
+        if (value == null) {
+            return null
+        }
+        return AccountRecordStatus.valueOf(value)
+    }
+
+    @TypeConverter
+    fun fromAccountRecordStatusToString(accountRecordStatus: AccountRecordStatus?): String? {
+        if (accountRecordStatus == null) {
+            return null
+        }
+        return accountRecordStatus.status
+    }
 }

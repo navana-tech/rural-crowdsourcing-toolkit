@@ -2,11 +2,8 @@ package com.microsoft.research.karya.injection
 
 import com.microsoft.research.karya.data.local.daos.KaryaFileDao
 import com.microsoft.research.karya.data.local.daos.MicroTaskDao
-<<<<<<< HEAD
-=======
 import com.microsoft.research.karya.data.local.daos.PaymentAccountDao
 import com.microsoft.research.karya.data.local.daos.WorkerDao
->>>>>>> e6daf938 (feat(payment): update dagger modules)
 import com.microsoft.research.karya.data.local.daosExtra.MicrotaskDaoExtra
 import com.microsoft.research.karya.data.local.ng.WorkerDao
 import com.microsoft.research.karya.data.repo.AuthRepository
