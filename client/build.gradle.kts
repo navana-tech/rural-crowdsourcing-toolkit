@@ -1,10 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
-    val kotlin_version by extra("1.4.32")
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
+        jcenter()
+
         // TODO: Remove JCenter
         @Suppress("JcenterRepositoryObsolete")
         jcenter {
@@ -53,6 +54,7 @@ allprojects {
             }
         }
         maven(url = "https://jitpack.io")
+
         // TODO: Remove JCenter
         @Suppress("JcenterRepositoryObsolete")
         jcenter {

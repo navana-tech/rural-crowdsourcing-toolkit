@@ -4,6 +4,7 @@
 package com.microsoft.research.karya.data.manager
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -32,28 +33,24 @@ import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
 
 @Database(
   entities =
-    [
-      ScenarioRecord::class,
-      WorkerRecord::class,
-      KaryaFileRecord::class,
-      TaskRecord::class,
-      MicroTaskRecord::class,
-      PolicyRecord::class,
-      MicroTaskAssignmentRecord::class,
-      PayoutMethodRecord::class,
-      PayoutInfoRecord::class,
-      PaymentRequestRecord::class,
-    ],
+  [
+    WorkerRecord::class,
+    KaryaFileRecord::class,
+    TaskRecord::class,
+    MicroTaskRecord::class,
+    MicroTaskAssignmentRecord::class,
+    PaymentAccountRecord::class
+  ],
   views = [TaskInfo::class],
-  version = 1,
-  exportSchema = true,
-  autoMigrations = [],
+  version = 2,
+  autoMigrations = [
+    AutoMigration(from = 1, to = 2)
+  ],
+  exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class KaryaDatabase : RoomDatabase() {
   abstract fun microTaskDao(): MicroTaskDao
-  abstract fun policyDao(): PolicyDao
-  abstract fun scenarioDao(): ScenarioDao
   abstract fun taskDao(): TaskDao
   abstract fun workerDao(): WorkerDao
   abstract fun microtaskAssignmentDao(): MicroTaskAssignmentDao
@@ -61,6 +58,7 @@ abstract class KaryaDatabase : RoomDatabase() {
   abstract fun microtaskAssignmentDaoExtra(): MicrotaskAssignmentDaoExtra
   abstract fun microtaskDaoExtra(): MicrotaskDaoExtra
   abstract fun karyaFileDao(): KaryaFileDao
+  abstract fun paymentAccountDao(): PaymentAccountDao
 
   companion object {
     private var INSTANCE: KaryaDatabase? = null
