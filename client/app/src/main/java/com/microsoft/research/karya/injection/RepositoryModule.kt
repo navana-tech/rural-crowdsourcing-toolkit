@@ -2,6 +2,11 @@ package com.microsoft.research.karya.injection
 
 import com.microsoft.research.karya.data.local.daos.KaryaFileDao
 import com.microsoft.research.karya.data.local.daos.MicroTaskDao
+<<<<<<< HEAD
+=======
+import com.microsoft.research.karya.data.local.daos.PaymentAccountDao
+import com.microsoft.research.karya.data.local.daos.WorkerDao
+>>>>>>> e6daf938 (feat(payment): update dagger modules)
 import com.microsoft.research.karya.data.local.daosExtra.MicrotaskDaoExtra
 import com.microsoft.research.karya.data.local.ng.WorkerDao
 import com.microsoft.research.karya.data.repo.AuthRepository
@@ -11,6 +16,7 @@ import com.microsoft.research.karya.data.repo.MicroTaskRepository
 import com.microsoft.research.karya.data.repo.WorkerRepository
 import com.microsoft.research.karya.data.service.KaryaFileAPI
 import com.microsoft.research.karya.data.service.LanguageAPI
+import com.microsoft.research.karya.data.service.PaymentAPI
 import com.microsoft.research.karya.data.service.WorkerAPI
 import dagger.Module
 import dagger.Provides
@@ -53,5 +59,11 @@ class RepositoryModule {
   @Singleton
   fun provideAuthRepository(workerDao: WorkerDao): AuthRepository {
     return AuthRepository(workerDao)
+  }
+
+  @Provides
+  @Singleton
+  fun providesPaymentRepository(paymentAPI: PaymentAPI, paymentAccountDao: PaymentAccountDao): PaymentRepository {
+      return PaymentRepository(paymentAPI, paymentAccountDao)
   }
 }
