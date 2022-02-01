@@ -22,7 +22,7 @@ buildscript {
         classpath(Plugins.gms)
         classpath(Plugins.crashlytics)
         classpath(Plugins.safeArgs)
-        classpath("in.navanatech.zabaan:zabaan-gradle-plugin:1.1.0")
+        // classpath("in.navanatech.zabaan:zabaan-gradle-plugin:1.1.0")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle.kts files
     }
@@ -31,15 +31,15 @@ buildscript {
 val localProperties = java.util.Properties()
 localProperties.load(java.io.FileInputStream(rootProject.file("local.properties")))
 
-apply(plugin = "in.navanatech.zabaan")
-
-configure<`in`.navanatech.zabaan.ZabaanExtension> {
-    apkPath = "/home/skrilltrax/Work/rural-crowdsourcing-toolkit/client/app/release/app-release.aab"
-    upload {
-        releaseNumber = localProperties.getProperty("zbn.release") as String
-        releaseToken = localProperties.getProperty("zbn.token") as String
-    }
-}
+//apply(plugin = "in.navanatech.zabaan")
+//
+//configure<`in`.navanatech.zabaan.ZabaanExtension> {
+//    apkPath = "/home/skrilltrax/Work/rural-crowdsourcing-toolkit/client/app/release/app-release.aab"
+//    upload {
+//        releaseNumber = localProperties.getProperty("zbn.release") as String
+//        releaseToken = localProperties.getProperty("zbn.token") as String
+//    }
+//}
 
 
 allprojects {

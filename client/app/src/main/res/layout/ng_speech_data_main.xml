@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_80sdp"
+        android:layout_marginTop="@dimen/_60sdp"
         android:gravity="center"
         android:textColor="#606060"
         android:textSize="@dimen/_12ssp"
@@ -34,13 +35,14 @@
         android:id="@+id/sentenceTv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        android:layout_marginVertical="@dimen/_40sdp"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginVertical="@dimen/_12sdp"
         android:gravity="center"
+        android:maxLength="100"
         android:paddingHorizontal="@dimen/_20sdp"
         android:textColor="#000000"
-        app:autoSizeMaxTextSize="@dimen/_30ssp"
-        app:autoSizeMinTextSize="@dimen/_12ssp"
+        app:autoSizeMaxTextSize="@dimen/_30sdp"
+        app:autoSizeMinTextSize="@dimen/_18ssp"
         app:autoSizeStepGranularity="@dimen/_2ssp"
         app:autoSizeTextType="uniform"
         app:fontFamily="sans-serif"
@@ -56,9 +58,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_16sdp"
         android:orientation="horizontal"
-        android:padding="@dimen/_16sdp"
+        android:padding="@dimen/_12sdp"
         android:background="@drawable/border_dark"
         android:weightSum="10"
         app:layout_constraintBottom_toTopOf="@id/recordLengthLL"
@@ -130,8 +132,8 @@
         android:id="@+id/recordLengthLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_40sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/recordBtn">
@@ -143,14 +145,14 @@
             android:gravity="center"
             android:text="0"
             android:textColor="@color/black"
-            android:textSize="@dimen/_26ssp"
+            android:textSize="@dimen/_18ssp"
             app:fontFamily="monospace" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="."
-            android:textSize="@dimen/_26ssp" />
+            android:textSize="@dimen/_18ssp" />
 
         <TextView
             android:id="@+id/recordCentiSecondsTv"
@@ -159,7 +161,7 @@
             android:gravity="center"
             android:text="00"
             android:textColor="@color/black"
-            android:textSize="@dimen/_26ssp"
+            android:textSize="@dimen/_18ssp"
             app:fontFamily="monospace" />
 
         <TextView
@@ -167,7 +169,7 @@
             android:layout_height="wrap_content"
             android:text="s"
             android:textColor="@color/black"
-            android:textSize="@dimen/_26ssp" />
+            android:textSize="@dimen/_18ssp" />
 
     </LinearLayout>
 
