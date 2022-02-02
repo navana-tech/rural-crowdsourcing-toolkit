@@ -30,7 +30,7 @@ class PaymentVerificationViewModel @Inject constructor(
         viewModelScope.launch {
             _uiStateFlow.update { it.copy(isLoading = true, requestProcessed = false) }
 
-            val worker = authManager.getLoggedInWorker()
+            val worker = authManager.fetchLoggedInWorker()
             val idToken = worker.idToken ?: run {
                 _uiStateFlow.update { it.copy(errorMessage = "Cannot find active worker, launch the app again") }
                 _navigationFlow.emit(PaymentVerificationNavigation.FAILURE)
@@ -74,7 +74,7 @@ class PaymentVerificationViewModel @Inject constructor(
 
     fun verifyAccount(confirm: Boolean) {
         viewModelScope.launch {
-            val worker = authManager.getLoggedInWorker()
+            val worker = authManager.fetchLoggedInWorker()
             val idToken = worker.idToken ?: run {
                 _uiStateFlow.update { it.copy(errorMessage = "Cannot find active worker, launch the app again") }
                 return@launch

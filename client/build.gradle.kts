@@ -4,16 +4,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
-
-        // TODO: Remove JCenter
-        @Suppress("JcenterRepositoryObsolete")
-        jcenter {
-            content {
-                //  org.jetbrains.trove4j is only available in JCenter
-                includeGroup("org.jetbrains.trove4j")
-            }
-        }
     }
 
     dependencies {

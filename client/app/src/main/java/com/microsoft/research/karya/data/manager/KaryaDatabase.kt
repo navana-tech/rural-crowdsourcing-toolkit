@@ -13,8 +13,7 @@ import com.microsoft.research.karya.data.local.Converters
 import com.microsoft.research.karya.data.local.daos.KaryaFileDao
 import com.microsoft.research.karya.data.local.daos.MicroTaskAssignmentDao
 import com.microsoft.research.karya.data.local.daos.MicroTaskDao
-import com.microsoft.research.karya.data.local.daos.PolicyDao
-import com.microsoft.research.karya.data.local.daos.ScenarioDao
+import com.microsoft.research.karya.data.local.daos.PaymentAccountDao
 import com.microsoft.research.karya.data.local.daos.TaskDao
 import com.microsoft.research.karya.data.local.daosExtra.MicrotaskAssignmentDaoExtra
 import com.microsoft.research.karya.data.local.daosExtra.MicrotaskDaoExtra
@@ -22,11 +21,7 @@ import com.microsoft.research.karya.data.local.ng.WorkerDao
 import com.microsoft.research.karya.data.model.karya.KaryaFileRecord
 import com.microsoft.research.karya.data.model.karya.MicroTaskAssignmentRecord
 import com.microsoft.research.karya.data.model.karya.MicroTaskRecord
-import com.microsoft.research.karya.data.model.karya.PaymentRequestRecord
-import com.microsoft.research.karya.data.model.karya.PayoutInfoRecord
-import com.microsoft.research.karya.data.model.karya.PayoutMethodRecord
-import com.microsoft.research.karya.data.model.karya.PolicyRecord
-import com.microsoft.research.karya.data.model.karya.ScenarioRecord
+import com.microsoft.research.karya.data.model.karya.PaymentAccountRecord
 import com.microsoft.research.karya.data.model.karya.TaskRecord
 import com.microsoft.research.karya.data.model.karya.modelsExtra.TaskInfo
 import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
@@ -44,7 +39,7 @@ import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
   views = [TaskInfo::class],
   version = 2,
   autoMigrations = [
-    AutoMigration(from = 1, to = 2)
+      AutoMigration(from = 1, to = 2, spec = V1ToV2Migration::class)
   ],
   exportSchema = true
 )
