@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
   id("com.android.application")
   id("kotlin-android")
@@ -12,16 +15,19 @@ plugins {
 }
 
 android {
-  compileSdkVersion(31)
+  compileSdk = 31
   defaultConfig {
     applicationId = "com.navana.bolo"
-    minSdkVersion(21)
-    targetSdkVersion(31)
+    minSdk = 21
+    targetSdk = 31
     multiDexEnabled = true
     versionCode = 25
     versionName = "1"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
+    val localProperties = Properties()
+    localProperties.load(FileInputStream(rootProject.file("local.properties")))
+    buildConfigField("String", "ZABAAN_ACCESS_TOKEN", localProperties.getProperty("zbn.token") as String)
   }
   buildTypes {
     named("release") {
