@@ -26,6 +26,7 @@ class KaryaApp : Application() {
         InitializeParams.Builder()
           .context(this)
           .assistantImage(R.drawable.img_asst_new)
+          .accessToken(BuildConfig.ZABAAN_ACCESS_TOKEN)
           .build()
 
       Zabaan.setDebug(BuildConfig.DEBUG)

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.microsoft.research.karya.ui.views.KaryaToolbar
+        <com.microsoft.research.karya.ui.widgets.KaryaToolbar
             android:id="@+id/appTb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 android:layout_marginHorizontal="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:text="Next Payment"
-                android:textSize="@dimen/_18sdp"
+                android:textSize="@dimen/_18ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/balanceAmountTv" />-->
 
@@ -94,7 +94,7 @@
                 android:layout_marginHorizontal="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:text="Previous Payment"
-                android:textSize="@dimen/_18sdp"
+                android:textSize="@dimen/_18ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/transferredAmountTv" />
 
@@ -117,7 +117,7 @@
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:text="@string/last_payment_details"
-            android:textSize="@dimen/_18sdp"
+            android:textSize="@dimen/_18ssp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/transferredAmountTv" />
 
@@ -144,7 +144,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:text="@string/amount_rs_2f"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintBottom_toTopOf="@id/utrTv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +159,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/utr_s"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintBottom_toTopOf="@id/dateTv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -173,7 +173,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/date_s"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintBottom_toTopOf="@id/statusTv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -187,7 +187,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/status_s"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintBottom_toTopOf="@id/transactionsButton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -202,7 +202,7 @@
                     android:background="#EEE"
                     android:text="@string/all_transactions"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_16sdp"
+                    android:textSize="@dimen/_16ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -219,7 +219,7 @@
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:text="@string/account_details"
-            android:textSize="@dimen/_18sdp"
+            android:textSize="@dimen/_18ssp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/transactionCv" />
 
@@ -248,7 +248,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:text="@string/name_s"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintBottom_toTopOf="@id/accountIdTv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -263,7 +263,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/id_s"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintBottom_toTopOf="@id/ifscTv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -277,7 +277,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/ifsc_s"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintBottom_toTopOf="@id/updateAccountButton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -293,7 +293,7 @@
                     android:background="#EEE"
                     android:text="@string/update_account_details"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_16sdp"
+                    android:textSize="@dimen/_16ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
