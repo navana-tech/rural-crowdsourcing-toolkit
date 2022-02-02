@@ -43,7 +43,7 @@ class PaymentDetailBankViewModel @Inject constructor(
                 )
             }
 
-            val worker = authManager.getLoggedInWorker()
+            val worker = authManager.fetchLoggedInWorker()
             val idToken = worker.idToken ?: run {
                 _uiStateFlow.update { it.copy(errorMessage = "Cannot find active worker, launch the app again") }
                 return@launch

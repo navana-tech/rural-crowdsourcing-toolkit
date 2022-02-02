@@ -40,7 +40,7 @@ class PaymentDetailUPIViewModel @Inject constructor(
                 upiIdRepeated = upiIdRepeated
             )
 
-            val worker = authManager.getLoggedInWorker()
+            val worker = authManager.fetchLoggedInWorker()
             val idToken = worker.idToken ?: run {
                 _uiStateFlow.update { it.copy(errorMessage = "Cannot find active worker, launch the app again") }
                 return@launch

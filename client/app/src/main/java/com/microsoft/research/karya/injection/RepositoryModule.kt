@@ -10,6 +10,7 @@ import com.microsoft.research.karya.data.repo.AuthRepository
 import com.microsoft.research.karya.data.repo.KaryaFileRepository
 import com.microsoft.research.karya.data.repo.LanguageRepository
 import com.microsoft.research.karya.data.repo.MicroTaskRepository
+import com.microsoft.research.karya.data.repo.PaymentRepository
 import com.microsoft.research.karya.data.repo.WorkerRepository
 import com.microsoft.research.karya.data.service.KaryaFileAPI
 import com.microsoft.research.karya.data.service.LanguageAPI

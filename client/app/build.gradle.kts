@@ -1,6 +1,3 @@
-import java.util.Properties
-import java.io.FileInputStream
-
 plugins {
   id("com.android.application")
   id("kotlin-android")
@@ -72,9 +69,11 @@ android {
   }
   kotlinOptions {
     jvmTarget = "1.8"
-  }
-  lintOptions {
-    isAbortOnError = false
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+    }
   }
   androidExtensions {
     isExperimental = true
@@ -116,6 +115,8 @@ dependencies {
 
   implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
+  implementation(project(":app-bow"))
+  implementation(project(":app-dropdown"))
   implementation(Dependencies.AndroidX.appcompat)
   implementation(Dependencies.AndroidX.constraintLayout)
   implementation(Dependencies.AndroidX.datastorePrefs)
@@ -137,7 +138,6 @@ dependencies {
 
   implementation(Dependencies.AndroidX.Navigation.fragmentKtx)
   implementation(Dependencies.AndroidX.Navigation.uiKtx)
-  implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
 
   kapt(Dependencies.AndroidX.Room.roomCompiler)
 

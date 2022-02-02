@@ -3,6 +3,7 @@ package com.microsoft.research.karya.injection
 import com.microsoft.research.karya.data.local.daos.KaryaFileDao
 import com.microsoft.research.karya.data.local.daos.MicroTaskAssignmentDao
 import com.microsoft.research.karya.data.local.daos.MicroTaskDao
+import com.microsoft.research.karya.data.local.daos.PaymentAccountDao
 import com.microsoft.research.karya.data.local.daos.TaskDao
 import com.microsoft.research.karya.data.local.daosExtra.MicrotaskAssignmentDaoExtra
 import com.microsoft.research.karya.data.local.daosExtra.MicrotaskDaoExtra

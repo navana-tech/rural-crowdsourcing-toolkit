@@ -21,7 +21,7 @@ class PaymentRegistrationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val worker = authManager.getLoggedInWorker()
+            val worker = authManager.fetchLoggedInWorker()
             val workerBalanceResponse = paymentRepository.getWorkerBalance(worker.idToken!!, worker.id)
                 .catch { WorkerBalanceResponse(0.0f, 0.0f) }
                 .single()

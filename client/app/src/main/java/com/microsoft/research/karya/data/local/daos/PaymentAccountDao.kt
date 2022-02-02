@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.microsoft.research.karya.data.model.karya.PaymentAccountRecord
-import com.microsoft.research.karya.data.model.karya.WorkerRecord
 import com.microsoft.research.karya.data.model.karya.enums.AccountRecordStatus
 
 @Dao
