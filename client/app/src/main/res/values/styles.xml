@@ -145,4 +145,9 @@
         <item name="backgroundTint">@drawable/karya_payments_button_bg_selector</item>
     </style>
 
+    <style name="PaymentsFlowTitle" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

@@ -15,6 +15,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/title"
+        style="@style/PaymentsFlowTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_56sdp"
+        android:text="Register Your Account"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTb" />
+
+    <TextView
         android:id="@+id/description"
         style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="0dp"
@@ -24,78 +35,94 @@
         android:text="@string/payment_registration_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appTb" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/bankLL"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bankCV"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_180sdp"
+        android:layout_height="@dimen/_120sdp"
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_16sdp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@id/upiLL"
+        android:layout_marginEnd="@dimen/_16sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="@dimen/_8sdp"
+        app:layout_constraintEnd_toStartOf="@id/upiCV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/description">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/bankIv"
-            android:layout_width="@dimen/_128sdp"
-            android:layout_height="@dimen/_128sdp"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:background="@drawable/border_black"
-            android:cropToPadding="true"
-            android:padding="@dimen/_8sdp"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/bank" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/bankLL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical">
 
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:text="Bank"
-            android:textColor="@color/black" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/bankIv"
+                android:layout_width="@dimen/_64sdp"
+                android:layout_height="@dimen/_64sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:cropToPadding="true"
+                android:padding="@dimen/_8sdp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/bank" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/upiLL"
+            <TextView
+                style="@style/TextAppearance.Material3.BodySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Bank"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_18ssp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/upiCV"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_180sdp"
+        android:layout_height="@dimen/_120sdp"
         android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginEnd="@dimen/_16sdp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="@dimen/_8sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/bankLL"
+        app:layout_constraintStart_toEndOf="@id/bankCV"
         app:layout_constraintTop_toBottomOf="@id/description">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/upiIv"
-            android:layout_width="@dimen/_128sdp"
-            android:layout_height="@dimen/_128sdp"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:background="@drawable/border_black"
-            android:cropToPadding="true"
-            android:padding="@dimen/_8sdp"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/upi" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/upiLL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical">
 
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:text="UPI"
-            android:textColor="@color/black" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/upiIv"
+                android:layout_width="@dimen/_64sdp"
+                android:layout_height="@dimen/_64sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:cropToPadding="true"
+                android:padding="@dimen/_8sdp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/upi" />
+
+            <TextView
+                style="@style/TextAppearance.Material3.BodySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_18ssp"
+                android:text="UPI"
+                android:textColor="@color/black" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
