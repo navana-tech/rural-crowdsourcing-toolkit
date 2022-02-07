@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <com.microsoft.research.karya.ui.widgets.KaryaToolbar
         android:id="@+id/appTb"
         android:layout_width="match_parent"
@@ -15,6 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/title"
+        style="@style/PaymentsFlowTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_56sdp"
+        android:text="@string/payment_transactions_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTb" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/transactionRv"
         android:layout_width="match_parent"
@@ -24,8 +36,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appTb"
-        tools:listitem="@layout/item_transaction_card"/>
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:listitem="@layout/item_transaction_card" />
 
     <ProgressBar
         android:id="@+id/progressBar"

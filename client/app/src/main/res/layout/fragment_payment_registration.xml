@@ -71,7 +71,7 @@
                 app:srcCompat="@drawable/bank" />
 
             <TextView
-                style="@style/TextAppearance.Material3.BodySmall"
+                style="@style/TextAppearance.MaterialComponents.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -115,7 +115,7 @@
                 app:srcCompat="@drawable/upi" />
 
             <TextView
-                style="@style/TextAppearance.Material3.BodySmall"
+                style="@style/TextAppearance.MaterialComponents.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

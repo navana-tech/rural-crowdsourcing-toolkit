@@ -15,6 +15,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/title"
+        style="@style/PaymentsFlowTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_56sdp"
+        android:text="@string/payment_registration_bank_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTb" />
+
+    <TextView
+        android:id="@+id/description"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/payment_registration_bank_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameTil"
         android:layout_width="0dp"
@@ -23,7 +45,7 @@
         android:layout_marginTop="@dimen/_16sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appTb">
+        app:layout_constraintTop_toBottomOf="@+id/description">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/nameEt"
@@ -47,8 +69,8 @@
             android:id="@+id/ifscCodeEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="11"
-            android:hint="@string/ifsc_code" />
+            android:hint="@string/ifsc_code"
+            android:maxLength="11" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -71,7 +93,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/accountNumberRepeatTil"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_50sdp"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_16sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,12 +104,14 @@
             android:id="@+id/accountNumberRepeatEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:hint="@string/re_enter_account_number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
+        style="@style/PaymentsPrimaryButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_32sdp"
@@ -120,6 +144,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submitButton"
         tools:text="Error adding bank account details" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

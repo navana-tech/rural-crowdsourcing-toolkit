@@ -51,28 +51,33 @@ class PaymentVerificationFragment : Fragment(R.layout.fragment_payment_verificat
         }.launchIn(viewLifecycleScope)
     }
 
-    private fun render(paymentFailureModel: PaymentVerificationModel) {
-        if (paymentFailureModel.isLoading) {
+    private fun render(paymentVerificationModel: PaymentVerificationModel) {
+        if (paymentVerificationModel.isLoading) {
             with(binding) {
                 failureBtn.gone()
                 successBtn.gone()
-                description.text = getString(R.string.verification_loading)
-                progressBar.visible()
+                title.gone()
+                description.gone()
+                progressLL.visible()
             }
         } else {
-            if (paymentFailureModel.requestProcessed) {
+            if (paymentVerificationModel.requestProcessed) {
                 with(binding) {
                     failureBtn.visible()
                     successBtn.visible()
+                    title.visible()
                     description.text = getString(R.string.verification_request_processed)
-                    progressBar.gone()
+                    description.visible()
+                    progressLL.gone()
                 }
             } else {
                 with(binding) {
                     failureBtn.gone()
                     successBtn.gone()
+                    title.visible()
                     description.text = getString(R.string.verification_request_processing)
-                    progressBar.gone()
+                    description.visible()
+                    progressLL.gone()
                 }
             }
         }

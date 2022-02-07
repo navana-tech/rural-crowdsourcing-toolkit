@@ -86,7 +86,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
 
       refreshLl.clicks().throttleFirst(500L).onEach { viewModel.syncWithServer() }.launchIn(lifecycleScope)
 
-      appTb.setProfileClickListener { findNavController().navigate(R.id.action_global_tempDataFlow) }
+      appTb.setProfileClickListener { findNavController().navigate(R.id.action_dashboardActivity_to_paymentVerificationFragment) }
       loadProfilePic()
     }
   }

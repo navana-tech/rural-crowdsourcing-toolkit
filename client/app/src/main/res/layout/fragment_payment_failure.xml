@@ -15,35 +15,48 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/title"
+        style="@style/PaymentsFlowTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_56sdp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:text="@string/registration_failed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTb" />
+
+    <TextView
         android:id="@+id/description"
         style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_16sdp"
-        android:text="We were not able to register your account with the given details."
+        android:text="@string/payment_registration_failure_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appTb" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
+        style="@style/PaymentsPrimaryButton"
         android:id="@+id/registerButton"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_80sdp"
+        android:layout_height="@dimen/_50sdp"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_32sdp"
-        android:text="Register account again"
+        android:text="@string/register_again"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/description" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
+        style="@style/PaymentsSecondaryButton"
         android:id="@+id/backButton"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_80sdp"
+        android:layout_height="@dimen/_50sdp"
         android:layout_marginHorizontal="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:text="contact project coordinator"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/contact_project_coordinator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/registerButton" />

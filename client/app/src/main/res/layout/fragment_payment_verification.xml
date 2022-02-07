@@ -15,6 +15,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/title"
+        style="@style/PaymentsFlowTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_56sdp"
+        android:text="@string/payment_verification_title"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTb" />
+
+    <TextView
         android:id="@+id/description"
         style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="0dp"
@@ -22,42 +34,72 @@
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_16sdp"
         android:text="@string/verification_loading"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appTb" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/successBtn"
-        android:layout_width="0dp"
-        android:layout_marginHorizontal="@dimen/_16sdp"
-        android:layout_height="@dimen/_80sdp"
-        android:layout_marginTop="@dimen/_32sdp"
-        android:text="Yes, I received Rs 2 in my account"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <Button
+        android:id="@+id/successBtn"
+        style="@style/PaymentsPrimaryButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_32sdp"
+        android:text="@string/payment_verification_received"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/description" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/failureBtn"
+        style="@style/PaymentsSecondaryButton"
         android:layout_width="0dp"
+        android:layout_height="@dimen/_50sdp"
         android:layout_marginHorizontal="@dimen/_16sdp"
-        android:layout_height="@dimen/_80sdp"
         android:layout_marginTop="@dimen/_8sdp"
-        android:text="No, I did not receive Rs 2 in my account"
+        android:text="@string/payment_verification_did_not_receive"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/successBtn" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/description"
-        app:layout_constraintStart_toStartOf="parent"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/progressLL"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_56sdp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/_16sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTb">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="#6200FF"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:gravity="center"
+            android:text="Checking account status\nPlease Wait!"
+            android:textColor="#FF6200FF"
+            android:textSize="@dimen/_14ssp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_32sdp"
+            app:srcCompat="@drawable/ic_wait" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

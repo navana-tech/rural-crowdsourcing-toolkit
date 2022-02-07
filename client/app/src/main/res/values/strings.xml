@@ -323,11 +323,24 @@
     <string name="utr_s">UTR: %s</string>
     <string name="date_s">Date: %s</string>
     <string name="status_s">Status: %s</string>
-    <string name="all_transactions">All Transactions</string>
+    <string name="all_transactions">All Transactions ➔</string>
     <string name="account_details">Account Details</string>
     <string name="name_s">Name: %s</string>
     <string name="id_s">ID: %s</string>
     <string name="ifsc_s">IFSC: %s</string>
-    <string name="update_account_details">Update Account Details</string>
+    <string name="update_account_details">Update Account Details ➔</string>
     <string name="no_internet">No internet available</string>
+    <string name="payment_verification_did_not_receive">No, I did not receive Rs 2</string>
+    <string name="payment_verification_received">Yes, I received Rs 2</string>
+    <string name="registration_failed">Registration Failed</string>
+    <string name="register_again">Register Again</string>
+    <string name="contact_project_coordinator">Contact Project Coordinator</string>
+    <string name="payment_registration_failure_description">We were not able to register your account with the given details.</string>
+    <string name="payment_registration_bank_description">Enter your account details to register your bank account.</string>
+    <string name="payment_registration_bank_title">Register Bank Account</string>
+    <string name="payment_registration_upi_title">Register UPI ID</string>
+    <string name="payment_registration_upi_description">Enter your account details to register your UPI id.</string>
+    <string name="payment_verification_title">Account Verification</string>
+    <string name="payment_dashboard">Payment Dashboard</string>
+    <string name="payment_transactions_title">All Transactions</string>
 </resources>
