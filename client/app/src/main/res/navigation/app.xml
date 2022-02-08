@@ -74,7 +74,11 @@
         <fragment
             android:id="@+id/selectAgeGroupFragment2"
             android:name="com.microsoft.research.karya.ui.onboarding.age.SelectAgeGroupFragment"
-            android:label="SelectAgeGroupFragment" />
+            android:label="SelectAgeGroupFragment" >
+            <action
+                android:id="@+id/action_selectAgeGroupFragment2_to_selectPinFragment"
+                app:destination="@id/selectPinFragment" />
+        </fragment>
         <fragment
             android:id="@+id/selectGenderFragment2"
             android:name="com.microsoft.research.karya.ui.onboarding.gender.SelectGenderFragment"
@@ -83,6 +87,10 @@
                 android:id="@+id/action_selectGenderFragment2_to_selectAgeGroupFragment2"
                 app:destination="@id/selectAgeGroupFragment2" />
         </fragment>
+        <fragment
+            android:id="@+id/selectPinFragment"
+            android:name="com.microsoft.research.karya.ui.onboarding.pin.SelectPinFragment"
+            android:label="SelectPinFragment" />
     </navigation>
     <navigation android:id="@+id/accessCodeFlow"
         app:startDestination="@id/accessCodeFragment2">
