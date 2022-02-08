@@ -8,6 +8,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonNull
+import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.microsoft.research.karya.data.model.karya.AssignmentGranularityType
 import com.microsoft.research.karya.data.model.karya.AssignmentOrderType
@@ -206,6 +207,21 @@ class Converters {
     if (list == null) {
       return null
     }
+    val gson = Gson()
+    return gson.toJson(list)
+  }
+
+  @TypeConverter
+  fun fromStringToJsonObject(value: String?): JsonObject {
+    if (value == null) return JsonObject()
+
+    return Gson().fromJson(value, JsonObject::class.java)
+  }
+
+  @TypeConverter
+  fun fromJsonObjectToString(list: JsonObject?): String? {
+    if (list == null) return null
+
     val gson = Gson()
     return gson.toJson(list)
   }
