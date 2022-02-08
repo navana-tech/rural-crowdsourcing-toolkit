@@ -60,11 +60,12 @@ constructor(
     if (worker.language.isNotEmpty())
       Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(worker.language))
 
+    val isPinCodePresent = worker.profile?.has("pincode") ?: false
     val destination =
       when {
         !worker.isConsentProvided -> Destination.AccessCodeFlow
         worker.idToken.isNullOrEmpty() -> Destination.LoginFlow
-        worker.yob.isNullOrEmpty() -> Destination.MandatoryDataFlow
+        !isPinCodePresent -> Destination.MandatoryDataFlow
         else -> Destination.Dashboard
       }
 
