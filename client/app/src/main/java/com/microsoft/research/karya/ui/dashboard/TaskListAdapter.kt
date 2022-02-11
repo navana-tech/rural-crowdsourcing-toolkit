@@ -1,5 +1,6 @@
 package com.microsoft.research.karya.ui.dashboard
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -64,6 +65,9 @@ class TaskListAdapter(
           val submitted = submittedMicrotasks + verifiedMicrotasks
           val verified = verifiedMicrotasks
 
+          if (taskName.contains("Spontaneous", ignoreCase = true)) {
+              binding.header.setBackgroundColor(Color.parseColor("#FF03A9F4"))
+          }
           taskTitle.text = taskName
           taskSubtitle.text = context.getString(R.string.d_sentences_available, total)
           tasksAvailable.text = context.getString(R.string.d_tasks_available, available, total)
