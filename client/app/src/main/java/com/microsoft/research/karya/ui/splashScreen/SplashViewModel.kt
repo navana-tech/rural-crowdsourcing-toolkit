@@ -3,6 +3,7 @@ package com.microsoft.research.karya.ui.splashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.gson.JsonObject
 import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
 import com.microsoft.research.karya.data.repo.WorkerRepository
@@ -60,7 +61,7 @@ constructor(
     if (worker.language.isNotEmpty())
       Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(worker.language))
 
-    val isPinCodePresent = worker.profile?.has("pincode") ?: false
+    val isPinCodePresent = worker.profile is JsonObject && worker.profile.has("pincode")
     val destination =
       when {
         !worker.isConsentProvided -> Destination.AccessCodeFlow
