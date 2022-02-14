@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_64sdp"
-        android:text="1/3"
+        android:text="1/4"
         android:textColor="@color/dk_blue"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

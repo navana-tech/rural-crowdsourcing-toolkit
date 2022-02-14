@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.exceptions.IncorrectAccessCodeException
 import com.microsoft.research.karya.data.exceptions.IncorrectOtpException
@@ -169,7 +170,7 @@ constructor(
     viewModelScope.launch {
       val worker = authManager.fetchLoggedInWorker()
       checkNotNull(worker.gender)
-      val registerOrUpdateWorkerRequest = RegisterOrUpdateWorkerRequest(currentAge.name, worker.gender)
+      val registerOrUpdateWorkerRequest = RegisterOrUpdateWorkerRequest(currentAge.name, worker.gender, worker.profile!!)
 
       checkNotNull(worker.idToken)
 
@@ -187,7 +188,7 @@ constructor(
   fun updateWorkerGender(gender: String) {
     viewModelScope.launch {
       val worker = authManager.fetchLoggedInWorker()
-      val registerOrUpdateWorkerRequest = RegisterOrUpdateWorkerRequest(worker.yob ?: "", gender)
+      val registerOrUpdateWorkerRequest = RegisterOrUpdateWorkerRequest(worker.yob ?: "", gender, JsonObject())
 
       checkNotNull(worker.idToken)
 

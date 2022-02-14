@@ -95,7 +95,6 @@ dependencies {
     implementation(Dependencies.AndroidX.work_runtime)
 
     implementation(Dependencies.AndroidX.Lifecycle.common)
-    implementation(Dependencies.AndroidX.Lifecycle.extensions)
     implementation(Dependencies.AndroidX.Lifecycle.livedataKtx)
     implementation(Dependencies.AndroidX.Lifecycle.runtimeKtx)
     implementation(Dependencies.AndroidX.Lifecycle.saved_state)
