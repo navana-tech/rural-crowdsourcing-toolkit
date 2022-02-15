@@ -98,7 +98,7 @@ object Dependencies {
         const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.9.3"
         const val lottie = "com.airbnb.android:lottie:4.2.1"
         const val okhttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.3"
-        const val zabaan = "in.navanatech:zabaan-sdk:1.2.2"
+        const val zabaan = "in.navanatech:zabaan-sdk:1.2.6"
 
         object Retrofit {
             private const val version = "2.9.0"
