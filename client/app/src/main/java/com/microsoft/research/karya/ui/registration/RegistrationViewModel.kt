@@ -170,7 +170,8 @@ constructor(
     viewModelScope.launch {
       val worker = authManager.fetchLoggedInWorker()
       checkNotNull(worker.gender)
-      val registerOrUpdateWorkerRequest = RegisterOrUpdateWorkerRequest(currentAge.name, worker.gender, worker.profile!!)
+      val registerOrUpdateWorkerRequest =
+        RegisterOrUpdateWorkerRequest(currentAge.name, worker.gender, worker.profile!!)
 
       checkNotNull(worker.idToken)
 

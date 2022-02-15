@@ -59,7 +59,7 @@ constructor(
     FirebaseCrashlytics.getInstance().setUserId(worker.accessCode)
     _splashEffects.emit(SplashEffects.UpdateLanguage(worker.language))
     if (worker.language.isNotEmpty())
-      Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(worker.language))
+      Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(worker.language.lowercase()))
 
     val isPinCodePresent = worker.profile is JsonObject && worker.profile.has("pincode")
     val destination =
