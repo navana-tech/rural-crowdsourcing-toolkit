@@ -66,7 +66,7 @@ class TaskListAdapter(
           val verified = verifiedMicrotasks
 
           if (taskName.contains("Spontaneous", ignoreCase = true)) {
-              binding.header.setBackgroundColor(Color.parseColor("#FF03A9F4"))
+            binding.header.setBackgroundColor(Color.parseColor("#FF03A9F4"))
           }
           taskTitle.text = taskName
           taskSubtitle.text = context.getString(R.string.d_sentences_available, total)

@@ -17,7 +17,7 @@
     <string name="s_dashboard_title">Dashboard</string>
     <string name="s_consent_form_agree">I agree</string>
     <string name="s_consent_form_disagree">No. I do not want to participate</string>
-    <string name="s_consent_form_text"><![CDATA[
+    <string name="s_consent_form_text" translatable="false"><![CDATA[
     <h5>Participant Privacy Policy</h5>
     <p>This privacy policy (<b>Privacy Policy</b>) will help you understand what information we collect for the Project, why we collect it, how we
             will use it, including if and how we share the information with third parties, and the choices you have with
@@ -299,7 +299,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="s_other">Other</string>
     <string name="d_sentences_available">%d sentences available</string>
-    <string name="rupees_d">₹%d</string>
+    <string name="rupees_d" translatable="false">₹%d</string>
     <string name="refresh_underline"><u>Refresh</u></string>
     <string name="refreshing">Refreshing…</string>
     <string name="tasks_updated">Tasks Updated</string>

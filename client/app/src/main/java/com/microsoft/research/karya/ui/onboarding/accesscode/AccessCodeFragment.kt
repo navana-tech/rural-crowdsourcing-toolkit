@@ -96,7 +96,7 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
   }
 
   private fun showSuccessUi(languageCode: String) {
-    Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(languageCode))
+    Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(languageCode.lowercase()))
     updateActivityLanguage(languageCode)
 
     hideLoading()

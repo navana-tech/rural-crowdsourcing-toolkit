@@ -39,7 +39,7 @@ class SelectPinFragment : BaseFragment(R.layout.fragment_enter_pin_code) {
     super.onResume()
     Zabaan.getInstance().show(binding.root, viewLifecycle)
     Zabaan.getInstance().setCurrentState("IDLE")
-    Zabaan.getInstance().setScreenName("AGE", autoPlay = true)
+    Zabaan.getInstance().setScreenName("PIN_CODE", autoPlay = true)
   }
 
   private fun setupView() {
@@ -62,9 +62,9 @@ class SelectPinFragment : BaseFragment(R.layout.fragment_enter_pin_code) {
     viewModel.selectAgeUiState.observe(viewLifecycleOwner.lifecycle, lifecycleScope) { state ->
       when (state) {
         is SelectPinUiState.Error -> showErrorUi(state.throwable.message!!)
-          SelectPinUiState.Initial -> showInitialUi()
-          SelectPinUiState.Loading -> showLoadingUi()
-          SelectPinUiState.Success -> showSuccessUi()
+        SelectPinUiState.Initial -> showInitialUi()
+        SelectPinUiState.Loading -> showLoadingUi()
+        SelectPinUiState.Success -> showSuccessUi()
       }
     }
   }
@@ -72,7 +72,7 @@ class SelectPinFragment : BaseFragment(R.layout.fragment_enter_pin_code) {
   private fun observeEffects() {
     viewModel.selectAgeEffects.observe(viewLifecycleOwner.lifecycle, lifecycleScope) { effect ->
       when (effect) {
-          SelectPinEffects.Navigate -> navigateToDashboard()
+        SelectPinEffects.Navigate -> navigateToDashboard()
       }
     }
   }

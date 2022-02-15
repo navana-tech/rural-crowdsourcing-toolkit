@@ -77,7 +77,7 @@ constructor(
               is UnknownException -> throwable
               else -> Exception("Error verifying OTP. Please try again later.")
             }
-            throwable.printStackTrace()
+          throwable.printStackTrace()
           _otpUiState.value = OTPUiState.Error(exception)
         }
         .collect()
