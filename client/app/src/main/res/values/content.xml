@@ -3,8 +3,8 @@
     <string name="karya_logo">Project Karya Logo</string>
     <string name="creation_code_hint">0000-0000-0000-0000</string>
     <string name="status_check">status</string>
-    <string name="otp_hint"> ------ </string>
-    <string name="phone_number_hint">----------</string>
+    <string name="otp_hint" translatable="false"> ------ </string>
+    <string name="phone_number_hint" translatable="false">----------</string>
     <string name="next">next</string>
     <string name="retake">Retake</string>
     <string name="back">back</string>
