@@ -238,6 +238,8 @@ constructor(
           )
         _dashboardUiState.value = success
       } catch (throwable: Throwable) {
+        FirebaseCrashlytics.getInstance().recordException(throwable)
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
         _dashboardUiState.value = DashboardUiState.Error(throwable)
       }
     }
