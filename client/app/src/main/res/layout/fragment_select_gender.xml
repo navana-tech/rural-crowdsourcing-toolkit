@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_64sdp"
+        android:layout_marginTop="@dimen/_56sdp"
         android:text="2/4"
         android:textColor="@color/dk_blue"
         android:textStyle="bold"
@@ -45,9 +45,9 @@
 
     <com.microsoft.research.karya.ui.widgets.GenderCard
         android:id="@+id/cv_male"
-        android:layout_width="@dimen/_128sdp"
-        android:layout_height="@dimen/_128sdp"
-        android:layout_marginTop="@dimen/_32sdp"
+        android:layout_width="@dimen/_110sdp"
+        android:layout_height="@dimen/_110sdp"
+        android:layout_marginTop="@dimen/_16sdp"
         app:icon="@drawable/ic_gender_male"
         app:layout_constraintEnd_toStartOf="@id/cv_female"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +56,8 @@
 
     <com.microsoft.research.karya.ui.widgets.GenderCard
         android:id="@+id/cv_female"
-        android:layout_width="@dimen/_128sdp"
-        android:layout_height="@dimen/_128sdp"
+        android:layout_width="@dimen/_110sdp"
+        android:layout_height="@dimen/_110sdp"
         app:icon="@drawable/ic_gender_female"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/cv_male"
@@ -66,8 +66,8 @@
 
     <com.microsoft.research.karya.ui.widgets.GenderCard
         android:id="@+id/cv_other"
-        android:layout_width="@dimen/_128sdp"
-        android:layout_height="@dimen/_128sdp"
+        android:layout_width="@dimen/_110sdp"
+        android:layout_height="@dimen/_110sdp"
         android:layout_marginTop="@dimen/_16sdp"
         app:icon="@drawable/ic_gender_other"
         app:layout_constraintEnd_toEndOf="@id/cv_female"

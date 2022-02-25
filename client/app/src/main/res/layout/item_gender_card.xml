@@ -23,8 +23,7 @@
             android:id="@+id/icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_16sdp"
-            android:layout_weight="8"
+            android:layout_weight="12"
             tools:src="@drawable/ic_gender_female" />
 
         <TextView
