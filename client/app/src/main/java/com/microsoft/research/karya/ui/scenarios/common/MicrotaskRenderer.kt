@@ -42,6 +42,8 @@ import kotlinx.android.synthetic.main.microtask_header.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -350,10 +352,12 @@ abstract class MicrotaskRenderer(
         if (microtaskAssignmentIDs.isEmpty()) {
           setResult(Activity.RESULT_OK, intent)
           finish()
+          cancel()
         }
 
         // Move to the first incomplete (assigned) microtask or the last microtask
         do {
+          ensureActive()
           val microtaskAssignmentID = microtaskAssignmentIDs[currentAssignmentIndex]
           val microtaskAssignment = karyaDb.microtaskAssignmentDao().getById(microtaskAssignmentID)
           if (microtaskAssignment.status == MicrotaskAssignmentStatus.ASSIGNED) {
@@ -437,14 +441,14 @@ abstract class MicrotaskRenderer(
 
   /** On stop, just cleanup */
   final override fun onStop() {
-    super.onStop()
     cleanupOnStop()
+    super.onStop()
   }
 
   /** On restart, just reset */
   final override fun onRestart() {
-    super.onRestart()
     resetOnRestart()
+    super.onRestart()
   }
 
   /** On destroy, just called super */
