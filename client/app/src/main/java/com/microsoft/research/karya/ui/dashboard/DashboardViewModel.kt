@@ -25,7 +25,7 @@ import com.microsoft.research.karya.utils.extensions.getBlobPath
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,15 +59,9 @@ constructor(
     MutableStateFlow(DashboardUiState.Success(DashboardStateSuccess(emptyList(), 0.0f)))
   val dashboardUiState = _dashboardUiState.asStateFlow()
 
-  private val coroutineExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-    FirebaseCrashlytics.getInstance().log("Coroutine Exception")
-    FirebaseCrashlytics.getInstance().recordException(throwable)
-    FirebaseCrashlytics.getInstance().sendUnsentReports()
-  }
-
   fun syncWithServer() {
     _dashboardUiState.value = DashboardUiState.Loading
-    viewModelScope.launch(coroutineExceptionHandler) {
+    viewModelScope.launch {
       withContext(Dispatchers.IO) {
         val accessCode = authManager.fetchLoggedInWorkerAccessCode()
         try {
@@ -77,11 +71,15 @@ constructor(
           cleanupKaryaFiles()
           getAllTasks(true)
         } catch (e: Exception) {
-          FirebaseCrashlytics.getInstance().setUserId(accessCode)
-          FirebaseCrashlytics.getInstance().log("Exception in syncing with server")
-          FirebaseCrashlytics.getInstance().recordException(e)
-          FirebaseCrashlytics.getInstance().sendUnsentReports()
           getAllTasks(true)
+          if (e is CancellationException) {
+            throw e
+          } else {
+            FirebaseCrashlytics.getInstance().setUserId(accessCode)
+            FirebaseCrashlytics.getInstance().log("Exception in syncing with server")
+            FirebaseCrashlytics.getInstance().recordException(e)
+            FirebaseCrashlytics.getInstance().sendUnsentReports()
+          }
         }
       }
     }
