@@ -12,7 +12,7 @@ import com.microsoft.research.karya.data.model.karya.enums.MicrotaskAssignmentSt
 
 @Dao
 interface MicrotaskAssignmentDaoExtra {
-  @Query("UPDATE microtask_assignment SET output_file_id =:outputFileID WHERE id=:microtaskAssID ")
+  @Query("UPDATE microtask_assignment SET output_file_id =:outputFileID WHERE id=:microtaskAssID AND output_file_id = null")
   suspend fun updateOutputFileID(microtaskAssID: String, outputFileID: String)
 
   /** Get list of microtask assignments by [status] */

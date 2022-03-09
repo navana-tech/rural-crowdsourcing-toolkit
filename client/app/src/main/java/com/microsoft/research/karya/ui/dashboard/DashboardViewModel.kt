@@ -169,6 +169,7 @@ constructor(
         val tarBallName = microtaskOutputContainer.getBlobName(assignment.id)
         val outputDir = microtaskOutputContainer.getDirectory()
         val fileNames = assignment.output.asJsonObject.get("files").asJsonArray.map { it.asString }
+        // TODO: Handle trailing slash
         val outputFilePaths = fileNames.map { "$outputDir/${it}" }
         createTarBall(assignmentTarBallPath, outputFilePaths, fileNames)
         uploadTarBall(assignment, assignmentTarBallPath, tarBallName)
