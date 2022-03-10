@@ -459,7 +459,6 @@ abstract class MicrotaskRenderer(
   /** Get the microtask record for the current assignment and setup the microtask */
   private fun getAndSetupMicrotask() {
     runBlocking {
-      if (microtaskAssignmentIDs.isEmpty()) return@runBlocking
       val assignmentID = microtaskAssignmentIDs[currentAssignmentIndex]
 
       // Fetch the assignment and the microtask
