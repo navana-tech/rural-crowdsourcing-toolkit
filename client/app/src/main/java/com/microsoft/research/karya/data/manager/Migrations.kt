@@ -10,4 +10,4 @@ import androidx.room.migration.AutoMigrationSpec
     DeleteTable(tableName = "payment_request"),
     DeleteTable(tableName = "policy"),
 )
-class V1ToV2Migration: AutoMigrationSpec
+class V2ToV3Migration: AutoMigrationSpec

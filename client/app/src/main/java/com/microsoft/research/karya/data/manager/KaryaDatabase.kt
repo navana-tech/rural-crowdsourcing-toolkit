@@ -37,9 +37,9 @@ import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
     PaymentAccountRecord::class
   ],
   views = [TaskInfo::class],
-  version = 2,
+  version = 3,
   exportSchema = true,
-  autoMigrations = [AutoMigration(from = 1, to = 2)],
+  autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3, spec = V2ToV3Migration::class)],
 )
 @TypeConverters(Converters::class)
 abstract class KaryaDatabase : RoomDatabase() {
