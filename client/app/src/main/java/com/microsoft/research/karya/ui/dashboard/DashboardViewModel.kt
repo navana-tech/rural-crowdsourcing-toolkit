@@ -13,8 +13,10 @@ import com.microsoft.research.karya.data.remote.request.UploadFileRequest
 import com.microsoft.research.karya.data.repo.AssignmentRepository
 import com.microsoft.research.karya.data.repo.KaryaFileRepository
 import com.microsoft.research.karya.data.repo.MicroTaskRepository
+import com.microsoft.research.karya.data.repo.PaymentRepository
 import com.microsoft.research.karya.data.repo.TaskRepository
 import com.microsoft.research.karya.injection.qualifier.FilesDir
+import com.microsoft.research.karya.ui.payment.PaymentFlowNavigation
 import com.microsoft.research.karya.utils.DateUtils
 import com.microsoft.research.karya.utils.FileUtils.createTarBall
 import com.microsoft.research.karya.utils.FileUtils.downloadFileToLocalPath
@@ -27,7 +29,9 @@ import java.io.File
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -41,16 +45,20 @@ import okhttp3.RequestBody
 class DashboardViewModel
 @Inject
 constructor(
-  private val taskRepository: TaskRepository,
-  private val assignmentRepository: AssignmentRepository,
-  private val karyaFileRepository: KaryaFileRepository,
-  private val microTaskRepository: MicroTaskRepository,
-  @FilesDir private val fileDirPath: String,
-  private val authManager: AuthManager,
+    private val taskRepository: TaskRepository,
+    private val assignmentRepository: AssignmentRepository,
+    private val karyaFileRepository: KaryaFileRepository,
+    private val microTaskRepository: MicroTaskRepository,
+    private val paymentRepository: PaymentRepository,
+    @FilesDir private val fileDirPath: String,
+    private val authManager: AuthManager,
 ) : ViewModel() {
 
   private val microtaskOutputContainer = MicrotaskAssignmentOutput(fileDirPath)
   private val microtaskInputContainer = MicrotaskInput(fileDirPath)
+
+  private val _navigationFlow = MutableSharedFlow<DashboardNavigation>()
+  val navigationFlow = _navigationFlow.asSharedFlow()
 
   private val taskInfoComparator =
     compareByDescending<TaskInfo> { taskInfo -> taskInfo.assignedMicrotasks }.thenBy { taskInfo -> taskInfo.taskID }
@@ -278,5 +286,21 @@ constructor(
       }
       microtaskDirectory.delete()
     }
+  }
+
+  fun navigatePayment() {
+      viewModelScope.launch {
+          val workerId = authManager.fetchLoggedInWorker().id
+          val status = paymentRepository.getPaymentRecordStatus(workerId)
+
+          Log.d("NAVIGATION_STATUS", status.status)
+          when (status.getNavigationDestination()) {
+              PaymentFlowNavigation.DASHBOARD -> _navigationFlow.emit(DashboardNavigation.PAYMENT_DASHBOARD)
+              PaymentFlowNavigation.FAILURE -> _navigationFlow.emit(DashboardNavigation.PAYMENT_FAILURE)
+              PaymentFlowNavigation.REGISTRATION -> _navigationFlow.emit(DashboardNavigation.PAYMENT_REGISTRATION)
+              PaymentFlowNavigation.VERIFICATION -> _navigationFlow.emit(DashboardNavigation.PAYMENT_VERIFICATION)
+              else -> {}
+          }
+      }
   }
 }

@@ -104,6 +104,18 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
         DashboardUiState.Loading -> showLoadingUi()
       }
     }
+
+      viewModel.navigationFlow.observe(viewLifecycle, viewLifecycleScope) { navigation: DashboardNavigation ->
+          val resId = when(navigation) {
+              DashboardNavigation.PAYMENT_REGISTRATION -> R.id.action_dashboardActivity_to_paymentRegistrationFragment
+              DashboardNavigation.PAYMENT_VERIFICATION -> R.id.action_dashboardActivity_to_paymentVerificationFragment
+              DashboardNavigation.PAYMENT_DASHBOARD -> R.id.action_dashboardActivity_to_paymentDashboardFragment
+              DashboardNavigation.PAYMENT_FAILURE -> R.id.action_global_paymentFailureFragment
+              else -> { -1 }
+          }
+
+          findNavController().navigate(resId)
+      }
   }
 
   private fun updateTasks(data: DashboardStateSuccess) {
@@ -114,6 +126,7 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
         val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
         binding.appTb.setEndIcon(drawable)
         binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
+        binding.appTb.setEndIconClickListener { viewModel.navigatePayment() }
       } else {
         binding.appTb.hideEndIcon()
         binding.appTb.hideEndText()
