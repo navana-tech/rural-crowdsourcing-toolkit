@@ -13,6 +13,7 @@ import android.media.MediaRecorder
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -545,6 +546,7 @@ open class SpeechDataMain(
           encodingJob =
             ioScope.launch {
               encodeRecording()
+              saveOutputDuration()
               completeAndSaveCurrentMicrotask()
             }
           encodingJob?.join()
@@ -559,6 +561,7 @@ open class SpeechDataMain(
           encodingJob =
             ioScope.launch {
               encodeRecording()
+              saveOutputDuration()
               completeAndSaveCurrentMicrotask()
             }
           encodingJob?.join()
@@ -993,6 +996,7 @@ open class SpeechDataMain(
       ActivityState.COMPLETED, ActivityState.NEW_PLAYING, ActivityState.NEW_PAUSED -> {
         runBlocking {
           encodeRecording()
+          saveOutputDuration()
           completeAndSaveCurrentMicrotask()
           setResult(Activity.RESULT_OK, intent)
           finish()
@@ -1009,6 +1013,15 @@ open class SpeechDataMain(
         // throw Exception("Android back button cannot not be clicked in '$activityState' state")
       }
     }
+  }
+
+  private fun saveOutputDuration() {
+    val playerDuration = mediaPlayer?.duration
+
+    // Player duration can be null if mediaPlayer is null or it can be -1 if it is not available
+    val duration = if (playerDuration != null && playerDuration != -1) playerDuration else samplesToTime(totalRecordedBytes / 2)
+    Log.d("SpeechDataMain", "Duration: $duration")
+    outputData.addProperty("duration", duration)
   }
 
   /** Initialize [audioRecorder] */
