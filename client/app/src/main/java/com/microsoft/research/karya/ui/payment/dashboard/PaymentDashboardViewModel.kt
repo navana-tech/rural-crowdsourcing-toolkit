@@ -52,11 +52,11 @@ class PaymentDashboardViewModel @Inject constructor(
             ) { paymentInfoResponse, workerBalanceResponse, transactions ->
                 val transaction = transactions.first()
 
-                val ifsc = paymentInfoResponse.meta.account.ifsc ?: ""
+                val ifsc = paymentInfoResponse.meta.account?.ifsc ?: ""
                 val idPrefix = if (ifsc.isEmpty()) "xxxxxx@xx" else "XXXXXXXXXXXX"
                 val userAccountDetail = UserAccountDetail(
                     name = paymentInfoResponse.meta.name,
-                    id = idPrefix + paymentInfoResponse.meta.account.id,
+                    id = paymentInfoResponse.meta.account?.id?.let { "$idPrefix$it" } ?: "",
                     ifsc = ifsc,
                 )
                 val parsedDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())

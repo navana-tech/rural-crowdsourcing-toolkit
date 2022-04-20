@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Meta(
     @SerializedName("account")
-    val account: Account,
+    val account: Account?,
     @SerializedName("name")
     val name: String
 )
