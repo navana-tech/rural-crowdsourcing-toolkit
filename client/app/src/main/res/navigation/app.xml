@@ -212,7 +212,11 @@
         <action
             android:id="@+id/action_paymentFailureFragment_to_dashboardActivity"
             app:destination="@id/dashboardActivity" />
-    </fragment><action android:id="@+id/action_global_paymentFailureFragment" app:destination="@id/paymentFailureFragment"/>
+    </fragment>
+    <action
+        android:id="@+id/action_global_paymentFailureFragment"
+        app:destination="@id/paymentFailureFragment"
+        app:popUpTo="@id/dashboardActivity" />
     <fragment
         android:id="@+id/paymentDashboardFragment"
         android:name="com.microsoft.research.karya.ui.payment.dashboard.PaymentDashboardFragment"

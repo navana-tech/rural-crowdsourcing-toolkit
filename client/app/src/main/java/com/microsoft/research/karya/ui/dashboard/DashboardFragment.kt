@@ -111,7 +111,6 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
               DashboardNavigation.PAYMENT_VERIFICATION -> R.id.action_dashboardActivity_to_paymentVerificationFragment
               DashboardNavigation.PAYMENT_DASHBOARD -> R.id.action_dashboardActivity_to_paymentDashboardFragment
               DashboardNavigation.PAYMENT_FAILURE -> R.id.action_global_paymentFailureFragment
-              else -> { -1 }
           }
 
           findNavController().navigate(resId)
