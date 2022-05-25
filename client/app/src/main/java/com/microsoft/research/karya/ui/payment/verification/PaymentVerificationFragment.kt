@@ -53,15 +53,16 @@ class PaymentVerificationFragment : Fragment(R.layout.fragment_payment_verificat
 
     private fun render(paymentVerificationModel: PaymentVerificationModel) {
         if (paymentVerificationModel.isLoading) {
-            with(binding) {
-                failureBtn.gone()
-                successBtn.gone()
-                title.gone()
-                description.gone()
-                progressLL.visible()
-            }
+            showNetworkRequest(paymentVerificationModel)
         } else {
-            if (paymentVerificationModel.requestProcessed) {
+            when (paymentVerificationModel.state) {
+                PaymentVerificationState.UNKNOWN -> showNetworkRequest(paymentVerificationModel)
+                PaymentVerificationState.REQUEST_PROCESSING -> showRequestProcessing(paymentVerificationModel)
+                PaymentVerificationState.REQUEST_PROCESSED -> showRequestProcessed(paymentVerificationModel)
+                PaymentVerificationState.FEEDBACK_RECEIVED -> showFeedbackProcessing(paymentVerificationModel)
+            }
+/*
+            if (paymentVerificationModel.state) {
                 with(binding) {
                     failureBtn.visible()
                     successBtn.visible()
@@ -80,6 +81,57 @@ class PaymentVerificationFragment : Fragment(R.layout.fragment_payment_verificat
                     progressLL.gone()
                 }
             }
+*/
+        }
+    }
+
+    private fun showNetworkRequest(paymentVerificationModel: PaymentVerificationModel) {
+        with(binding) {
+            failureBtn.gone()
+            successBtn.gone()
+            title.gone()
+            description.gone()
+            progressBar.visible()
+            progressText.setText(R.string.checking_account_status)
+            progressImage.setImageResource(R.drawable.ic_wait)
+            progressLL.visible()
+        }
+    }
+
+    private fun showRequestProcessing(paymentVerificationModel: PaymentVerificationModel) {
+        with(binding) {
+            failureBtn.gone()
+            successBtn.gone()
+            title.gone()
+            description.gone()
+            progressBar.gone()
+            progressText.setText(R.string.processing_account_details)
+            progressImage.setImageResource(R.drawable.ic_processing)
+            progressLL.visible()
+        }
+    }
+
+    private fun showRequestProcessed(paymentVerificationModel: PaymentVerificationModel) {
+        with(binding) {
+            failureBtn.visible()
+            successBtn.visible()
+            title.visible()
+            description.text = getString(R.string.verification_request_processed, paymentVerificationModel.utr)
+            description.visible()
+            progressLL.gone()
+        }
+    }
+
+    private fun showFeedbackProcessing(paymentVerificationModel: PaymentVerificationModel) {
+        with(binding) {
+            failureBtn.gone()
+            successBtn.gone()
+            title.gone()
+            description.gone()
+            progressBar.gone()
+            progressText.setText(R.string.account_feedback_received)
+            progressImage.setImageResource(R.drawable.ic_processing)
+            progressLL.visible()
         }
     }
 

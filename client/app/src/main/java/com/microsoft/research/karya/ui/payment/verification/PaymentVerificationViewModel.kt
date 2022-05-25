@@ -20,7 +20,7 @@ class PaymentVerificationViewModel @Inject constructor(
     private val paymentRepository: PaymentRepository,
 ) : ViewModel() {
 
-    private val _uiStateFlow = MutableStateFlow(PaymentVerificationModel(isLoading = false, requestProcessed = false))
+    private val _uiStateFlow = MutableStateFlow(PaymentVerificationModel(isLoading = false, state = PaymentVerificationState.UNKNOWN))
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     private val _navigationFlow = MutableSharedFlow<PaymentVerificationNavigation>()
@@ -28,7 +28,7 @@ class PaymentVerificationViewModel @Inject constructor(
 
     fun checkStatus() {
         viewModelScope.launch {
-            _uiStateFlow.update { it.copy(isLoading = true, requestProcessed = false) }
+            _uiStateFlow.update { it.copy(isLoading = true, state = PaymentVerificationState.UNKNOWN) }
 
             val worker = authManager.fetchLoggedInWorker()
             val idToken = worker.idToken ?: run {
@@ -39,33 +39,39 @@ class PaymentVerificationViewModel @Inject constructor(
 
             paymentRepository.getCurrentAccount(idToken).catch {
                 _uiStateFlow.update {
-                    it.copy(isLoading = false, errorMessage = "Error connecting to server", requestProcessed = false)
+                    it.copy(isLoading = false, errorMessage = "Error connecting to server", state = PaymentVerificationState.UNKNOWN)
                 }
                 navigateFailure()
             }.collect { paymentInfoResponse ->
                 paymentRepository.updatePaymentRecord(worker.id, paymentInfoResponse)
                 when (paymentInfoResponse.status) {
                     "INITIALISED" -> {
-                        _uiStateFlow.update { it.copy(isLoading = false, requestProcessed = false) }
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.REQUEST_PROCESSING) }
+                    }
+                    "SERVER_API" -> {
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.REQUEST_PROCESSING) }
+                    }
+                    "TRANSACTION_CREATED" -> {
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.REQUEST_PROCESSING) }
                     }
                     "VERIFICATION" -> {
-                        _uiStateFlow.update { it.copy(isLoading = false, requestProcessed = true) }
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.REQUEST_PROCESSED) }
                     }
                     "CONFIRMATION_RECEIVED" -> {
-                        _uiStateFlow.update { it.copy(isLoading = false, requestProcessed = false) }
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.FEEDBACK_RECEIVED) }
                     }
                     "VERIFIED" -> {
-                        _uiStateFlow.update { it.copy(isLoading = false, requestProcessed = false) }
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.FEEDBACK_RECEIVED) }
                         // navigate to payment dashboard
-                         _navigationFlow.emit(PaymentVerificationNavigation.DASHBOARD)
+                        navigateSuccess()
                     }
                     "CONFIRMATION_FAILED", "REJECTED", "FAILED" -> {
                         // navigate to failure
-                        _uiStateFlow.update { it.copy(isLoading = false, requestProcessed = false) }
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.UNKNOWN) }
                         navigateFailure()
                     }
                     else -> {
-                        _uiStateFlow.update { it.copy(isLoading = false, requestProcessed = false) }
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.UNKNOWN) }
                     }
                 }
             }
@@ -97,7 +103,7 @@ class PaymentVerificationViewModel @Inject constructor(
                 paymentRepository.updatePaymentRecord(worker.id, paymentInfoResponse)
                 when (paymentInfoResponse.status) {
                     "CONFIRMATION_RECEIVED" -> {
-                        _uiStateFlow.update { it.copy(isLoading = false, requestProcessed = false) }
+                        _uiStateFlow.update { it.copy(isLoading = false, state = PaymentVerificationState.FEEDBACK_RECEIVED) }
                     }
                     "CONFIRMATION_FAILED" -> {
                         navigateFailure()

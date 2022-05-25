@@ -43,6 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_16sdp"
+        app:endIconDrawable="@drawable/ic_speaker_blue"
+        app:endIconMode="custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description">
@@ -60,6 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_16sdp"
+        app:endIconDrawable="@drawable/ic_speaker_blue"
+        app:endIconMode="custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameTil">
@@ -77,6 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_16sdp"
+        app:endIconDrawable="@drawable/ic_speaker_blue"
+        app:endIconMode="custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upiIdTil">
@@ -89,13 +95,15 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        style="@style/PaymentsPrimaryButton"
         android:id="@+id/submitButton"
+        style="@style/PaymentsPrimaryButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_32sdp"
         android:text="@string/submit"
+        app:endIconDrawable="@drawable/ic_speaker_blue"
+        app:endIconMode="custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upiIdRepeatTil" />

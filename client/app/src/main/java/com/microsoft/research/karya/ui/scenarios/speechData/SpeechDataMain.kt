@@ -1021,7 +1021,7 @@ open class SpeechDataMain(
     // Player duration can be null if mediaPlayer is null or it can be -1 if it is not available
     val duration = if (playerDuration != null && playerDuration != -1) playerDuration else samplesToTime(totalRecordedBytes / 2)
     Log.d("SpeechDataMain", "Duration: $duration")
-    outputData.addProperty("duration", duration)
+    outputData.addProperty("duration", duration.toDouble() / 1000)
   }
 
   /** Initialize [audioRecorder] */
