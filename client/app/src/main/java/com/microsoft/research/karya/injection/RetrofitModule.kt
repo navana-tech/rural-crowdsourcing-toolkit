@@ -1,7 +1,10 @@
 package com.microsoft.research.karya.injection
 
+import android.content.Context
 import com.microsoft.research.karya.BuildConfig
 import com.microsoft.research.karya.data.manager.AuthManager
+import com.microsoft.research.karya.data.manager.BaseUrlManager
+import com.microsoft.research.karya.data.remote.interceptors.HostSelectionInterceptor
 import com.microsoft.research.karya.data.remote.interceptors.IdTokenRenewInterceptor
 import com.microsoft.research.karya.data.remote.interceptors.VersionInterceptor
 import com.microsoft.research.karya.data.repo.AuthRepository
@@ -14,12 +17,14 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -35,7 +40,14 @@ class RetrofitModule {
   @Reusable
   @BaseUrl
   fun provideBaseUrl(): String {
-    return "https://navana-karya-box-1.centralindia.cloudapp.azure.com/"
+    return "http://__url__"
+    // return "https://navana-karya-box-1.centralindia.cloudapp.azure.com/"
+  }
+
+  @Provides
+  @Singleton
+  fun provideBaseUrlManager(@ApplicationContext context: Context): BaseUrlManager {
+    return BaseUrlManager(context)
   }
 
   @Provides
@@ -62,9 +74,16 @@ class RetrofitModule {
 
   @Provides
   @Reusable
+  fun provideHostSelectionInterceptor(baseUrlManager: BaseUrlManager): HostSelectionInterceptor {
+    return HostSelectionInterceptor(baseUrlManager)
+  }
+
+  @Provides
+  @Reusable
   fun provideOkHttp(
     idTokenRenewInterceptor: IdTokenRenewInterceptor,
     versionInterceptor: VersionInterceptor,
+    hostSelectionInterceptor: HostSelectionInterceptor,
     httpLoggingInterceptor: HttpLoggingInterceptor,
   ): OkHttpClient {
     return OkHttpClient.Builder()
@@ -77,6 +96,7 @@ class RetrofitModule {
       .readTimeout(10, TimeUnit.MINUTES)
       .addInterceptor(idTokenRenewInterceptor)
       .addInterceptor(versionInterceptor)
+      .addInterceptor(hostSelectionInterceptor)
       .build()
   }
 

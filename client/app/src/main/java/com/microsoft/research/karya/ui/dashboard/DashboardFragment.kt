@@ -17,6 +17,7 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.data.model.karya.modelsExtra.TaskInfo
 import com.microsoft.research.karya.databinding.FragmentDashboardBinding
 import com.microsoft.research.karya.ui.base.SessionFragment
+import com.microsoft.research.karya.ui.onboarding.accesscode.AccessCodeDecoder
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain
 import com.microsoft.research.karya.ui.scenarios.speechVerification.SpeechVerificationMain
 import com.microsoft.research.karya.ui.scenarios.textToTextTranslation.TextToTextTranslationMain
@@ -64,6 +65,8 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
     super.onViewCreated(view, savedInstanceState)
     setupViews()
     observeUi()
+     val url = AccessCodeDecoder.decodeURL(requireContext(), "2418346356101213")
+     Log.d("ACCESSCODE", url + "AAAAAAAaaaaa")
   }
 
   override fun onResume() {

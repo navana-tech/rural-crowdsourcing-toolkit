@@ -1,0 +1,7 @@
+{
+  "directs": [
+    "https://navana-box-1.eastasia.cloudapp.azure.com",
+    "https://navana-box-2.eastasia.cloudapp.azure.com"
+  ],
+  "templates": []
+}
