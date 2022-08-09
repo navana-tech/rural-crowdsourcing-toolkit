@@ -8,6 +8,7 @@ import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.databinding.FragmentAccessCodeBinding
@@ -17,6 +18,7 @@ import com.microsoft.research.karya.utils.extensions.*
 import com.zabaan.common.ZabaanLanguages
 import com.zabaan.sdk.Zabaan
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
@@ -65,7 +67,9 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
 
       submitAccessCodeBtn.setOnClickListener {
         val accessCode = binding.creationCodeEt.text.toString().replace("-", "")
-        viewModel.checkAccessCode(accessCode)
+        val decodedURL = AccessCodeDecoder.decodeURL(requireContext(), accessCode)
+
+        viewModel.setUrlAndCheckAccessCode(decodedURL, accessCode)
       }
 
       requestSoftKeyFocus(creationCodeEt)
