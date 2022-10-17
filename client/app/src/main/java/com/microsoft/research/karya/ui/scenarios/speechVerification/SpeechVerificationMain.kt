@@ -13,6 +13,7 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.ui.scenarios.common.MicrotaskRenderer
 import kotlinx.android.synthetic.main.microtask_speech_verification.*
 import kotlinx.coroutines.launch
+import java.io.File
 
 class SpeechVerificationMain :
   MicrotaskRenderer(
@@ -136,8 +137,22 @@ class SpeechVerificationMain :
     val sentence = currentMicroTask.input.asJsonObject.getAsJsonObject("data").get("sentence").toString()
     val recordingFileName = currentMicroTask.input.asJsonObject.getAsJsonObject("files").get("recording").asString
     val recordingFile = getMicrotaskInputFilePath(recordingFileName)
+    val recordingFileFile = File(recordingFile)
 
     sentenceTv.text = sentence
+
+    if (recordingFile.isEmpty() || !recordingFileFile.exists()) {
+      val alertDialogBuilder = AlertDialog.Builder(this@SpeechVerificationMain)
+      alertDialogBuilder.setMessage("Audio file is getting downloaded, try again in a few minutes.")
+      alertDialogBuilder.setNeutralButton("Ok") { _, _ ->
+        finish()
+      }
+      val alertDialog = alertDialogBuilder.create()
+      alertDialog.setCancelable(false)
+      alertDialog.setCanceledOnTouchOutside(false)
+      alertDialog.show()
+      return
+    }
 
     try {
       /** setup media player */
