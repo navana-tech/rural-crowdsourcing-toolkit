@@ -34,4 +34,6 @@ object AppConstants {
   const val OTP_LENGTH = 6
 
   const val INITIAL_TIME = "1970-01-01T00:00:00Z"
+
+  const val DEFAULT_URL: String = "https://navana-karya-box-1.centralindia.cloudapp.azure.com/"
 }

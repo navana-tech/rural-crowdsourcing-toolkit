@@ -2,6 +2,7 @@ package com.microsoft.research.karya.ui.onboarding.accesscode
 
 import android.content.Context
 import com.microsoft.research.karya.data.exceptions.InvalidAccessCodeException
+import com.microsoft.research.karya.utils.AppConstants.DEFAULT_URL
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
@@ -17,7 +18,6 @@ private const val PROD = 1
 private const val DIRECT_MAP = 0
 private const val TEMPLATE = 1
 
-private const val DEFAULT_URL: String = "https://navana-karya-box-1.centralindia.cloudapp.azure.com/"
 private const val PHYSICAL_BOX_URL: String = "http://localhost:8000"
 private const val DEV_URL: String = "http://localhost:8000"
 
@@ -32,8 +32,7 @@ object AccessCodeDecoder {
   private lateinit var url: String
 
   fun decodeURL(context: Context, accessCode: String): String {
-    try {
-      val accessCodeLong = accessCode.toLong()
+    try { val accessCodeLong = accessCode.toLong()
       version = accessCodeLong and 3
       accessCodeLength = getAccessCodeLength(accessCodeLong, version)
       boxType = getBoxType(accessCodeLong, version)
@@ -47,6 +46,7 @@ object AccessCodeDecoder {
       return url
     } catch (e: Throwable) {
       // TODO: Log the error somewhere
+      e.printStackTrace()
       return DEFAULT_URL
     }
 

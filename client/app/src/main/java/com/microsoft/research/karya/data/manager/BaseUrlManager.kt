@@ -3,6 +3,7 @@ package com.microsoft.research.karya.data.manager
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.microsoft.research.karya.utils.AppConstants
 import com.microsoft.research.karya.utils.PreferenceKeys
 import com.microsoft.research.karya.utils.extensions.dataStore
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,7 @@ class BaseUrlManager(val applicationContext: Context) {
     if (!this::baseUrl.isInitialized) {
       val baseUrlKey = stringPreferencesKey(PreferenceKeys.BASE_URL)
       val data = applicationContext.dataStore.data.first()
-      baseUrl = data[baseUrlKey] ?: throw Exception("No URL Found")
+      baseUrl = data[baseUrlKey] ?: AppConstants.DEFAULT_URL
     }
     return baseUrl
   }
