@@ -6,9 +6,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import androidx.core.graphics.withTranslation
+import com.google.android.material.textview.MaterialTextView
 import com.microsoft.research.karya.R
 
-class OutlineTextView : androidx.appcompat.widget.AppCompatTextView {
+class OutlineTextView : MaterialTextView {
 
   constructor(context: Context) : this(context, null)
   constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {
