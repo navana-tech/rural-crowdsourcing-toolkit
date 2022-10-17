@@ -16,6 +16,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.microsoft.research.karya.BuildConfig
 import com.microsoft.research.karya.data.manager.KaryaDatabase
 import com.microsoft.research.karya.data.model.karya.MicroTaskAssignmentRecord
 import com.microsoft.research.karya.data.model.karya.MicroTaskRecord
@@ -246,6 +247,7 @@ abstract class MicrotaskRenderer(
     output.add("data", outputData)
     output.add("files", outputFiles)
     output.add("logs", logs)
+    output.addProperty("version",  BuildConfig.VERSION_NAME)
 
     karyaDb
       .microtaskAssignmentDaoExtra()
@@ -459,6 +461,11 @@ abstract class MicrotaskRenderer(
   /** Get the microtask record for the current assignment and setup the microtask */
   private fun getAndSetupMicrotask() {
     runBlocking {
+      if (microtaskAssignmentIDs.isEmpty()) {
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+        cancel()
+      }
       val assignmentID = microtaskAssignmentIDs[currentAssignmentIndex]
 
       // Fetch the assignment and the microtask
