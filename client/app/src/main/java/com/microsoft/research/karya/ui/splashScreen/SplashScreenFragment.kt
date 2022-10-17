@@ -1,11 +1,19 @@
 package com.microsoft.research.karya.ui.splashScreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailabilityLight
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.microsoft.research.karya.R
 import com.microsoft.research.karya.databinding.FragmentSplashScreenBinding
 import com.microsoft.research.karya.ui.Destination
@@ -23,9 +31,48 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
   private val viewModel by viewModels<SplashViewModel>()
   private lateinit var navController: NavController
 
+  private val appUpdateManager: AppUpdateManager by lazy {
+    AppUpdateManagerFactory.create(requireContext())
+  }
+
+  private val UPDATE_REQUEST_CODE = 1
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    if (GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(requireContext()) == ConnectionResult.SUCCESS)
+      checkUpdates()
+    else setupSplashScreen()
+  }
+
+  private fun checkUpdates() {
+
+    // Returns an intent object that you use to check for an update.
+    val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+    // Checks that the platform will allow the specified type of update.
+    appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+      if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+      ) {
+        appUpdateManager.startUpdateFlowForResult(
+          // Pass the intent that is returned by 'getAppUpdateInfo()'.
+          appUpdateInfo,
+          // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+          AppUpdateType.IMMEDIATE,
+          // The current activity making the update request.
+          requireActivity(),
+          // Include a request code to later monitor this update request.
+          UPDATE_REQUEST_CODE)
+      } else {
+        // If no updates available proceed
+        setupSplashScreen()
+      }
+    }
+
+  }
+
+
+  private fun setupSplashScreen() {
     navController = findNavController()
     handleNavigation()
     observeEffects()
@@ -81,5 +128,27 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
 
   private fun navigateToMandatoryDataFlow() {
     navController.navigate(R.id.action_splashScreenFragment2_to_mandatoryDataFlow)
+  }
+
+  // Checks that the update is not stalled during 'onResume()'.
+  // However, you should execute this check at all entry points into the app.
+  override fun onResume() {
+    super.onResume()
+
+    appUpdateManager
+      .appUpdateInfo
+      .addOnSuccessListener { appUpdateInfo ->
+        if (appUpdateInfo.updateAvailability()
+          == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
+        ) {
+          // If an in-app update is already running, resume the update.
+          appUpdateManager.startUpdateFlowForResult(
+            appUpdateInfo,
+            IMMEDIATE,
+            requireActivity(),
+            UPDATE_REQUEST_CODE
+          )
+        }
+      }
   }
 }
