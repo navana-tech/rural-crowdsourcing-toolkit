@@ -29,17 +29,33 @@ import com.microsoft.research.karya.utils.extensions.invisible
 import com.microsoft.research.karya.utils.extensions.visible
 import com.zabaan.sdk.Zabaan
 import com.zabaan.sdk.internal.interaction.StateInteractionRequest
-import java.io.DataOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.RandomAccessFile
-import kotlinx.android.synthetic.main.ng_speech_data_main.*
+import kotlinx.android.synthetic.main.ng_speech_data_main.backBtn
+import kotlinx.android.synthetic.main.ng_speech_data_main.backPointerIv
+import kotlinx.android.synthetic.main.ng_speech_data_main.microtaskTb
+import kotlinx.android.synthetic.main.ng_speech_data_main.nextBtn
+import kotlinx.android.synthetic.main.ng_speech_data_main.nextPointerIv
+import kotlinx.android.synthetic.main.ng_speech_data_main.playBtn
+import kotlinx.android.synthetic.main.ng_speech_data_main.playCentiSecondsTv
+import kotlinx.android.synthetic.main.ng_speech_data_main.playPointerIv
+import kotlinx.android.synthetic.main.ng_speech_data_main.playSecondsTv
+import kotlinx.android.synthetic.main.ng_speech_data_main.playbackProgressPb
+import kotlinx.android.synthetic.main.ng_speech_data_main.recordBtn
+import kotlinx.android.synthetic.main.ng_speech_data_main.recordCentiSecondsTv
+import kotlinx.android.synthetic.main.ng_speech_data_main.recordPointerIv
+import kotlinx.android.synthetic.main.ng_speech_data_main.recordPromptTv
+import kotlinx.android.synthetic.main.ng_speech_data_main.recordSecondsTv
+import kotlinx.android.synthetic.main.ng_speech_data_main.sentencePointerIv
+import kotlinx.android.synthetic.main.ng_speech_data_main.sentenceTv
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import java.io.DataOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.RandomAccessFile
 
 /** Audio recording parameters */
 private const val SAMPLE_RATE = 16000
@@ -188,7 +204,6 @@ open class SpeechDataMain(
 
     /** Set on click listeners */
     recordBtn.setOnClickListener {
-      vibratePhone(it.context)
       Zabaan.getInstance().stopZabaanInteraction()
       handleRecordClick()
     }
@@ -211,6 +226,7 @@ open class SpeechDataMain(
     preRecordBuffer = Array(2) { ByteArray(maxPreRecordBytes) }
   }
 
+  // Replace run blocking with application scope
   /** Clean up on activity stop. Depending on the state, we may have to wait for some jobs to complete. */
   final override fun cleanupOnStop() {
     setButtonStates(DISABLED, DISABLED, DISABLED, DISABLED)
@@ -246,7 +262,8 @@ open class SpeechDataMain(
         ActivityState.NEW_PLAYING,
         ActivityState.NEW_PAUSED,
         ActivityState.OLD_PLAYING,
-        ActivityState.OLD_PAUSED, -> {
+        ActivityState.OLD_PAUSED,
+        -> {
           releasePlayer()
         }
 
@@ -263,7 +280,8 @@ open class SpeechDataMain(
         ActivityState.ENCODING_NEXT,
         ActivityState.ENCODING_BACK,
         ActivityState.ASSISTANT_PLAYING,
-        ActivityState.ACTIVITY_STOPPED, -> {
+        ActivityState.ACTIVITY_STOPPED,
+        -> {
           // Do nothing
         }
       }
@@ -285,14 +303,16 @@ open class SpeechDataMain(
       ActivityState.OLD_PLAYING,
       ActivityState.ENCODING_NEXT,
       ActivityState.ENCODING_BACK,
-      ActivityState.ASSISTANT_PLAYING, -> {
+      ActivityState.ASSISTANT_PLAYING,
+      -> {
         resetMicrotask()
       }
 
       /** If recorded, then move to first playback */
       ActivityState.RECORDED,
       ActivityState.FIRST_PLAYBACK,
-      ActivityState.FIRST_PLAYBACK_PAUSED, -> {
+      ActivityState.FIRST_PLAYBACK_PAUSED,
+      -> {
         setButtonStates(DISABLED, DISABLED, ACTIVE, DISABLED)
         setActivityState(ActivityState.FIRST_PLAYBACK)
       }
@@ -300,7 +320,8 @@ open class SpeechDataMain(
       /** In completed states, move back to completed state */
       ActivityState.COMPLETED,
       ActivityState.NEW_PAUSED,
-      ActivityState.NEW_PLAYING, -> {
+      ActivityState.NEW_PLAYING,
+      -> {
         setButtonStates(ENABLED, ENABLED, ENABLED, ENABLED)
         setActivityState(ActivityState.COMPLETED)
       }
@@ -569,9 +590,11 @@ open class SpeechDataMain(
           setActivityState(ActivityState.INIT)
         }
       }
+
       ActivityState.ASSISTANT_PLAYING -> {
         /** This is a dummy state to trigger events before assistant can be played */
       }
+
       ActivityState.ACTIVITY_STOPPED -> {
         /**
          * This is a dummy state to trigger events (e.g., end recordings). [cleanupOnStop] should take care of handling
@@ -591,6 +614,7 @@ open class SpeechDataMain(
           playRecordPrompt()
         }
       }
+
       ActivityState.PRERECORDING, ActivityState.COMPLETED_PRERECORDING -> {
         runBlocking {
           setActivityState(ActivityState.ASSISTANT_PLAYING)
@@ -602,6 +626,7 @@ open class SpeechDataMain(
           playRecordPrompt()
         }
       }
+
       else -> {}
     }
   }
@@ -792,7 +817,8 @@ open class SpeechDataMain(
       ActivityState.OLD_PLAYING,
       ActivityState.OLD_PAUSED,
       ActivityState.NEW_PLAYING,
-      ActivityState.NEW_PAUSED, -> {
+      ActivityState.NEW_PAUSED,
+      -> {
         setButtonStates(DISABLED, ACTIVE, DISABLED, DISABLED)
 
         releasePlayer()
@@ -818,7 +844,8 @@ open class SpeechDataMain(
       ActivityState.SIMPLE_BACK,
       ActivityState.SIMPLE_NEXT,
       ActivityState.ASSISTANT_PLAYING,
-      ActivityState.ACTIVITY_STOPPED, -> {
+      ActivityState.ACTIVITY_STOPPED,
+      -> {
         // throw Exception("Record button should not be clicked in '$activityState' state")
       }
     }
@@ -881,6 +908,7 @@ open class SpeechDataMain(
         setButtonStates(ENABLED, ENABLED, ACTIVE, ENABLED)
         setActivityState(ActivityState.OLD_PLAYING)
       }
+
       ActivityState.INIT,
       ActivityState.PRERECORDING,
       ActivityState.RECORDED,
@@ -890,7 +918,8 @@ open class SpeechDataMain(
       ActivityState.SIMPLE_BACK,
       ActivityState.SIMPLE_NEXT,
       ActivityState.ASSISTANT_PLAYING,
-      ActivityState.ACTIVITY_STOPPED, -> {
+      ActivityState.ACTIVITY_STOPPED,
+      -> {
         // throw Exception("Play button should not be clicked in '$activityState' state")
       }
     }
@@ -911,10 +940,12 @@ open class SpeechDataMain(
       ActivityState.COMPLETED_PRERECORDING, ActivityState.OLD_PLAYING, ActivityState.OLD_PAUSED -> {
         setActivityState(ActivityState.SIMPLE_NEXT)
       }
+
       ActivityState.COMPLETED, ActivityState.NEW_PLAYING, ActivityState.NEW_PAUSED -> {
         setButtonStates(DISABLED, DISABLED, DISABLED, DISABLED)
         setActivityState(ActivityState.ENCODING_NEXT)
       }
+
       ActivityState.INIT,
       ActivityState.PRERECORDING,
       ActivityState.RECORDING,
@@ -926,7 +957,8 @@ open class SpeechDataMain(
       ActivityState.SIMPLE_NEXT,
       ActivityState.SIMPLE_BACK,
       ActivityState.ASSISTANT_PLAYING,
-      ActivityState.ACTIVITY_STOPPED, -> {
+      ActivityState.ACTIVITY_STOPPED,
+      -> {
         // throw Exception("Next button should not be clicked in '$activityState' state")
       }
     }
@@ -947,13 +979,16 @@ open class SpeechDataMain(
       ActivityState.PRERECORDING,
       ActivityState.COMPLETED_PRERECORDING,
       ActivityState.OLD_PLAYING,
-      ActivityState.OLD_PAUSED, -> {
+      ActivityState.OLD_PAUSED,
+      -> {
         setActivityState(ActivityState.SIMPLE_BACK)
       }
+
       ActivityState.COMPLETED, ActivityState.NEW_PLAYING, ActivityState.NEW_PAUSED -> {
         setButtonStates(DISABLED, DISABLED, DISABLED, DISABLED)
         setActivityState(ActivityState.ENCODING_BACK)
       }
+
       ActivityState.INIT,
       ActivityState.RECORDING,
       ActivityState.RECORDED,
@@ -964,7 +999,8 @@ open class SpeechDataMain(
       ActivityState.SIMPLE_NEXT,
       ActivityState.SIMPLE_BACK,
       ActivityState.ASSISTANT_PLAYING,
-      ActivityState.ACTIVITY_STOPPED, -> {
+      ActivityState.ACTIVITY_STOPPED,
+      -> {
         // throw Exception("Back button should not be clicked in '$activityState' state")
       }
     }
@@ -989,10 +1025,12 @@ open class SpeechDataMain(
       ActivityState.OLD_PAUSED,
       ActivityState.SIMPLE_NEXT,
       ActivityState.SIMPLE_BACK,
-      ActivityState.ASSISTANT_PLAYING, -> {
+      ActivityState.ASSISTANT_PLAYING,
+      -> {
         setResult(Activity.RESULT_OK, intent)
         finish()
       }
+
       ActivityState.COMPLETED, ActivityState.NEW_PLAYING, ActivityState.NEW_PAUSED -> {
         runBlocking {
           encodeRecording()
@@ -1002,6 +1040,7 @@ open class SpeechDataMain(
           finish()
         }
       }
+
       ActivityState.ENCODING_NEXT, ActivityState.ENCODING_BACK -> {
         runBlocking {
           encodingJob?.join()
@@ -1009,6 +1048,7 @@ open class SpeechDataMain(
           finish()
         }
       }
+
       ActivityState.ACTIVITY_STOPPED -> {
         // throw Exception("Android back button cannot not be clicked in '$activityState' state")
       }
@@ -1019,7 +1059,8 @@ open class SpeechDataMain(
     val playerDuration = mediaPlayer?.duration
 
     // Player duration can be null if mediaPlayer is null or it can be -1 if it is not available
-    val duration = if (playerDuration != null && playerDuration != -1) playerDuration else samplesToTime(totalRecordedBytes / 2)
+    val duration =
+      if (playerDuration != null && playerDuration != -1) playerDuration else samplesToTime(totalRecordedBytes / 2)
     Log.d("SpeechDataMain", "Duration: $duration")
     outputData.addProperty("duration", duration)
   }
@@ -1096,7 +1137,7 @@ open class SpeechDataMain(
     val runnable = Runnable {
       while (state == activityState) {
         val currentPosition = mediaPlayer?.currentPosition
-        resetPlayingLength(mediaPlayer?.currentPosition!!)
+        resetPlayingLength(currentPosition)
         playbackProgressPb.progress = currentPosition ?: playbackProgressPb.progress
         Thread.sleep(100)
       }
