@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -65,8 +66,6 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
     super.onViewCreated(view, savedInstanceState)
     setupViews()
     observeUi()
-     val url = AccessCodeDecoder.decodeURL(requireContext(), "2418346356101213")
-     Log.d("ACCESSCODE", url + "AAAAAAAaaaaa")
   }
 
   override fun onResume() {
@@ -104,7 +103,10 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
             updateTasks(dashboardUiState.data)
           }
         is DashboardUiState.Error -> showErrorUi(dashboardUiState.throwable)
-        DashboardUiState.Loading -> showLoadingUi()
+        DashboardUiState.Loading -> {
+          showLoadingUi()
+          Toast.makeText(requireContext(), "Please don't close the app when data is loading.", Toast.LENGTH_LONG).show()
+        }
       }
     }
   }
