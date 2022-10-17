@@ -44,7 +44,7 @@
     <EditText
         android:id="@+id/pinEt"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_52sdp"
+        android:layout_height="@dimen/_60sdp"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginEnd="@dimen/_20sdp"
         android:background="@drawable/blue_rounded_border"
@@ -54,7 +54,7 @@
         android:inputType="number"
         android:maxLength="6"
         android:paddingHorizontal="@dimen/_32sdp"
-        android:textSize="@dimen/_26ssp"
+        android:textSize="@dimen/_12ssp"
         app:layout_constraintStart_toStartOf="@id/screenProgress"
         app:layout_constraintTop_toBottomOf="@+id/ageGroupPromptTv" />
 
