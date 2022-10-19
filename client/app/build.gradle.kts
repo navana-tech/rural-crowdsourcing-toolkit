@@ -15,14 +15,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion(31)
+  compileSdk = 31
     defaultConfig {
         applicationId = "com.navana.bolo"
         minSdkVersion(21)
         targetSdkVersion(31)
         multiDexEnabled = true
-        versionCode = 16
-        versionName = "1.1.5"
+        versionCode = 20
+        versionName = "1.1.9"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -140,6 +140,8 @@ dependencies {
 
     implementation(Dependencies.ThirdParty.Retrofit.retrofit)
     implementation(Dependencies.ThirdParty.Retrofit.gsonConverter)
+
+    implementation("com.google.android.play:core-ktx:1.8.1")
 
     debugImplementation(Dependencies.ThirdParty.debugDB)
 
