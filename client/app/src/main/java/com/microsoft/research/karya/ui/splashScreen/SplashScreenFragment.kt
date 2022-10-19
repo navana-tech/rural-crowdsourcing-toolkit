@@ -67,7 +67,7 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
         // If no updates available proceed
         setupSplashScreen()
       }
-    }
+    }.addOnFailureListener { setupSplashScreen() }
 
   }
 
