@@ -145,7 +145,7 @@ class SpeechVerificationMain :
       val alertDialogBuilder = AlertDialog.Builder(this@SpeechVerificationMain)
       alertDialogBuilder.setMessage("Audio file is getting downloaded, try again in a few minutes.")
       alertDialogBuilder.setNeutralButton("Ok") { _, _ ->
-        finish()
+//        finish()
       }
       val alertDialog = alertDialogBuilder.create()
       alertDialog.setCancelable(false)

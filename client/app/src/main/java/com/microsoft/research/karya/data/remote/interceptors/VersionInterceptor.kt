@@ -6,6 +6,14 @@ import okhttp3.Response
 
 class VersionInterceptor() : Interceptor {
   override fun intercept(chain: Interceptor.Chain): Response {
-    return chain.proceed(chain.request().newBuilder().addHeader("version", "v10").build())
+    return chain.proceed(
+      chain
+        .request()
+        .newBuilder()
+        .addHeader("version-code", "${BuildConfig.VERSION_CODE}")
+        .addHeader("version-name", BuildConfig.VERSION_NAME)
+        .build()
+    )
+
   }
 }

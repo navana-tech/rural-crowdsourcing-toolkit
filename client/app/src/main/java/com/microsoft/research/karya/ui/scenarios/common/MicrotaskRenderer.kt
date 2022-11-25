@@ -247,7 +247,8 @@ abstract class MicrotaskRenderer(
     output.add("data", outputData)
     output.add("files", outputFiles)
     output.add("logs", logs)
-    output.addProperty("version",  BuildConfig.VERSION_NAME)
+    output.addProperty("version-code",  BuildConfig.VERSION_CODE)
+    output.addProperty("version-name",  BuildConfig.VERSION_NAME)
 
     karyaDb
       .microtaskAssignmentDaoExtra()

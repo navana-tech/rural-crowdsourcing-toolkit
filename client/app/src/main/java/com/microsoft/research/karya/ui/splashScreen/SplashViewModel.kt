@@ -8,6 +8,7 @@ import com.microsoft.research.karya.data.manager.AuthManager
 import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
 import com.microsoft.research.karya.data.repo.WorkerRepository
 import com.microsoft.research.karya.ui.Destination
+import com.microsoft.research.karya.utils.WorkerLanguage
 import com.zabaan.common.ZabaanLanguages
 import com.zabaan.sdk.Zabaan
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -58,8 +59,10 @@ constructor(
     val worker = getLoggedInWorker()
     FirebaseCrashlytics.getInstance().setUserId(worker.accessCode)
     _splashEffects.emit(SplashEffects.UpdateLanguage(worker.language))
-    if (worker.language.isNotEmpty())
+    if (worker.language.isNotEmpty()) {
       Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(worker.language.lowercase()))
+      WorkerLanguage.language = worker.language.lowercase()
+    }
 
     val isPinCodePresent = worker.profile is JsonObject && worker.profile.has("pincode")
     val destination =

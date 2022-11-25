@@ -14,6 +14,7 @@ import com.microsoft.research.karya.R
 import com.microsoft.research.karya.databinding.FragmentAccessCodeBinding
 import com.microsoft.research.karya.ui.MainActivity
 import com.microsoft.research.karya.utils.SeparatorTextWatcher
+import com.microsoft.research.karya.utils.WorkerLanguage
 import com.microsoft.research.karya.utils.extensions.*
 import com.zabaan.common.ZabaanLanguages
 import com.zabaan.sdk.Zabaan
@@ -101,6 +102,7 @@ class AccessCodeFragment : Fragment(R.layout.fragment_access_code) {
 
   private fun showSuccessUi(languageCode: String) {
     Zabaan.getInstance().setLanguage(ZabaanLanguages.getNavanaLanguage(languageCode.lowercase()))
+    WorkerLanguage.language = languageCode.lowercase()
     updateActivityLanguage(languageCode)
 
     hideLoading()

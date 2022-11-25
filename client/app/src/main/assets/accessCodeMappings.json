@@ -1,7 +1,7 @@
 {
   "directs": [
-    "https://navana-box-1.eastasia.cloudapp.azure.com",
-    "https://navana-box-2.eastasia.cloudapp.azure.com"
+    "https://navana-karya-box-1.centralindia.cloudapp.azure.com",
+    "https://navana-karya-box-2.centralindia.cloudapp.azure.com"
   ],
   "templates": []
 }

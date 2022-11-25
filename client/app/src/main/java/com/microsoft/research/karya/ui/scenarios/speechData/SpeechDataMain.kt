@@ -25,8 +25,10 @@ import com.microsoft.research.karya.ui.scenarios.common.MicrotaskRenderer
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.ACTIVE
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.DISABLED
 import com.microsoft.research.karya.ui.scenarios.speechData.SpeechDataMain.ButtonState.ENABLED
+import com.microsoft.research.karya.utils.WorkerLanguage
 import com.microsoft.research.karya.utils.extensions.invisible
 import com.microsoft.research.karya.utils.extensions.visible
+import com.zabaan.common.ZabaanLanguages
 import com.zabaan.sdk.Zabaan
 import com.zabaan.sdk.internal.interaction.StateInteractionRequest
 import kotlinx.android.synthetic.main.ng_speech_data_main.backBtn
@@ -204,6 +206,7 @@ open class SpeechDataMain(
 
     /** Set on click listeners */
     recordBtn.setOnClickListener {
+//      vibratePhone(it.context)
       Zabaan.getInstance().stopZabaanInteraction()
       handleRecordClick()
     }
@@ -358,6 +361,7 @@ open class SpeechDataMain(
     /** Write wav file */
     scratchRecordingFileInitJob = ioScope.launch { resetWavFile() }
 
+    sentenceTv.typeface = WorkerLanguage.getFontForLanguage(this)
     sentenceTv.text = currentMicroTask.input.asJsonObject.getAsJsonObject("data").get("sentence").toString()
     totalRecordedBytes = 0
     playbackProgressPb.progress = 0

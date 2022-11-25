@@ -131,6 +131,7 @@ class ProfileFragment : SessionFragment(R.layout.fragment_profile_picture), Assi
     when (destination) {
       Destination.MandatoryDataFlow -> navigateToSelectGenderFragment()
       Destination.Dashboard -> navigateToDashboard()
+      else -> navigateToDashboard()
     }
   }
 

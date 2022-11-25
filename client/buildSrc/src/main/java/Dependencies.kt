@@ -1,9 +1,9 @@
-private const val AGP_VERSION = "7.1.0"
+private const val AGP_VERSION = "7.3.1"
 private const val ANDROIDX_HILT_VERSION = "1.0.0"
 private const val CRASHLYTICS_VERSION = "2.8.1"
-private const val DAGGER_HILT_VERSION = "2.40.5"
+private const val DAGGER_HILT_VERSION = "2.44"
 private const val GMS_VERSION = "4.3.10"
-private const val KOTLIN_VERSION = "1.6.10"
+private const val KOTLIN_VERSION = "1.7.20"
 private const val LINT_VERSION = "27.3.0-alpha04"
 private const val NAVIGATION_VERSION = "2.5.0-alpha01"
 
@@ -63,7 +63,7 @@ object Dependencies {
         }
 
         object Room {
-            private const val version = "2.4.1"
+            private const val version = "2.4.3"
 
             const val roomRuntime = "androidx.room:room-runtime:$version"
             const val roomCompiler = "androidx.room:room-compiler:$version"

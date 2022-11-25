@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@id/microtaskTb"
         tools:text="1/10" />
 
-    <com.microsoft.research.karya.ui.widgets.IndicTextView
+    <TextView
         android:id="@+id/sentenceTv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
