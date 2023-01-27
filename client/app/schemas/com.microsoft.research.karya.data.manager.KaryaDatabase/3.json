@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "1358a1a9f27c040da8c839ee09489f7d",
+    "version": 3,
+    "identityHash": "128b8cfb27c7928b87312c3ea048eeb1",
     "entities": [
       {
         "tableName": "scenario",
@@ -104,7 +104,7 @@
       },
       {
         "tableName": "worker",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `accessCode` TEXT NOT NULL, `language` TEXT NOT NULL, `yob` TEXT, `authType` TEXT, `email` TEXT, `fullName` TEXT, `gender` TEXT, `idToken` TEXT, `authId` TEXT, `params` TEXT, `phoneNumber` TEXT, `profilePicturePath` TEXT, `username` TEXT, `isConsentProvided` INTEGER NOT NULL, `profile` TEXT, `ageGroup` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `accessCode` TEXT NOT NULL, `language` TEXT NOT NULL, `yob` TEXT, `authType` TEXT, `email` TEXT, `fullName` TEXT, `gender` TEXT, `idToken` TEXT, `authId` TEXT, `params` TEXT, `phoneNumber` TEXT, `profilePicturePath` TEXT, `username` TEXT, `isConsentProvided` INTEGER NOT NULL, `profile` TEXT, `ageGroup` TEXT, `deviceId` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -205,6 +205,12 @@
           {
             "fieldPath": "ageGroup",
             "columnName": "ageGroup",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -953,7 +959,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1358a1a9f27c040da8c839ee09489f7d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '128b8cfb27c7928b87312c3ea048eeb1')"
     ]
   }
 }

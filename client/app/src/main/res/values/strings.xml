@@ -304,4 +304,8 @@
     <string name="refreshing">Refreshing…</string>
     <string name="tasks_updated">Tasks Updated</string>
     <string name="invalid_access_code">The access code you have entered is not valid. Please contact your coordinator.</string>
+    <string name="age_18_25">18-25</string>
+    <string name="age_26_55">26-55</string>
+    <string name="age_55">55+</string>
+    <string name="select_age_group">Select your age group</string>
 </resources>

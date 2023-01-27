@@ -26,15 +26,17 @@ constructor(
   private val _selectAgeEffects: MutableSharedFlow<SelectAgeEffects> = MutableSharedFlow()
   val selectAgeEffects = _selectAgeEffects.asSharedFlow()
 
-  fun updateWorkerYOB(yob: String) {
+  fun updateWorkerYOB(yob: String, group: String, deviceId: String) {
     viewModelScope.launch {
+      println("Submitted $yob - $group - $deviceId")
       _selectAgeUiState.value = SelectAgeUiState.Loading
 
       val worker = authManager.fetchLoggedInWorker()
       checkNotNull(worker.idToken)
       checkNotNull(worker.gender)
+      checkNotNull(worker.deviceId)
 
-      val newWorker = worker.copy(yob = yob)
+      val newWorker = worker.copy(yob = yob, ageGroup = group, deviceId = deviceId)
 
       try {
         workerRepository.upsertWorker(newWorker)

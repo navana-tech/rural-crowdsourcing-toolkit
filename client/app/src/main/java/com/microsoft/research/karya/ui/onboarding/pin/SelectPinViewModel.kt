@@ -39,9 +39,13 @@ constructor(
       checkNotNull(worker.idToken)
       checkNotNull(worker.gender)
       checkNotNull(worker.yob)
+      checkNotNull(worker.ageGroup)
+      checkNotNull(worker.deviceId)
 
       val profile = JsonObject()
       profile.addProperty("pincode", pin)
+      profile.addProperty("age_group", worker.ageGroup)
+      profile.addProperty("device_id", worker.deviceId)
       val registerOrUpdateWorkerRequest = RegisterOrUpdateWorkerRequest(worker.yob, worker.gender, profile)
 
       workerRepository

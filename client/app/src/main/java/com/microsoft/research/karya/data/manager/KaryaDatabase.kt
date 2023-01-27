@@ -33,20 +33,20 @@ import com.microsoft.research.karya.data.model.karya.ng.WorkerRecord
 
 @Database(
   entities =
-    [
-      ScenarioRecord::class,
-      WorkerRecord::class,
-      KaryaFileRecord::class,
-      TaskRecord::class,
-      MicroTaskRecord::class,
-      PolicyRecord::class,
-      MicroTaskAssignmentRecord::class,
-      PayoutMethodRecord::class,
-      PayoutInfoRecord::class,
-      PaymentRequestRecord::class,
-    ],
+  [
+    ScenarioRecord::class,
+    WorkerRecord::class,
+    KaryaFileRecord::class,
+    TaskRecord::class,
+    MicroTaskRecord::class,
+    PolicyRecord::class,
+    MicroTaskAssignmentRecord::class,
+    PayoutMethodRecord::class,
+    PayoutInfoRecord::class,
+    PaymentRequestRecord::class,
+  ],
   views = [TaskInfo::class],
-  version = 2,
+  version = 4,
   exportSchema = true,
   autoMigrations = [AutoMigration(from = 1, to = 2)],
 )
@@ -69,7 +69,10 @@ abstract class KaryaDatabase : RoomDatabase() {
     fun getInstance(context: Context): KaryaDatabase? {
       if (INSTANCE == null) {
         synchronized(KaryaDatabase::class) {
-          INSTANCE = Room.databaseBuilder(context.applicationContext, KaryaDatabase::class.java, "karya.db").build()
+          INSTANCE = Room
+            .databaseBuilder(context.applicationContext, KaryaDatabase::class.java, "karya.db")
+            .fallbackToDestructiveMigration()
+            .build()
         }
       }
       return INSTANCE

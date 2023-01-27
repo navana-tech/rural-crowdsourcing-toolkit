@@ -1,7 +1,7 @@
 package com.microsoft.research.karya.ui.splashScreen
 
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -40,7 +40,8 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    if (GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(requireContext()) == ConnectionResult.SUCCESS)
+    if (GoogleApiAvailabilityLight.getInstance()
+        .isGooglePlayServicesAvailable(requireContext()) == ConnectionResult.SUCCESS)
       checkUpdates()
     else setupSplashScreen()
   }
@@ -62,7 +63,8 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
           // The current activity making the update request.
           requireActivity(),
           // Include a request code to later monitor this update request.
-          UPDATE_REQUEST_CODE)
+          UPDATE_REQUEST_CODE
+        )
       } else {
         // If no updates available proceed
         setupSplashScreen()

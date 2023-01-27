@@ -17,6 +17,6 @@ class DatabaseModule {
   @Provides
   @Singleton
   fun providesKaryaDatabase(@ApplicationContext context: Context): KaryaDatabase {
-    return Room.databaseBuilder(context, KaryaDatabase::class.java, "karya.db").build()
+    return Room.databaseBuilder(context, KaryaDatabase::class.java, "karya.db").fallbackToDestructiveMigration().build()
   }
 }
