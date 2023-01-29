@@ -34,7 +34,7 @@ localProperties.load(java.io.FileInputStream(rootProject.file("local.properties"
 //apply(plugin = "in.navanatech.zabaan")
 //
 //configure<`in`.navanatech.zabaan.ZabaanExtension> {
-//    apkPath = "/home/skrilltrax/Work/rural-crowdsourcing-toolkit/client/app/release/app-release.aab"
+//    apkPath = "/home/skrilltrax/Work/ruraFl-crowdsourcing-toolkit/client/app/release/app-release.aab"
 //    upload {
 //        releaseNumber = localProperties.getProperty("zbn.release") as String
 //        releaseToken = localProperties.getProperty("zbn.token") as String

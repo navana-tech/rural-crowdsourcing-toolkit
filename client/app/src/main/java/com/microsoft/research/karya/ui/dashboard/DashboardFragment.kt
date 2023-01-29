@@ -115,14 +115,16 @@ class DashboardFragment : SessionFragment(R.layout.fragment_dashboard), Assistan
     data.apply {
       (binding.tasksRv.adapter as TaskListAdapter).updateList(taskInfoData)
       // Show total credits if it is greater than 0
-      if (totalCreditsEarned > 0.0f) {
-        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
-        binding.appTb.setEndIcon(drawable)
-        binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
-      } else {
-        binding.appTb.hideEndIcon()
-        binding.appTb.hideEndText()
-      }
+//      if (totalCreditsEarned > 0.0f) {
+//        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_coins) ?: return@apply
+//        binding.appTb.setEndIcon(drawable)
+//        binding.appTb.setEndText(requireContext().getString(R.string.rupees_d, totalCreditsEarned.toInt()))
+//      } else {
+//        binding.appTb.hideEndIcon()
+//        binding.appTb.hideEndText()
+//      }
+      binding.appTb.hideEndIcon()
+      binding.appTb.hideEndText()
     }
   }
 
